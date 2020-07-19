@@ -1,0 +1,23 @@
+header.mainheader{
+width = 100%;
+margin: 0;
+}
+
+.headermenu{
+list-style: none;
+background: #4CCCCC;
+margin: 0;
+}
+
+.headermenu li a{
+color: #4CCCCC;
+}
+
+#header_mainbtn, #header_nothingbtn, #header_secondbtn{
+position: relative;
+margin-left: 13.75%;
+background: #B33333;
+width: 15%;
+display: inline-block;
+text-align: center;
+}
