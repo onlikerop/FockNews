@@ -25,7 +25,7 @@ SECRET_KEY = 'vse777b!7(^s!+0)!c7^(2(s9_8k@2is@lj$q7z23h00bk*5tz'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [r'*']
 
 
 # Application definition
