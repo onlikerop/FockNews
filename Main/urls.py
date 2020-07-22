@@ -16,5 +16,11 @@ urlpatterns = [
         'contacts/',
         views.contacts,
         name='contacts'
+    ),
+    path(
+        'news/<int:pk>/',
+        DetailView.as_view(model=Articles,
+                           template_name="article.html"),
+        name='article'
     )
 ]

@@ -26,3 +26,13 @@ display: inline;
 .article_author{
 float: right;
 }
+
+.article{
+width: 50%;
+margin-left:10px
+}
+
+.article_body{
+margin-left: 10px;
+margin-right: 10px;
+}

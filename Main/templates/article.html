@@ -1,0 +1,38 @@
+{% extends "wrapper.html" %}
+
+{% block title %}
+    {{articles.title}}
+{% endblock %}
+
+{% block content %}
+    <style>
+        #upperhr {
+        height: 30px;
+        border-style: solid;
+        border-color: black;
+        border-width: 1px 0 0 0;
+        border-radius: 20px;
+        }
+
+        #lowerhr {
+        display: block;
+        content: "";
+        height: 30px;
+        margin-top: -31px;
+        border-style: solid;
+        border-color: black;
+        border-width: 0 0 1px 0;
+        border-radius: 20px;
+        }
+    </style>
+    <div class="article">
+        <h2 class="article_title text-primary">{{articles.title}}</h2>
+        <hr id="upperhr">
+        <div class="article_body text-dark">{{articles.body|safe|linebreaks}}</div>
+        <hr id="lowerhr">
+        <h5 class="article_datetime">Дата публикации: {{articles.pub_datetime|date:"d.m.Y H:i"}}</h5>{% if articles.pub_datetime != articles.lasted_datetime %} <span class="btn-link article_lasted_datetime" title="{{articles.lasted_datetime|date:'d.m.Y H:i'}}">(ред.)</span> {% endif %}
+        <h5 class="article_author">Опубликовано пользователем <a href="/users/{{articles.author}}"><u>{{articles.author}}</u></a></h5>
+        <br><br>
+        <p class="article_tags"><b>Тэги статьи: {{articles.tags}}</b></p>
+    </div>
+{% endblock %}

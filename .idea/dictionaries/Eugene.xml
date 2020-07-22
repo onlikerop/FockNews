@@ -3,10 +3,12 @@
     <words>
       <w>endblock</w>
       <w>endfor</w>
+      <w>lowerhr</w>
       <w>minarticle</w>
       <w>minarticles</w>
       <w>minbody</w>
       <w>truncatechars</w>
+      <w>upperhr</w>
     </words>
   </dictionary>
 </component>
