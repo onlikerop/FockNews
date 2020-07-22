@@ -1,7 +1,28 @@
+/*
+*{
+ border: solid 1px red;
+}*/
+
 #header_menu{
 list-style: none;
 }
 
 #header_menu li{
 display: inline-block;
+}
+
+.minarticles{
+margin-left: 30px;
+}
+
+.minarticle{
+width: 50%;
+}
+
+.article_datetime{
+display: inline;
+}
+
+.article_author{
+float: right;
 }
