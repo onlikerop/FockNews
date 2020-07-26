@@ -10,7 +10,8 @@ urlpatterns = [
     path(
         '',
         ListView.as_view(queryset=Articles.objects.all().order_by("-pub_datetime")[:20],
-                         template_name="index.html")
+                         template_name="Main/index.html"),
+        name='index'
     ),
     path(
         'contacts/',
@@ -20,7 +21,7 @@ urlpatterns = [
     path(
         'news/<int:pk>/',
         DetailView.as_view(model=Articles,
-                           template_name="article.html"),
+                           template_name="Main/article.html"),
         name='article'
     ),
     # path(

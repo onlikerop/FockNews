@@ -4,8 +4,8 @@ from django.template import RequestContext
 
 
 def index(request):
-    return render(request, 'index.html')
+    return render(request, 'Main/index.html')
 
 
 def contacts(request):
-    return render(request, 'contacts.html')
+    return render(request, 'Main/contacts.html')
