@@ -22,5 +22,10 @@ urlpatterns = [
         DetailView.as_view(model=Articles,
                            template_name="article.html"),
         name='article'
-    )
+    ),
+    # path(
+    #     'contact/',
+    #     include('html_forms.urls'),
+    #     {"form_type": "contact"}
+    # )
 ]

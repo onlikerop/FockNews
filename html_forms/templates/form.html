@@ -1,0 +1,11 @@
+{% extends "wrapper.html" %}
+
+{% block title %}
+    Главная страница
+{% endblock %}
+
+{% block content %}
+<div class="{{form_type}}_form">
+    {% include "includes/html_forms/{{form_type}}_form.html" %}
+</div>
+{% endblock %}
