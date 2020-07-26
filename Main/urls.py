@@ -14,6 +14,11 @@ urlpatterns = [
         name='index'
     ),
     path(
+        'admin/',
+        admin.site.urls,
+        name='admin'
+    ),
+    path(
         'contacts/',
         views.contacts,
         name='contacts'

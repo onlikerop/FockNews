@@ -1,8 +1,8 @@
 <header>
     <ul id="header_menu">
-        <li><a class="btn btn-lg btn-primary" href = "http://127.0.0.1:8000">Главная Страница</a></li>
-        <li><a class="btn btn-lg btn-info" href = "/contacts">Контакты</a></li>
-        <li><a class="btn btn-lg btn-danger" href = "/admin">Админпанель</a></li>
+        <li><a class="btn btn-lg btn-primary" href = "{% url 'index' %}">Главная Страница</a></li>
+        <li><a class="btn btn-lg btn-info" href = "{% url 'contacts' %}">Контакты</a></li>
+        <li><a class="btn btn-lg btn-danger" href = "admin/" target="_blank">Панель администратора</a></li>
     </ul>
     <hr>
 </header>
