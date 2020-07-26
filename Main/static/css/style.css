@@ -36,3 +36,9 @@ margin-left:10px
 margin-left: 10px;
 margin-right: 10px;
 }
+
+.article_draft{
+color: #FF5050;
+text-decoration: underline;
+font-size: 1em
+}

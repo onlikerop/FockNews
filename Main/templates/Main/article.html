@@ -27,11 +27,15 @@
     </style>
     <div class="article">
         <h2 class="article_title text-primary">{{articles.title}}</h2>
+        {% if articles.status == "draft" %}
+            <h3 class="article_draft">Внимание! Вы просматриваете черновик!</h3>
+            <br>
+        {% endif%}
         <hr id="upperhr">
         <div class="article_body text-dark">{{articles.body|safe|linebreaks}}</div>
         <hr id="lowerhr">
-        <h5 class="article_datetime">Дата публикации: {{articles.pub_datetime|date:"d.m.Y H:i"}}</h5>{% if articles.pub_datetime != articles.lasted_datetime %} <span class="btn-link article_lasted_datetime" title="{{articles.lasted_datetime|date:'d.m.Y H:i'}}">(ред.)</span> {% endif %}
-        <h5 class="article_author">Опубликовано пользователем <a href="/users/{{articles.author}}"><u>{{articles.author}}</u></a></h5>
+        <h5 class="article_datetime">Дата публикации: {% if articles.pub_datetime != NULL %}{{articles.pub_datetime|date:"d.m.Y H:i"}}{% else %}Не опубликовано{% endif %}</h5>{% if articles.lasted_datetime != NULL %} <span class="btn-link article_lasted_datetime" title="{{articles.lasted_datetime|date:'d.m.Y H:i'}}">(ред.)</span> {% endif %}
+        <h5 class="article_author">{% if articles.status == "published" %}Опубликовано{% else %}Создано{% endif %} пользователем <a href="/users/{{articles.author}}"><u>{{articles.author}}</u></a></h5>
         <br><br>
         <p class="article_tags"><b>Тэги статьи: {{articles.tags}}</b></p>
     </div>
