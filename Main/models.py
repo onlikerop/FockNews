@@ -11,7 +11,8 @@ class Articles(models.Model):
     )
     lasted_datetime = models.DateTimeField(
         blank=True,
-        null=True)
+        null=True
+    )
     author = models.CharField(max_length=24)
     tags = models.TextField()
     status = models.CharField(max_length=24)
@@ -19,3 +20,7 @@ class Articles(models.Model):
 
     def __str__(self):
         return self.title
+
+    class Meta:
+        verbose_name = 'Статья'
+        verbose_name_plural = 'Статьи'
