@@ -1,6 +1,19 @@
 from django.shortcuts import render
-# Create your views here.
+from html_forms.forms import CreateArticleForm
 
 
-def form(request):
-    return render(request, 'form.html')
+def contact(request):
+    return render(request, 'html_forms/contact_form.html')
+
+
+def createarticle(request):
+    if request.method == 'POST':
+        form = CreateArticleForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+    return render(request, 'html_forms/create_article_form.html',
+                  {
+                      'form': CreateArticleForm()
+                  }
+                  )

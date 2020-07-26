@@ -46,3 +46,7 @@ font-size: 1em
 .user{
 float: right;
 }
+
+.form-control{
+margin-bottom: 10px;
+}

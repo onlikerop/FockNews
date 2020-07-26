@@ -2,7 +2,7 @@
     <ul id="header_menu">
         <li><a class="btn btn-lg btn-primary" href = "{% url 'index' %}">Главная Страница</a></li>
         <li><a class="btn btn-lg btn-info" href = "{% url 'contacts' %}">Контакты</a></li>
-        <li><a class="btn btn-lg btn-danger" href = "admin/" target="_blank">Панель администратора</a></li>
+        <li><a class="btn btn-lg btn-danger" href = "{% url 'admin:index' %}" target="_blank">Панель администратора</a></li>
         {% if user_data.username != ''%}<li class="btn btn-lg user">{{ user_data.username }}</li>{% endif %}
     </ul>
     <hr>

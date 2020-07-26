@@ -1,0 +1,19 @@
+{% extends "wrapper.html" %}
+
+{% block title %}
+    Создание статьи
+{% endblock %}
+
+{% block content %}
+    <h1>Создать статью:</h1><br>
+    <div class="create_article_form">
+        <form method="post">
+        {% csrf_token %}
+        {{ form.title }}
+        {{ form.body }}
+        {{ form.tags }}
+        {{ form.status }}
+        <button type="submit" class="btn btn-success">Добавить статью</button>
+    </form>
+    </div>
+{% endblock %}

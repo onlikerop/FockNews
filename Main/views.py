@@ -6,10 +6,17 @@ from Main.models import Articles
 
 
 def index(request):
-    return render(request, 'Main/index.html', {
-        'user_data': request.user,
-        'object_list': Articles.objects.all().order_by("-pub_datetime")[:20]})
+    return render(request, 'Main/index.html',
+                  {
+                      'object_list': Articles.objects.all().order_by("-pub_datetime")[:20],
+                      'user_data': request.user
+                  }
+                  )
 
 
 def contacts(request):
-    return render(request, 'Main/contacts.html')
+    return render(request, 'Main/contacts.html',
+                  {
+                      'user_data': request.user
+                  }
+                  )

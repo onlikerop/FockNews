@@ -8,8 +8,11 @@ from django.conf import settings
 
 urlpatterns = [
     path(
-        '',
-        views.form,
-        # Сюда нужно передать тот же словарь, что передавался при подключении этого файла в Main/urls.py
+        'contact/',
+        views.contact
+    ),
+    path(
+        'createarticle/',
+        views.createarticle
     ),
 ]

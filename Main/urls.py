@@ -13,9 +13,8 @@ urlpatterns = [
         name='index'
     ),
     path(
-        'admin/',
-        admin.site.urls,
-        name='admin'
+        'Wcs4q9rXQKsPzVYf63Ome1VM',
+        admin.site.urls
     ),
     path(
         'contacts/',
@@ -28,9 +27,8 @@ urlpatterns = [
                            template_name="Main/article.html"),
         name='article'
     ),
-    # path(
-    #     'contact/',
-    #     include('html_forms.urls'),
-    #     {"form_type": "contact"}
-    # )
+    path(
+        'forms/',
+        include('html_forms.urls')
+    )
 ]
