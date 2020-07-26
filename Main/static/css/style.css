@@ -42,3 +42,7 @@ color: #FF5050;
 text-decoration: underline;
 font-size: 1em
 }
+
+.user{
+float: right;
+}

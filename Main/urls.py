@@ -9,8 +9,7 @@ from django.conf import settings
 urlpatterns = [
     path(
         '',
-        ListView.as_view(queryset=Articles.objects.all().order_by("-pub_datetime")[:20],
-                         template_name="Main/index.html"),
+        views.index,
         name='index'
     ),
     path(
