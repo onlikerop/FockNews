@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from html_forms.forms import CreateArticleForm
+import datetime
 
 
 def contact(request):
@@ -11,9 +12,13 @@ def createarticle(request):
         form = CreateArticleForm(request.POST)
 
         if form.is_valid():
+            form.save(commit=False)
+            form.author = request.user
             form.save()
+            return redirect('index')
     return render(request, 'html_forms/create_article_form.html',
                   {
-                      'form': CreateArticleForm()
+                      'form': CreateArticleForm(),
+                      'user_data': request.user
                   }
                   )
