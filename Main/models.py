@@ -5,11 +5,7 @@ from django.contrib.auth.models import User
 class Articles(models.Model):
     title = models.CharField(max_length=120)
     body = models.TextField()
-    create_datetime = models.DateTimeField(
-        auto_now_add=True,
-        blank=True,
-        null=True
-    )
+    create_datetime = models.DateTimeField()
     pub_datetime = models.DateTimeField(
         blank=True,
         null=True
