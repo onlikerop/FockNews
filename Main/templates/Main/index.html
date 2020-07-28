@@ -9,7 +9,8 @@
 {% block content %}
 
 <div class="minarticles">
-    {# if checkperm user=user_data perm="Main.add_articles" #}
+    {% check_perm user_data "Main.add_articles" as checkperm %}
+    {% if checkperm %}
     <div class="create_article_btn">
         <a class="btn btn-lg" href="{% url 'createarticle' %}">
             <label>Создать статью</label>
@@ -19,7 +20,7 @@
             </svg>
         </a>
     </div>
-    {# endif #}
+    {% endif %}
     {% for post in object_list %}
         {% if post.status == "published"%}
             <div class="minarticle">

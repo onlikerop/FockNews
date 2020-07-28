@@ -20,3 +20,13 @@ def contacts(request):
                       'user_data': request.user
                   }
                   )
+
+
+def article(request, pk):
+    print(pk)
+    return render(request, 'Main/article.html',
+                  {
+                      'articles': Articles.objects.get(id=pk),
+                      'user_data': request.user
+                  }
+                  )

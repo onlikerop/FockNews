@@ -1,4 +1,5 @@
 {% extends "wrapper.html" %}
+{% load extra_tags %}
 
 {% block title %}
     {{articles.title}}
@@ -25,18 +26,29 @@
         border-radius: 20px;
         }
     </style>
-    <div class="article">
-        <h2 class="article_title text-primary">{{articles.title}}</h2>
-        {% if articles.status == "draft" %}
-            <h3 class="article_draft">Внимание! Вы просматриваете черновик!</h3>
-            <br>
-        {% endif%}
-        <hr id="upperhr">
-        <div class="article_body text-dark">{{articles.body|safe|linebreaks}}</div>
-        <hr id="lowerhr">
-        <h5 class="article_datetime">Дата публикации: {% if articles.status == "published" %}{{articles.pub_datetime|date:"d.m.Y H:i"}}{% else %}Не опубликовано{% endif %}</h5>{% if articles.lasted_datetime != NULL %} <span class="btn-link article_lasted_datetime" title="{{articles.lasted_datetime|date:'d.m.Y H:i'}}">(ред.)</span> {% endif %}
-        <h5 class="article_author">{% if articles.status == "published" %}Опубликовано{% else %}Создано{% endif %} пользователем <a href="/users/{{articles.author}}"><u>{{articles.author}}</u></a></h5>
-        <br><br>
-        <p class="article_tags"><b>Тэги статьи: {{articles.tags}}</b></p>
-    </div>
+    {% if articles.status == "draft" %}
+        {% check_perm user_data "Main.view_drafts" as checkperm %}
+    {% endif %}
+    {% if checkperm or articles.status == "published" %}
+        <div class="article">
+            <h2 class="article_title text-primary">{{articles.title}}</h2>
+            {% check_perm user_data "Main.delete_articles" as checkperm %}
+            {% if checkperm %}
+                <button class="btn btn-lg text-danger" id="btn-deletearticle" type="button" onclick="">Удалить статью</button>
+            {% endif %}
+            {% if articles.status == "draft" %}
+                <h3 class="article_draft">Внимание! Вы просматриваете черновик!</h3>
+                <br>
+            {% endif%}
+            <hr id="upperhr">
+            <div class="article_body text-dark">{{articles.body|safe|linebreaks}}</div>
+            <hr id="lowerhr">
+            <h5 class="article_datetime">Дата публикации: {% if articles.status == "published" %}{{articles.pub_datetime|date:"d.m.Y H:i"}}{% else %}Не опубликовано{% endif %}</h5>{% if articles.lasted_datetime != NULL %} <span class="btn-link article_lasted_datetime" title="{{articles.lasted_datetime|date:'d.m.Y H:i'}}">(ред.)</span> {% endif %}
+            <h5 class="article_author">{% if articles.status == "published" %}Опубликовано{% else %}Создано{% endif %} пользователем <a href="/users/{{articles.author}}"><u>{{articles.author}}</u></a></h5>
+            <br><br>
+            <p class="article_tags"><b>Тэги статьи: {{articles.tags}}</b></p>
+        </div>
+    {% else %}
+        <h3 align="center" class="error text-danger">У Вас нет прав на просмотр данной статьи!</h3>
+    {% endif %}
 {% endblock %}

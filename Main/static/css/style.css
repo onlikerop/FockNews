@@ -44,19 +44,15 @@ text-decoration: underline;
 font-size: 1em
 }
 
-.btn-user, .btn-login{
-float: right;
-}
-
 .form-control{
 margin-bottom: 10px;
 }
 
-.btn-admin{
+#admin-btn a{
 color: #FF3844;
 }
 
-.btn-admin:hover{
+#admin-btn a:hover{
 color: #9A1C25;
 }
 
@@ -71,7 +67,7 @@ width: 100%;
 }
 
 .create_article_btn .btn:hover{
-background: #D0D0E6
+background: #D0D0E6;
 }
 
 .create_article_btn .btn svg{
@@ -86,4 +82,22 @@ margin-right: 30px;
 
 .create_article .btn{
 width: 100%;
+}
+
+.article_title{
+display: inline-block;
+}
+
+#btn-deletearticle{
+display: inline-block;
+float: right;
+background: #FFE7E7;
+}
+
+#btn-deletearticle:hover{
+background: #E6D0D0;
+}
+
+.btn-user{
+float: right;
 }

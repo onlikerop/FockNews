@@ -23,8 +23,7 @@ urlpatterns = [
     ),
     path(
         'news/<int:pk>/',
-        DetailView.as_view(model=Articles,
-                           template_name="Main/article.html"),
+        views.article,
         name='article'
     ),
     path(
