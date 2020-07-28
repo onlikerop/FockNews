@@ -1,0 +1,11 @@
+{% extends "wrapper.html" %}
+
+{% block title %}
+    Вы вышли
+{% endblock %}
+
+{% block content %}
+    <p>До свидания!</p>
+
+    <a href="{% url 'login'%}">Войти снова</a>
+{% endblock %}

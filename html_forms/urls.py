@@ -9,10 +9,12 @@ from django.conf import settings
 urlpatterns = [
     path(
         'contact/',
-        views.contact
+        views.contact,
+        name='contact'
     ),
     path(
         'createarticle/',
-        views.createarticle
+        views.createarticle,
+        name='createarticle'
     ),
 ]
