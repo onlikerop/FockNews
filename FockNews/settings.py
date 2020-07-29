@@ -29,14 +29,14 @@ ALLOWED_HOSTS = [r'*']
 # Application definition
 
 INSTALLED_APPS = [
+    'Main',
+    'html_forms',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'Main',
-    'html_forms'
 ]
 
 MIDDLEWARE = [
