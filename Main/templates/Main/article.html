@@ -26,20 +26,26 @@
         border-radius: 20px;
         }
     </style>
-    {% if articles.status == "draft" %}
-        {% check_perm user_data "Main.view_drafts" as checkperm %}
+    {% if articles.status != "published" %}
+        {% check_perm user_data necessary_perm as checkperm %}
     {% endif %}
     {% if checkperm or articles.status == "published" %}
         <div class="article">
             <h2 class="article_title text-primary">{{articles.title}}</h2>
             {% check_perm user_data "Main.delete_articles" as checkperm %}
-            {% if checkperm %}
-                <button class="btn btn-lg text-danger" id="btn-deletearticle" type="button" onclick="">Удалить статью</button>
+            {% if checkperm and articles.status != "deleted" %}
+                <form method="post" id="form-delbtn">
+                    {% csrf_token %}
+                    <button class="btn btn-lg text-danger" id="btn-deletearticle" type="submit">Удалить статью</button>
+                </form>
             {% endif %}
             {% if articles.status == "draft" %}
                 <h3 class="article_draft">Внимание! Вы просматриваете черновик!</h3>
                 <br>
-            {% endif%}
+            {% elif articles.status == "deleted" %}
+                <h3 class="article_deleted">Внимание! Вы просматриваете удалённую статью!</h3>
+                <br>
+            {% endif %}
             <hr id="upperhr">
             <div class="article_body text-dark">{{articles.body|safe|linebreaks}}</div>
             <hr id="lowerhr">

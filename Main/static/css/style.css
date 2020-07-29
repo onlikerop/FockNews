@@ -38,10 +38,17 @@ margin-left: 10px;
 margin-right: 10px;
 }
 
-.article_draft{
-color: #FF5050;
+.article_draft, .article_deleted{
 text-decoration: underline;
 font-size: 1em
+}
+
+.article_deleted{
+color: #FF5050;
+}
+
+.article_draft{
+color: #FF8B50;
 }
 
 .form-control{
@@ -92,6 +99,7 @@ display: inline-block;
 display: inline-block;
 float: right;
 background: #FFE7E7;
+margin-top: -45px;
 }
 
 #btn-deletearticle:hover{

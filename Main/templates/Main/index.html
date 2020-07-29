@@ -21,17 +21,19 @@
         </a>
     </div>
     {% endif %}
-    {% for post in object_list %}
-        {% if post.status == "published"%}
-            <div class="minarticle">
-                <h3 class="article_title"><a href="/news/{{post.id}}">{{post.title}}</a></h3>
-                <p class="article_minbody">{{post.body|safe|truncatechars:255}}</p>
-                <h6 class="article_datetime">{{post.pub_datetime|date:"d.m.Y H:i"}}</h6>{% if post.lasted_datetime != NULL %} <span class="btn-link article_lasted_datetime" title="{{post.lasted_datetime|date:'d.m.Y H:i'}}">(ред.)</span> {% endif %}
-                <h6 class="article_author">Опубликовано пользователем <a href="/users/{{post.author}}"><u>{{post.author}}</u></a></h6>
-                <p class="article_tags">{{post.tags}}</p>
-                <hr><br>
-            </div>
-        {% endif %}
-    {% endfor %}
+    {% if object_list %}
+        {% for post in object_list %}
+                <div class="minarticle">
+                    <h3 class="article_title"><a href="/news/{{post.id}}">{{post.title}}</a></h3>
+                    <p class="article_minbody">{{post.body|safe|truncatechars:255}}</p>
+                    <h6 class="article_datetime">{{post.pub_datetime|date:"d.m.Y H:i"}}</h6>{% if post.lasted_datetime != NULL %} <span class="btn-link article_lasted_datetime" title="{{post.lasted_datetime|date:'d.m.Y H:i'}}">(ред.)</span> {% endif %}
+                    <h6 class="article_author">Опубликовано пользователем <a href="/users/{{post.author}}"><u>{{post.author}}</u></a></h6>
+                    <p class="article_tags">{{post.tags}}</p>
+                    <hr><br>
+                </div>
+        {% endfor %}
+    {% else %}
+        <h2 align="center">Опубликованных статей нет!</h2>
+    {% endif %}
 </div>
 {% endblock %}
