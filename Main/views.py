@@ -24,23 +24,23 @@ def contacts(request):
 
 
 def article(request, pk):
-    if request.method == 'POST':
-        form = DeleteArticleButtonForm(request.POST)
-        if form.is_valid():
-            instance = form.save(commit=False)
-            instance.id = pk
-            instance.title = Articles.objects.get(id=pk).title
-            instance.body = Articles.objects.get(id=pk).body
-            instance.create_datetime = Articles.objects.get(id=pk).create_datetime
-            instance.pub_datetime = None
-            instance.lasted_datetime = Articles.objects.get(id=pk).lasted_datetime
-            instance.author = Articles.objects.get(id=pk).author
-            instance.tags = Articles.objects.get(id=pk).tags
-            instance.status = "deleted"
-            instance.save()
+    # if request.method == 'POST':
+    #     form = DeleteArticleButtonForm(request.POST)
+    #     if form.is_valid():
+    #         instance = form.save(commit=False)
+    #         instance.id = pk
+    #         instance.title = Articles.objects.get(id=pk).title
+    #         instance.body = Articles.objects.get(id=pk).body
+    #         instance.create_datetime = Articles.objects.get(id=pk).create_datetime
+    #         instance.pub_datetime = None
+    #         instance.lasted_datetime = Articles.objects.get(id=pk).lasted_datetime
+    #         instance.author = Articles.objects.get(id=pk).author
+    #         instance.tags = Articles.objects.get(id=pk).tags
+    #         instance.status = "deleted"
+    #         instance.save()
     return render(request, 'Main/article.html',
                   {
-                      'form': DeleteArticleButtonForm(),
+                      # 'form': DeleteArticleButtonForm(),
                       'articles': Articles.objects.get(id=pk),
                       'user_data': request.user,
                       'necessary_perm': "Main.view_" + Articles.objects.get(id=pk).status

@@ -34,10 +34,7 @@
             <h2 class="article_title text-primary">{{articles.title}}</h2>
             {% check_perm user_data "Main.delete_articles" as checkperm %}
             {% if checkperm and articles.status != "deleted" %}
-                <form method="post" id="form-delbtn">
-                    {% csrf_token %}
-                    <button class="btn btn-lg text-danger" id="btn-deletearticle" type="submit">Удалить статью</button>
-                </form>
+                <button class="btn btn-lg text-danger" id="btn-deletearticle" type="submit">Удалить статью</button>
             {% endif %}
             {% if articles.status == "draft" %}
                 <h3 class="article_draft">Внимание! Вы просматриваете черновик!</h3>

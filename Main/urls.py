@@ -5,6 +5,7 @@ from django.views.generic import ListView, DetailView
 from Main.models import Articles
 from django.conf.urls.static import static
 from django.conf import settings
+from . import ajax_handler
 
 urlpatterns = [
     path(
@@ -25,6 +26,11 @@ urlpatterns = [
         'news/<int:pk>/',
         views.article,
         name='article'
+    ),
+    path(
+        'news/<int:pk>/delete/',
+        ajax_handler.deletearticle,
+        name='deletearticle'
     ),
     path(
         'forms/',
