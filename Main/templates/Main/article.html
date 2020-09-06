@@ -36,9 +36,9 @@
             {% if checkperm and articles.status != "deleted" %}
                 <button class="btn btn-lg text-danger" id="btn-deletearticle" type="submit">Удалить статью</button>
             {% endif %}
-            {% check_perm user_data "Main.edit_articles" as checkperm %}
+            {% check_perm user_data "Main.change_articles" as checkperm %}
             {% if checkperm %}
-                <button class="btn btn-lg text-warning" id="btn-editarticle" type="submit">Изменить статью</button>
+                <a class="btn btn-lg text-warning" id="btn-editarticle" href="edit">Изменить статью</a>
             {% endif %}
             {% if articles.status == "draft" %}
                 <h3 class="article_draft">Внимание! Вы просматриваете черновик!</h3>

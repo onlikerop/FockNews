@@ -1,0 +1,23 @@
+{% extends "wrapper.html" %}
+{% load extra_tags %}
+
+{% block title %}
+    Создание статьи
+{% endblock %}
+
+{% block content %}
+    {% check_perm user_data necessary_perm as checkperm %}
+    {% if checkperm %}
+        <div class="create_article">
+            <h1>Изменить статью:</h1><br>
+            <div class="create_article_form">
+                <input id="title-input" type="text" placeholder="Название статьи" class="form-control" value="{{articles.title}}">
+                <textarea id="body-input" placeholder="Текст статьи" class="form-control">{{articles.body}}</textarea>
+                <input id="tags-input" type="text" placeholder="Тэги статьи" class="form-control" value="{{articles.tags}}">
+                <button type="submit" class="btn btn-success" id="btn-saveeditarticle">Сохранить статью</button>
+            </div>
+        </div>
+    {% else %}
+        <h3 align="center" class="error text-danger">У Вас нет прав на редактирование данной статьи!</h3>
+    {% endif %}
+{% endblock %}

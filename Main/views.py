@@ -25,9 +25,18 @@ def contacts(request):
 def article(request, pk):
     return render(request, 'Main/article.html',
                   {
-                      # 'form': DeleteArticleButtonForm(),
                       'articles': Articles.objects.get(id=pk),
                       'user_data': request.user,
                       'necessary_perm': "Main.view_" + Articles.objects.get(id=pk).status
+                  }
+                  )
+
+
+def editarticle(request, pk):
+    return render(request, 'html_forms/edit_article_form.html',
+                  {
+                      'articles': Articles.objects.get(id=pk),
+                      'user_data': request.user,
+                      'necessary_perm': "Main.change_articles"
                   }
                   )

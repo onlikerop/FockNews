@@ -33,6 +33,16 @@ urlpatterns = [
         name='deletearticle'
     ),
     path(
+        'news/<int:pk>/edit/',
+        views.editarticle,
+        name='editarticle'
+    ),
+    path(
+        'news/<int:pk>/edit/save/',
+        ajax_handler.saveeditedarticle,
+        name='saveeditedarticle'
+    ),
+    path(
         'forms/',
         include('html_forms.urls')
     ),
