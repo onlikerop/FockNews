@@ -36,10 +36,3 @@ class CreateArticleForm(ModelForm):
                 }
             )
         }
-
-
-class DeleteArticleButtonForm(ModelForm):
-    class Meta:
-        model = Articles
-        fields = []
-        widgets = {}
