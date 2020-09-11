@@ -43,10 +43,6 @@ urlpatterns = [
         name='saveeditedarticle'
     ),
     path(
-        'forms/',
-        include('html_forms.urls')
-    ),
-    path(
         'accounts/',
         include('django.contrib.auth.urls')
     ),
