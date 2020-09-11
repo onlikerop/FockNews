@@ -56,4 +56,9 @@ urlpatterns = [
         views.createarticle,
         name='createarticle'
     ),
-]
+    path(
+        'users/',
+        include('Users.urls'),
+        name='Users'
+    ),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

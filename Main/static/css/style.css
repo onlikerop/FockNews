@@ -120,3 +120,27 @@
 .btn-user{
     float: right;
 }
+
+div.avatar img{
+    width: 64px;
+    height: 64px;
+}
+
+.user_profile{
+    margin-left: 25px;
+    margin-right: 25px;
+}
+
+h2.username, div.avatar, .about_me1, .about_me2{
+    display: inline-block;
+}
+
+.about_me2{
+    width: 50%;
+    vertical-align: top;
+    padding-left: 10px;
+}
+
+.user_profile_data{
+    padding-top: 25px;
+}

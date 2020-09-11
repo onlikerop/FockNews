@@ -1,5 +1,7 @@
 from django.contrib import admin
-from Main.models import Articles
+import Main.models as models
 
 
-admin.site.register(Articles)
+admin.site.register(models.Articles)
+admin.site.register(models.UserData)
+admin.site.register(models.Bans)

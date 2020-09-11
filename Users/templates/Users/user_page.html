@@ -1,0 +1,22 @@
+{% extends "wrapper.html" %}
+{% load extra_tags %}
+
+{% block title %}
+    Профиль пользователя {{page_user_data.username}}
+{% endblock %}
+
+{% block content %}
+    <div class="user_profile">
+        <div class="avatar">
+            {% if page_additional_user_data.avatar %}
+                <img src="{{MEDIA_URL}}{{page_additional_user_data.avatar}}">
+            {% else %}
+                <img src="{{MEDIA_URL}}images/avatars/default.png">
+            {% endif %}
+        </div>
+        <h2 class="username">{{page_user_data.username}}</h2>
+        <div class="user_profile_data">
+            <p class="about_me1">Обо мне:<div class="about_me2">{{page_additional_user_data.about_me}}</div></p>
+        </div>
+    </div>
+{% endblock %}
