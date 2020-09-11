@@ -50,4 +50,14 @@ urlpatterns = [
         'accounts/',
         include('django.contrib.auth.urls')
     ),
+    path(
+        'contact/',
+        views.contact,
+        name='contact'
+    ),
+    path(
+        'createarticle/',
+        views.createarticle,
+        name='createarticle'
+    ),
 ]
