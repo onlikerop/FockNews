@@ -1,110 +1,175 @@
+@charset "UTF-8";
+
 /**{
- border: solid 1px #ff0000;
+     border: solid 1px #ff0000;
 }*/
 
 #header_menu{
-list-style: none;
+    list-style: none;
 }
 
 #header_menu li{
-display: inline-block;
+    display: inline-block;
 }
 
 #header_menu li a{
-transform: translateY(17%);
--webkit-transform: translateY(17%);
+    transform: translateY(17%);
+    -webkit-transform: translateY(17%);
 }
 
 .minarticles{
-margin-left: 30px;
-width: 50%;
+    margin-left: 30px;
+    width: 50%;
 }
 
 .article_datetime{
-display: inline;
+    display: inline;
 }
 
 .article_author{
-float: right;
+    float: right;
 }
 
 .article{
-width: 50%;
-margin-left:10px
+    width: 50%;
+    margin-left:10px
 }
 
 .article_body{
-margin-left: 10px;
-margin-right: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
 .article_draft, .article_deleted{
-text-decoration: underline;
-font-size: 1em
+    text-decoration: underline;
+    font-size: 1em
 }
 
 .article_deleted{
-color: #FF5050;
+    color: #FF5050;
 }
 
 .article_draft{
-color: #FF8B50;
+    color: #FF8B50;
 }
 
 .form-control{
-margin-bottom: 10px;
+    margin-bottom: 10px;
 }
 
 #admin-btn a{
-color: #FF3844;
+    color: #FF3844;
 }
 
 #admin-btn a:hover{
-color: #9A1C25;
+    color: #9A1C25;
 }
 
 .create_article_btn{
-margin-bottom: 25px;
-text-align: center;
+    margin-bottom: 25px;
+    text-align: center;
 }
 
 .create_article_btn .btn{
-background: #E7E7FF;
-width: 100%;
+    background: #E7E7FF;
+    width: 100%;
 }
 
 .create_article_btn .btn:hover{
-background: #D0D0E6;
+    background: #D0D0E6;
 }
 
 .create_article_btn .btn svg{
-position: relative;
-vertical-align: -0.5em;
+    position: relative;
+    vertical-align: -0.5em;
 }
 
 .create_article{
-margin-left: 30px;
-margin-right: 30px;
+    margin-left: 30px;
+    margin-right: 30px;
 }
 
 .create_article .btn{
-width: 100%;
+    width: 100%;
 }
 
 .article_title{
-display: inline-block;
+    display: inline-block;
+}
+
+#btn-deletearticle, #btn-editarticle{
+    display: inline-block;
+    float: right;
+    margin-left: 10px;
 }
 
 #btn-deletearticle{
-display: inline-block;
-float: right;
-background: #FFE7E7;
+    background: #FFE7E7;
+}
+
+#btn-editarticle{
+    background: #FFFFC0;
 }
 
 #btn-deletearticle:hover{
-background: #E6D0D0;
+    background: #E6D0D0;
+}
+
+#btn-editarticle:hover{
+    background: #E6E6A9;
 }
 
 .btn-user{
-float: right;
+    float: right;
+}
+
+div.avatar img{
+    width: 100px;
+    height: 100px;
+    border: solid 1px silver;
+}
+
+.user_profile{
+    margin-left: 25px;
+    margin-right: 25px;
+}
+
+div.username, div.avatar{
+    display: inline-block;
+}
+
+.username{
+    padding-left: 5px;
+    vertical-align: middle;
+}
+
+p.group{
+    margin-left: 15px;
+}
+
+.about_me2, .rank2, .birthday2{
+    width: 50%;
+    vertical-align: top;
+    padding-left: 10px;
+    display: inline-block;
+}
+
+.user_profile_data{
+    padding-top: 25px;
+}
+
+.banned_user{
+    color: red;
+    text-decoration: underline;
+}
+/*Стили групп пользователей*/
+
+.Администратор{
+    color: red;
+    font-weight: 700;
+}
+
+.Модератор{
+    color: forestgreen;
+    font-weight: 500;
 }

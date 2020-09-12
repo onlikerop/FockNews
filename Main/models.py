@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 class Articles(models.Model):
     title = models.CharField(max_length=120)
-    body = models.TextField()
+    body = models.TextField(blank=True)
     create_datetime = models.DateTimeField()
     pub_datetime = models.DateTimeField(
         blank=True,
@@ -16,11 +16,11 @@ class Articles(models.Model):
     )
     author = models.ForeignKey(
         User,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         null=True,
         verbose_name='Автор'
     )
-    tags = models.TextField()
+    tags = models.TextField(blank=True)
     status = models.CharField(max_length=24)
     objects = models.Manager()
 

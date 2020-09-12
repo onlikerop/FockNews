@@ -38,5 +38,33 @@ $(document).ready(function () {
         });
     }
 
+    function saveEditedArticle(event) {
+        alert($("#title-input").val() + "\n" + $("#body-input").val() + "\n" + $("#tags-input").val());
+        $.ajax ({
+            url: window.location.pathname + 'save/',
+            data: {
+                'csrfmiddlewaretoken': csrftoken,
+                'title': $("#title-input").val(),
+                'body': $("#body-input").val(),
+                'tags': $("#tags-input").val()
+            },
+            method: 'POST',
+            beforeSend: function() {
+                $("#btn-saveeditarticle").hide();
+            },
+            success: function(data) {
+                if (data.column_num == 0) {
+                    alert("Ошибка. Статья не была сохранена!");
+                }
+                location.href = ".."
+            },
+            error: function(data) {
+                alert("Ошибка!");
+            }
+
+        });
+    }
+
     $("#btn-deletearticle").bind("click", delArticle);
+    $("#btn-saveeditarticle").bind("click", saveEditedArticle);
 });

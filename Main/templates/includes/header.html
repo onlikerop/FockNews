@@ -13,7 +13,7 @@
                     </svg>
                 </a>
             </li>
-            <li id="user-btn" class="btn-user"><a class="btn btn-lg" href = "#">{{ user_data.username }}</a></li>
+            <li id="user-btn" class="btn-user"><a class="btn btn-lg" href = "{% url 'userpage' user_data.username %}">{{ user_data.username }}</a></li>
         {% else %}
             <li id="login-btn" class="btn-user"><a class="btn btn-lg" href = "{% url 'login' %}">Войти</a></li>
         {% endif %}

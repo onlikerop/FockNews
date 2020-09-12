@@ -1,9 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.template import RequestContext
 from django.contrib.auth.models import User
 from Main.models import Articles
-from html_forms.forms import DeleteArticleButtonForm
+from html_forms.forms import CreateArticleForm
+import datetime
 
 
 def index(request):
@@ -24,25 +25,44 @@ def contacts(request):
 
 
 def article(request, pk):
-    # if request.method == 'POST':
-    #     form = DeleteArticleButtonForm(request.POST)
-    #     if form.is_valid():
-    #         instance = form.save(commit=False)
-    #         instance.id = pk
-    #         instance.title = Articles.objects.get(id=pk).title
-    #         instance.body = Articles.objects.get(id=pk).body
-    #         instance.create_datetime = Articles.objects.get(id=pk).create_datetime
-    #         instance.pub_datetime = None
-    #         instance.lasted_datetime = Articles.objects.get(id=pk).lasted_datetime
-    #         instance.author = Articles.objects.get(id=pk).author
-    #         instance.tags = Articles.objects.get(id=pk).tags
-    #         instance.status = "deleted"
-    #         instance.save()
     return render(request, 'Main/article.html',
                   {
-                      # 'form': DeleteArticleButtonForm(),
                       'articles': Articles.objects.get(id=pk),
                       'user_data': request.user,
                       'necessary_perm': "Main.view_" + Articles.objects.get(id=pk).status
+                  }
+                  )
+
+
+def editarticle(request, pk):
+    return render(request, 'html_forms/edit_article_form.html',
+                  {
+                      'articles': Articles.objects.get(id=pk),
+                      'user_data': request.user,
+                      'necessary_perm': "Main.change_articles"
+                  }
+                  )
+
+
+#  Form views  #
+def contact(request):
+    return render(request, 'html_forms/contact_form.html')
+
+
+def createarticle(request):
+    if request.method == 'POST':
+        form = CreateArticleForm(request.POST)
+
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.author = request.user
+            instance.create_datetime = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%d")
+            if instance.status == "published":
+                instance.pub_datetime = instance.create_datetime
+            instance.save()
+    return render(request, 'html_forms/create_article_form.html',
+                  {
+                      'form': CreateArticleForm(),
+                      'user_data': request.user
                   }
                   )

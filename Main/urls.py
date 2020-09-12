@@ -33,11 +33,32 @@ urlpatterns = [
         name='deletearticle'
     ),
     path(
-        'forms/',
-        include('html_forms.urls')
+        'news/<int:pk>/edit/',
+        views.editarticle,
+        name='editarticle'
+    ),
+    path(
+        'news/<int:pk>/edit/save/',
+        ajax_handler.saveeditedarticle,
+        name='saveeditedarticle'
     ),
     path(
         'accounts/',
         include('django.contrib.auth.urls')
     ),
-]
+    path(
+        'contact/',
+        views.contact,
+        name='contact'
+    ),
+    path(
+        'createarticle/',
+        views.createarticle,
+        name='createarticle'
+    ),
+    path(
+        'users/',
+        include('Users.urls'),
+        name='Users'
+    ),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
