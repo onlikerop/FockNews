@@ -1,3 +1,5 @@
+@charset "UTF-8";
+
 /**{
      border: solid 1px #ff0000;
 }*/
@@ -122,8 +124,9 @@
 }
 
 div.avatar img{
-    width: 64px;
-    height: 64px;
+    width: 100px;
+    height: 100px;
+    border: solid 1px silver;
 }
 
 .user_profile{
@@ -131,16 +134,38 @@ div.avatar img{
     margin-right: 25px;
 }
 
-h2.username, div.avatar, .about_me1, .about_me2{
+div.username, div.avatar{
     display: inline-block;
 }
 
-.about_me2{
+.username{
+    padding-left: 5px;
+    vertical-align: middle;
+}
+
+p.group{
+    margin-left: 15px;
+}
+
+.about_me2, .rank2, .birthday2{
     width: 50%;
     vertical-align: top;
     padding-left: 10px;
+    display: inline-block;
 }
 
 .user_profile_data{
     padding-top: 25px;
+}
+
+/*Стили групп пользователей*/
+
+.Администратор{
+    color: red;
+    font-weight: 700;
+}
+
+.Модератор{
+    color: forestgreen;
+    font-weight: 500;
 }
