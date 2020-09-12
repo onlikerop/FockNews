@@ -158,6 +158,10 @@ p.group{
     padding-top: 25px;
 }
 
+.banned_user{
+    color: red;
+    text-decoration: underline;
+}
 /*Стили групп пользователей*/
 
 .Администратор{
