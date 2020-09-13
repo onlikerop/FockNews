@@ -1,7 +1,4 @@
-from django.shortcuts import render, redirect
-from django.http import HttpResponse
-from django.template import RequestContext
-from django.contrib.auth.models import User
+from django.shortcuts import render
 from Main.models import Articles
 from html_forms.forms import CreateArticleForm
 import datetime
@@ -63,6 +60,7 @@ def createarticle(request):
     return render(request, 'html_forms/create_article_form.html',
                   {
                       'form': CreateArticleForm(),
-                      'user_data': request.user
+                      'user_data': request.user,
+                      'necessary_perm': "Main.add_articles"
                   }
                   )
