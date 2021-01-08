@@ -20,9 +20,22 @@
             <div class="username">
                 <h2 class="{{page_user_data.groups.all.0.name}}">{{page_user_data.username}}</h2>
                 <p class="group {{page_user_data.groups.all.0.name}}">{{page_user_data.groups.all.0.name}}</p>
+            </div>
+
+            <div class="baninfo">
                 {% check_ban page_user_data as checkban %}
                 {% if checkban.is_banned %}
+                    {% check_perm user_data 'Users.delete_bans' as checkperm %}
+                        {% if checkperm %}
+                            <a class="btn btn-lg text-success" id="unbanuser-btn" href="#">Разблокировать</a>
+                    {% endif %}
+
                     <p class="banned_user">Пользователь заблокирован администрацией ({{checkban.data.who_banned}}) до {{checkban.data.pass_datetime}} по причине: {{checkban.data.reason}}</p>
+                {% else %}
+                    {% check_perm user_data 'Users.add_bans' as checkperm %}
+                    {% if checkperm %}
+                        <a class="btn btn-lg text-danger" id="banuser-btn" href="#">Заблокировать</a>
+                    {% endif %}
                 {% endif %}
             </div>
 

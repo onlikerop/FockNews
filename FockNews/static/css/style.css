@@ -136,11 +136,13 @@ div.avatar img{
 
 div.username, div.avatar{
     display: inline-block;
+    vertical-align: top;
 }
 
 .username{
     padding-left: 5px;
-    vertical-align: middle;
+    /*vertical-align: middle;*/ /*Вообще не помню, зачем это было написано...*/
+    width: calc(50% - 126px);
 }
 
 p.group{
@@ -159,8 +161,20 @@ p.group{
 }
 
 .banned_user{
-    color: red;
-    text-decoration: underline;
+    border-radius: 7px;
+    padding: 5px 7px;
+    margin: 5px;
+    background: #FF595C;
+    color: white;
+    font-weight: 700;
+}
+
+div.baninfo{
+display: inline;
+}
+
+div.baninfo a#banuser-btn, div.baninfo a#unbanuser-btn{
+    float: right;
 }
 /*Стили групп пользователей*/
 
