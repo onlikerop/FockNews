@@ -25,7 +25,7 @@
             <div class="baninfo">
                 {% check_ban page_user_data as checkban %}
                 {% if checkban.is_banned %}
-                    {% check_perm user_data 'Users.delete_bans' as checkperm %}
+                    {% check_perm user_data "Users.delete_bans" as checkperm %}
                         {% if checkperm %}
                             <a class="btn btn-lg text-success" id="unbanuser-btn" href="#">Разблокировать</a>
                     {% endif %}

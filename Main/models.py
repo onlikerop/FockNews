@@ -30,3 +30,38 @@ class Articles(models.Model):
     class Meta:
         verbose_name = 'Статья'
         verbose_name_plural = 'Статьи'
+
+
+class Views(models.Model):
+    article = models.ForeignKey(
+        Articles,
+        on_delete=models.SET_NULL,
+        null=True,
+        verbose_name='Статья'
+    )
+    user = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        verbose_name='Пользователь'
+    )
+    user_ip = models.CharField(
+        max_length=16,
+        blank=True,
+        null=True
+    )
+    view_datetime = models.DateTimeField(
+        blank=True,
+        null=True
+    )
+    view_type = models.CharField(
+        max_length=24,
+        default='Default'
+    )
+    view_weight = models.IntegerField(default=1)
+    objects = models.Manager()
+
+    class Meta:
+        verbose_name = 'Просмотры'
+        verbose_name_plural = 'Просмотры'

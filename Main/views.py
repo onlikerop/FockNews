@@ -1,7 +1,8 @@
 from django.shortcuts import render
-from Main.models import Articles
+from Main.models import Articles, Views
 from html_forms.forms import CreateArticleForm
 import datetime
+import Main.zlib as zlib
 
 
 def index(request):
@@ -22,6 +23,24 @@ def contacts(request):
 
 
 def article(request, pk):
+    viewer = request.user if request.user.is_authenticated else None
+    locktimer = (datetime.datetime.utcnow() - Views.objects.filter(
+            article=Articles.objects.get(id=pk),
+            user=viewer,
+            user_ip=zlib.get_client_ip(request)
+    ).order_by("-view_datetime")[0].view_datetime.replace(tzinfo=None)).seconds > 60 if Views.objects.filter(
+            article=Articles.objects.get(id=pk),
+            user=viewer,
+            user_ip=zlib.get_client_ip(request)
+    ).order_by("-view_datetime") else True
+    if locktimer:
+        view = Views(
+            article=Articles.objects.get(id=pk),
+            user=viewer,
+            user_ip=zlib.get_client_ip(request),
+            view_datetime=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        )
+        view.save()
     return render(request, 'Main/article.html',
                   {
                       'articles': Articles.objects.get(id=pk),
@@ -53,7 +72,7 @@ def createarticle(request):
         if form.is_valid():
             instance = form.save(commit=False)
             instance.author = request.user
-            instance.create_datetime = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%d")
+            instance.create_datetime = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             if instance.status == "published":
                 instance.pub_datetime = instance.create_datetime
             instance.save()
