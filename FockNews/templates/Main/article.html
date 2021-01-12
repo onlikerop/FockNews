@@ -36,6 +36,14 @@
             {% if checkperm and articles.status != "deleted" %}
                 <button class="btn btn-lg text-danger" id="btn-deletearticle" type="submit">Удалить статью</button>
             {% endif %}
+            {% check_perm user_data "Main.restore_articles" as checkperm %}
+            {% if checkperm and articles.status == "deleted" %}
+                <button class="btn btn-lg text-success" id="btn-restorearticle" type="submit">Восстановить статью</button>
+            {% endif %}
+            {% check_perm user_data "Main.add_articles" as checkperm %}
+            {% if checkperm and articles.status == "draft" %}
+                <button class="btn btn-lg text-success" id="btn-publisharticle" type="submit">Опубликовать статью</button>
+            {% endif %}
             {% check_perm user_data "Main.change_articles" as checkperm %}
             {% if checkperm %}
                 <a class="btn btn-lg text-warning" id="btn-editarticle" href="edit">Изменить статью</a>

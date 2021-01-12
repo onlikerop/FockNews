@@ -38,8 +38,49 @@ $(document).ready(function () {
         });
     }
 
+
+    function restoreArticle(event) {
+        $.ajax ({
+            url: window.location.pathname + 'restore/',
+            data: {
+                'csrfmiddlewaretoken': csrftoken
+            },
+            method: 'POST',
+            beforeSend: function() {
+                $("#btn-restorearticle").hide();
+            },
+            success: function(data) {
+                if (data.column_num == 0) {
+                    alert("Ошибка. Статья не была восстановлена!");
+                }
+                location.reload();
+            }
+
+        });
+    }
+
+
+    function publishArticle(event) {
+        $.ajax ({
+            url: window.location.pathname + 'publish/',
+            data: {
+                'csrfmiddlewaretoken': csrftoken
+            },
+            method: 'POST',
+            beforeSend: function() {
+                $("#btn-publisharticle").hide();
+            },
+            success: function(data) {
+                if (data.column_num == 0) {
+                    alert("Ошибка. Статья не была восстановлена!");
+                }
+                location.reload();
+            }
+
+        });
+    }
+
     function saveEditedArticle(event) {
-        alert($("#title-input").val() + "\n" + $("#body-input").val() + "\n" + $("#tags-input").val());
         $.ajax ({
             url: window.location.pathname + 'save/',
             data: {
@@ -66,5 +107,7 @@ $(document).ready(function () {
     }
 
     $("#btn-deletearticle").bind("click", delArticle);
+    $("#btn-restorearticle").bind("click", restoreArticle);
+    $("#btn-publisharticle").bind("click", publishArticle);
     $("#btn-saveeditarticle").bind("click", saveEditedArticle);
 });

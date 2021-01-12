@@ -13,6 +13,24 @@ def deletearticle(request, pk):
     return JsonResponse({"column_num": item})
 
 
+def restorearticle(request, pk):
+    if request.user.is_authenticated\
+            and request.is_ajax\
+            and request.POST\
+            and request.user.has_perm("Main.restore_articles"):
+        item = Articles.objects.filter(id=pk).update(status="published")
+    return JsonResponse({"column_num": item})
+
+
+def publisharticle(request, pk):
+    if request.user.is_authenticated\
+            and request.is_ajax\
+            and request.POST\
+            and request.user.has_perm("Main.publish_articles"):
+        item = Articles.objects.filter(id=pk).update(status="published")
+    return JsonResponse({"column_num": item})
+
+
 def saveeditedarticle(request, pk):
     if request.user.is_authenticated\
             and request.is_ajax\

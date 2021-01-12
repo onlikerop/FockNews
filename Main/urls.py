@@ -31,6 +31,16 @@ urlpatterns = [
         name='deletearticle'
     ),
     path(
+        'news/<int:pk>/restore/',
+        ajax_handler.restorearticle,
+        name='restorearticle'
+    ),
+    path(
+        'news/<int:pk>/publish/',
+        ajax_handler.publisharticle,
+        name='publisharticle'
+    ),
+    path(
         'news/<int:pk>/edit/',
         views.editarticle,
         name='editarticle'

@@ -31,6 +31,14 @@ class Articles(models.Model):
         verbose_name = 'Статья'
         verbose_name_plural = 'Статьи'
 
+        permissions = (
+            ("restore_articles", "Can restore Articles"),
+            ("publish_articles", "Can publish drafts of Articles"),
+            ("view_published", "Can view published Articles"),
+            ("view_draft", "Can view drafts of Articles"),
+            ("view_deleted", "Can view deleted Articles"),
+        )
+
 
 class Views(models.Model):
     article = models.ForeignKey(
