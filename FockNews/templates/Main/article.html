@@ -62,6 +62,7 @@
             <h5 class="article_author">{% if articles.status == "published" %}Опубликовано{% else %}Создано{% endif %} пользователем <a href="/users/{{articles.author}}"><u>{{articles.author}}</u></a></h5>
             <br><br>
             <p class="article_tags"><b>Тэги статьи: {{articles.tags}}</b></p>
+            <p class="article_views text-secondary">Просмотров: {{views}} <span title="Просмотров за последнюю неделю">({{views_per_week}})</span></p>
         </div>
     {% else %}
         <h3 align="center" class="error text-danger">У Вас нет прав на просмотр данной статьи!</h3>

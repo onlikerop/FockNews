@@ -17,21 +17,54 @@
     -webkit-transform: translateY(17%);
 }
 
-.minarticles{
-    margin-left: 30px;
+.main_body{
+    display: inline-block;
     width: 50%;
 }
 
-.article_datetime{
+aside{
+    float: right;
+    width: 20%;
+    border-radius: 5px;
+    border: solid 1px silver;
+    position: fixed;
+    top: 100px;
+    right:0;
+
+}
+
+footer{
+    position: absolute;
+    bottom: 30px;
+    left:0;
+    width: 100%;
+}
+
+aside div{
+    margin: 3px
+}
+
+aside div.username .group{
+    margin: 0;
+}
+
+aside .rank2{
+    width: auto;
+}
+
+.minarticles{
+    margin-left: 30px;
+}
+
+.article_datetime, .article_tags{
     display: inline;
 }
 
-.article_author{
+.article_author, .article_views{
     float: right;
 }
 
 .article{
-    width: 50%;
     margin-left:10px
 }
 

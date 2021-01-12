@@ -27,7 +27,7 @@
                     <h3 class="article_title"><a href="/news/{{post.id}}">{{post.title}}</a></h3>
                     <p class="article_minbody">{{post.body|safe|truncatechars:255}}</p>
                     <h6 class="article_datetime">{{post.pub_datetime|date:"d.m.Y H:i"}}</h6>{% if post.lasted_datetime != NULL %} <span class="btn-link article_lasted_datetime" title="{{post.lasted_datetime|date:'d.m.Y H:i'}}">(ред.)</span> {% endif %}
-                    <h6 class="article_author">Опубликовано пользователем <a href="/users/{{post.author}}"><u>{{post.author}}</u></a></h6>
+                    <h6 class="article_author"><a href="/users/{{post.author}}"><u>{{post.author}}</u></a></h6>
                     <p class="article_tags">{{post.tags}}</p>
                     <hr><br>
                 </div>

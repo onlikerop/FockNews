@@ -1,0 +1,26 @@
+<aside>
+    <div class="aside">
+        <div class="side_minprofile">
+            <div class="avatar">
+                    {% if request.user.profile.avatar %}
+                        <img src="{{MEDIA_URL}}{{request.user.profile.avatar}}">
+                    {% else %}
+                        <img src="{{MEDIA_URL}}images/avatars/default.png">
+                    {% endif %}
+            </div>
+            <div class="username">
+                    <h4 class="{{request.user.groups.all.0.name}}">{{request.user.username}}</h4>
+                    <p class="group {{request.user.groups.all.0.name}}">{{request.user.groups.all.0.name}}</p>
+            </div>
+            {% if request.user.profile.rank %}
+                    <div class="rank">Звание: <span class="rank2">{{request.user.profile.rank|safe}}</span></div>
+            {% endif %}
+        </div><hr>
+
+        <div class="side_articles">
+            <div>Article1</div>
+            <div>Article2</div>
+            <div>Article3</div>
+        </div><hr>
+    </div>
+</aside>

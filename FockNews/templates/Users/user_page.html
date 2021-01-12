@@ -47,7 +47,7 @@
                 <div class="birthday">Дата рождения: <div class="birthday2">{{page_user_data.profile.birthday_date}}</div></div>
                 {% endif %}
                 {% if page_user_data.profile.rank %}
-                <div class="rank">Звание: <div class="rank2">{{page_user_data.profile.rank|safe}}</div></div>
+                <div class="rank">Звание: <span class="rank2">{{page_user_data.profile.rank|safe}}</span></div>
                 {% endif %}
                 {% if page_user_data.profile.about_me %}
                 <div class="about_me1">Обо мне: <div class="about_me2">{{page_user_data.profile.about_me|safe|linebreaks}}</div></div>

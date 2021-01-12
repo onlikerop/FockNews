@@ -20,9 +20,12 @@
         {% include "includes/header.html" %}
     </head>
     <body>
-        {% block content %}
-        {% endblock %}
+        <div class="main_body">
+            {% block content %}
+            {% endblock %}
+        </div>
 
+        {% include "includes/sidebar.html" %}
         {% include "includes/footer.html" %}
     </body>
 </html>
