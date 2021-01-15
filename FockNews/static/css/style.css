@@ -44,6 +44,10 @@ aside div{
     margin: 3px
 }
 
+aside .username{
+    width: calc(100% - 120px);
+}
+
 aside div.username .group{
     margin: 0;
 }
@@ -191,7 +195,6 @@ p.group{
 }
 
 .about_me2, .rank2, .birthday2{
-    width: 50%;
     vertical-align: top;
     padding-left: 10px;
     display: inline-block;

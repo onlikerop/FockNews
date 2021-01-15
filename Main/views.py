@@ -6,32 +6,30 @@ import Main.zlib as zlib
 
 
 def index(request):
-    return render(request, 'Main/index.html',
-                  {
-                      'object_list': Articles.objects.filter(status="published").order_by("-pub_datetime")[:20],
-                      'user_data': request.user
-                  }
-                  )
+    response = zlib.get_full_response(
+        request,
+        {
+            'object_list': Articles.objects.filter(status="published").order_by("-pub_datetime")[:20]
+        }
+    )
+    return render(request, 'Main/index.html', response)
 
 
 def contacts(request):
-    return render(request, 'Main/contacts.html',
-                  {
-                      'user_data': request.user
-                  }
-                  )
+    response = zlib.get_full_response(request, {})
+    return render(request, 'Main/contacts.html', response)
 
 
 def article(request, pk):
     viewer = request.user if request.user.is_authenticated else None
     locktimer = (datetime.datetime.utcnow() - Views.objects.filter(
-            article=Articles.objects.get(id=pk),
-            user=viewer,
-            user_ip=zlib.get_client_ip(request)
+        article=Articles.objects.get(id=pk),
+        user=viewer,
+        user_ip=zlib.get_client_ip(request)
     ).order_by("-view_datetime")[0].view_datetime.replace(tzinfo=None)).seconds > 60 if Views.objects.filter(
-            article=Articles.objects.get(id=pk),
-            user=viewer,
-            user_ip=zlib.get_client_ip(request)
+        article=Articles.objects.get(id=pk),
+        user=viewer,
+        user_ip=zlib.get_client_ip(request)
     ).order_by("-view_datetime") else True
     if locktimer:
         view = Views(
@@ -47,25 +45,28 @@ def article(request, pk):
         article=Articles.objects.get(id=pk),
         view_datetime__gte=(datetime.datetime.now() + datetime.timedelta(days=-7)).strftime("%Y-%m-%d %H:%M:%S")
     ).count
-    return render(request, 'Main/article.html',
-                  {
-                      'articles': Articles.objects.get(id=pk),
-                      'views': views,
-                      'views_per_week': views_per_week,
-                      'user_data': request.user,
-                      'necessary_perm': "Main.view_" + Articles.objects.get(id=pk).status
-                  }
-                  )
+
+    response = zlib.get_full_response(
+        request,
+        {
+            'articles': Articles.objects.get(id=pk),
+            'views': views,
+            'views_per_week': views_per_week,
+            'necessary_perm': "Main.view_" + Articles.objects.get(id=pk).status
+        }
+    )
+    return render(request, 'Main/article.html', response)
 
 
 def editarticle(request, pk):
-    return render(request, 'html_forms/edit_article_form.html',
-                  {
-                      'articles': Articles.objects.get(id=pk),
-                      'user_data': request.user,
-                      'necessary_perm': "Main.change_articles"
-                  }
-                  )
+    response = zlib.get_full_response(
+        request,
+        {
+            'articles': Articles.objects.get(id=pk),
+            'necessary_perm': "Main.change_articles"
+        }
+    )
+    return render(request, 'html_forms/edit_article_form.html', response)
 
 
 #  Form views  #
@@ -84,10 +85,12 @@ def createarticle(request):
             if instance.status == "published":
                 instance.pub_datetime = instance.create_datetime
             instance.save()
-    return render(request, 'html_forms/create_article_form.html',
-                  {
-                      'form': CreateArticleForm(),
-                      'user_data': request.user,
-                      'necessary_perm': "Main.add_articles"
-                  }
-                  )
+
+    response = zlib.get_full_response(
+        request,
+        {
+            'form': CreateArticleForm(),
+            'necessary_perm': "Main.add_articles"
+        }
+    )
+    return render(request, 'html_forms/create_article_form.html', response)
