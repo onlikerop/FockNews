@@ -1,3 +1,6 @@
+import random
+import string
+
 from django.contrib import admin
 from django.urls import include, path
 from . import views
@@ -12,7 +15,7 @@ urlpatterns = [
         name='index'
     ),
     path(
-        'Wcs4q9rXQKsPzVYf63Ome1VM',
+        ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(24)),
         admin.site.urls
     ),
     path(

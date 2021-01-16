@@ -1,3 +1,5 @@
+import datetime
+
 from Main.models import Articles, Views
 from django.db.models import Sum
 
@@ -12,7 +14,9 @@ def get_client_ip(request):
 
 
 def stdict(request):
-    poparts = Articles.objects.annotate(views_num=Sum('views__view_weight')).order_by('-views_num')[:3]
+    poparts = Articles.objects.filter(
+        views__view_datetime__gte=(datetime.datetime.now() + datetime.timedelta(days=-7)).strftime("%Y-%m-%d %H:%M:%S")
+    ).annotate(views_num=Sum('views__view_weight')).order_by('-views_num')[:3]
     return {
         'user_data': request.user,
         'sidebar_data': {

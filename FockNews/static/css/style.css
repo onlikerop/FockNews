@@ -20,6 +20,8 @@
 .main_body{
     display: inline-block;
     width: 50%;
+    height: calc(100% - 150px);
+    overflow: auto;
 }
 
 aside{
@@ -34,7 +36,7 @@ aside{
 }
 
 footer{
-    position: absolute;
+    position: fixed;
     bottom: 30px;
     left:0;
     width: 100%;
