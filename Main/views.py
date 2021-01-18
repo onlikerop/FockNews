@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from Main.models import Articles, Views
 from html_forms.forms import CreateArticleForm
+from Main import zlib
 import datetime
-import Main.zlib as zlib
+
 
 
 def index(request):

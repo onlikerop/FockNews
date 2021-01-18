@@ -4,6 +4,15 @@
      border: solid 1px #ff0000;
 }*/
 
+body{
+    display: flex;
+    flex-direction: column;
+}
+
+header{
+    height: 75px;
+}
+
 #header_menu{
     list-style: none;
 }
@@ -20,8 +29,7 @@
 .main_body{
     display: inline-block;
     width: 50%;
-    height: calc(100% - 150px);
-    overflow: auto;
+    flex: 1 0 auto;
 }
 
 aside{
@@ -32,14 +40,13 @@ aside{
     position: fixed;
     top: 100px;
     right:0;
-
 }
 
 footer{
-    position: fixed;
-    bottom: 30px;
-    left:0;
+    position: relative;
+    bottom: 20px;
     width: 100%;
+    flex: 0 0 auto;
 }
 
 aside div{
