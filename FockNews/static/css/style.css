@@ -103,6 +103,14 @@ aside .rank2{
     margin-bottom: 10px;
 }
 
+#API-btn a{
+    color: #7932ff;
+}
+
+#API-btn a:hover{
+    color: #5202d4;
+}
+
 #admin-btn a{
     color: #FF3844;
 }
@@ -239,4 +247,21 @@ div.baninfo a#banuser-btn, div.baninfo a#unbanuser-btn{
 .Модератор{
     color: forestgreen;
     font-weight: 500;
+}
+
+#API_select{
+    width: 100%;
+    font-size: 5em;
+    word-spacing: 2.5em;
+    height: 10em;
+    position: relative;
+}
+
+#API_select p{
+    text-align: center;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%)
 }

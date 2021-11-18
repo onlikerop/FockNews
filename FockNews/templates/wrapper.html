@@ -24,8 +24,9 @@
             {% block content %}
             {% endblock %}
         </div>
-
-        {% include "includes/sidebar.html" %}
+        {% if sidebar_data %}
+            {% include "includes/sidebar.html" %}
+        {% endif %}
         {% include "includes/footer.html" %}
     </body>
 </html>

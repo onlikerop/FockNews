@@ -72,4 +72,9 @@ urlpatterns = [
         include('Users.urls'),
         name='Users'
     ),
+    path(
+        'api/',
+        include('API.urls'),
+        name='API'
+    )
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

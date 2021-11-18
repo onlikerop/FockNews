@@ -4,7 +4,7 @@ from html_forms.forms import CreateArticleForm
 from Main import zlib
 import datetime
 
-
+from Main.models import Articles
 
 def index(request):
     response = zlib.get_full_response(
