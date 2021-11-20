@@ -1,0 +1,267 @@
+@charset "UTF-8";
+
+/**{
+     border: solid 1px #ff0000;
+}*/
+
+body{
+    display: flex;
+    flex-direction: column;
+}
+
+header{
+    height: 75px;
+}
+
+#header_menu{
+    list-style: none;
+}
+
+#header_menu li{
+    display: inline-block;
+}
+
+#header_menu li a{
+    transform: translateY(17%);
+    -webkit-transform: translateY(17%);
+}
+
+.main_body{
+    display: inline-block;
+    width: 50%;
+    flex: 1 0 auto;
+}
+
+aside{
+    float: right;
+    width: 20%;
+    border-radius: 5px;
+    border: solid 1px silver;
+    position: fixed;
+    top: 100px;
+    right:0;
+}
+
+footer{
+    position: relative;
+    bottom: 20px;
+    width: 100%;
+    flex: 0 0 auto;
+}
+
+aside div{
+    margin: 3px
+}
+
+aside .username{
+    width: calc(100% - 120px);
+}
+
+aside div.username .group{
+    margin: 0;
+}
+
+aside .rank2{
+    width: auto;
+}
+
+.minarticles{
+    margin-left: 30px;
+}
+
+.article_datetime, .article_tags{
+    display: inline;
+}
+
+.article_author, .article_views{
+    float: right;
+}
+
+.article{
+    margin-left:10px
+}
+
+.article_body{
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.article_draft, .article_deleted{
+    text-decoration: underline;
+    font-size: 1em
+}
+
+.article_deleted{
+    color: #FF5050;
+}
+
+.article_draft{
+    color: #FF8B50;
+}
+
+.form-control{
+    margin-bottom: 10px;
+}
+
+#API-btn a{
+    color: #7932ff;
+}
+
+#API-btn a:hover{
+    color: #5202d4;
+}
+
+#admin-btn a{
+    color: #FF3844;
+}
+
+#admin-btn a:hover{
+    color: #9A1C25;
+}
+
+.create_article_btn{
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.create_article_btn .btn{
+    background: #E7E7FF;
+    width: 100%;
+}
+
+.create_article_btn .btn:hover{
+    background: #D0D0E6;
+}
+
+.create_article_btn .btn svg{
+    position: relative;
+    vertical-align: -0.5em;
+}
+
+.create_article{
+    margin-left: 30px;
+    margin-right: 30px;
+}
+
+.create_article .btn{
+    width: 100%;
+}
+
+.article_title{
+    display: inline-block;
+}
+
+#btn-deletearticle, #btn-editarticle, #btn-restorearticle, btn-publisharticle{
+    display: inline-block;
+    float: right;
+    margin-left: 10px;
+}
+
+#btn-deletearticle{
+    background: #FFE7E7;
+}
+
+#btn-editarticle{
+    background: #FFFFC0;
+}
+
+#btn-restorearticle, btn-publisharticle{
+    background: #E7FFE7;
+}
+
+#btn-deletearticle:hover{
+    background: #E6D0D0;
+}
+
+#btn-editarticle:hover{
+    background: #E6E6A9;
+}
+
+#btn-restorearticle:hover, btn-publisharticle:hover{
+    background: #D0E6D0;
+}
+
+.btn-user{
+    float: right;
+}
+
+div.avatar img{
+    width: 100px;
+    height: 100px;
+    border: solid 1px silver;
+}
+
+.user_profile{
+    margin-left: 25px;
+    margin-right: 25px;
+}
+
+div.username, div.avatar{
+    display: inline-block;
+    vertical-align: top;
+}
+
+.username{
+    padding-left: 5px;
+    /*vertical-align: middle;*/ /*Вообще не помню, зачем это было написано...*/
+    width: calc(50% - 126px);
+}
+
+p.group{
+    margin-left: 15px;
+}
+
+.about_me2, .rank2, .birthday2{
+    vertical-align: top;
+    padding-left: 10px;
+    display: inline-block;
+}
+
+.user_profile_data{
+    padding-top: 25px;
+}
+
+.banned_user{
+    border-radius: 7px;
+    padding: 5px 7px;
+    margin: 5px;
+    background: #FF595C;
+    color: white;
+    font-weight: 700;
+}
+
+div.baninfo{
+display: inline;
+}
+
+div.baninfo a#banuser-btn, div.baninfo a#unbanuser-btn{
+    float: right;
+}
+/*Стили групп пользователей*/
+
+.Администратор{
+    color: red;
+    font-weight: 700;
+}
+
+.Модератор{
+    color: forestgreen;
+    font-weight: 500;
+}
+
+#API_select{
+    width: 100%;
+    font-size: 5em;
+    word-spacing: 2.5em;
+    height: 10em;
+    position: relative;
+}
+
+#API_select p{
+    text-align: center;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%)
+}

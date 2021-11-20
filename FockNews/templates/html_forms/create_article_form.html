@@ -1,0 +1,27 @@
+{% extends "wrapper.html" %}
+{% load extra_tags %}
+
+{% block title %}
+    Создание статьи
+{% endblock %}
+
+{% block content %}
+    {% check_perm user_data necessary_perm as checkperm %}
+    {% if checkperm %}
+        <div class="create_article">
+            <h1>Создать статью:</h1><br>
+            <div class="create_article_form">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.title }}
+                    {{ form.body }}
+                    {{ form.tags }}
+                    {{ form.status }}
+                    <button type="submit" class="btn btn-success">Добавить статью</button>
+                </form>
+            </div>
+        </div>
+    {% else %}
+        <h3 align="center" class="error text-danger">У Вас нет прав на создание статей!</h3>
+    {% endif %}
+{% endblock %}

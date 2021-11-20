@@ -1,4 +1,4 @@
-from Main.models import Articles
+from Main.models import Articles, Views
 from django.forms import ModelForm, TextInput, Textarea, Select
 
 

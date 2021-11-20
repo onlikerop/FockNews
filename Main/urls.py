@@ -1,8 +1,9 @@
+import random
+import string
+
 from django.contrib import admin
 from django.urls import include, path
 from . import views
-from django.views.generic import ListView, DetailView
-from Main.models import Articles
 from django.conf.urls.static import static
 from django.conf import settings
 from . import ajax_handler
@@ -14,7 +15,7 @@ urlpatterns = [
         name='index'
     ),
     path(
-        'Wcs4q9rXQKsPzVYf63Ome1VM',
+        ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(24)),
         admin.site.urls
     ),
     path(
@@ -31,6 +32,16 @@ urlpatterns = [
         'news/<int:pk>/delete/',
         ajax_handler.deletearticle,
         name='deletearticle'
+    ),
+    path(
+        'news/<int:pk>/restore/',
+        ajax_handler.restorearticle,
+        name='restorearticle'
+    ),
+    path(
+        'news/<int:pk>/publish/',
+        ajax_handler.publisharticle,
+        name='publisharticle'
     ),
     path(
         'news/<int:pk>/edit/',
@@ -61,4 +72,9 @@ urlpatterns = [
         include('Users.urls'),
         name='Users'
     ),
+    path(
+        'api/',
+        include('API.urls'),
+        name='API'
+    )
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
