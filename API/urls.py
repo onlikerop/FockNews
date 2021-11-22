@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import ArticleView, ProfileView
+from .views import ArticlesView, ProfilesView, ArticleView, ProfileView
 from . import views
 
 
@@ -10,9 +10,15 @@ urlpatterns = [
          views.select
          ),
     path('articles/',
-         ArticleView.as_view()
+         ArticlesView.as_view()
          ),
     path('users/',
+         ProfilesView.as_view()
+         ),
+    path('news/<int:pk>/',
+         ArticleView.as_view()
+         ),
+    path('users/<slug:pk>/',
          ProfileView.as_view()
          ),
 ]
