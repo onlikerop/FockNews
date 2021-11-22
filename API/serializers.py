@@ -32,3 +32,13 @@ class ArticleSerializer(serializers.Serializer):
     status = serializers.CharField(max_length=24)
 
 
+class APIKeySerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    key = serializers.CharField()
+    issue_datetime = serializers.DateTimeField()
+    exp_datetime = serializers.DateTimeField()
+    issued_by_id = serializers.IntegerField()
+    purpose = serializers.CharField()
+    allowed_requests = serializers.IntegerField()
+    status = serializers.CharField()
+    super_key = serializers.BooleanField()

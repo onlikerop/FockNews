@@ -1,5 +1,7 @@
 import datetime
+from API.models import APIKey as APIKey_M
 
+from API.models import APIRequests
 from Main.models import Articles, Views
 from django.db.models import Sum
 
@@ -28,3 +30,16 @@ def stdict(request):
 def get_full_response(request, addictive):
     addictive.update(stdict(request))
     return addictive
+
+
+def CreateAPIRequest(APIKey=None, ip=None, body=None, free=None):
+    APIKey_M.objects.filter(
+        exp_datetime__lt=datetime.datetime.now(),
+        status="Active"
+    ).update(status="Expired")
+    return APIRequests(
+        APIKey=APIKey,
+        ip=ip,
+        body=body,
+        free=free
+    )

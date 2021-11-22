@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import ArticlesView, ProfilesView, ArticleView, ProfileView
+from .views import ArticlesView, ProfilesView, ArticleView, ProfileView, APIKeyView, APIKeysView
 from . import views
 
 
@@ -20,5 +20,11 @@ urlpatterns = [
          ),
     path('users/<slug:pk>/',
          ProfileView.as_view()
+         ),
+    path('APIKeys/',
+         APIKeysView.as_view()
+         ),
+    path('APIKeys/<slug:pk>/',
+         APIKeyView.as_view()
          ),
 ]
