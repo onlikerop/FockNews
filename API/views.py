@@ -1,7 +1,6 @@
 import datetime
 
 from django.contrib.auth.models import User
-from django.db.models import Q
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -23,7 +22,7 @@ def select(request):
 
 class ArticlesView(APIView):
     def get(self, request):
-        if "APIKey" in request.GET:
+        if "APIKey" in request.GET.keys():
             thisKey = APIKey.objects.filter(
                 key=request.GET['APIKey'],
                 exp_datetime__gte=datetime.datetime.utcnow(),
@@ -37,16 +36,41 @@ class ArticlesView(APIView):
                     APIRequest = CreateAPIRequest(
                         APIKey=thisKey,
                         ip=zlib.get_client_ip(request),
-                        body=request.get_full_path()
+                        body="GET: " + str(request.GET) + "\nPOST: " + str(request.POST) + "\ndata: " + str(request.data)
                     )
                     APIRequest.save()
                     return Response({"articles": serializer.data if articles else None})
         return Response("403 Forbidden")
 
+    def post(self, request):
+        if "APIKey" in request.data:
+            thisKey = APIKey.objects.filter(
+                key=request.data.get('APIKey'),
+                exp_datetime__gte=datetime.datetime.utcnow(),
+                status="Active"
+            ).first()
+            if thisKey:
+                counter = APIRequests.objects.filter(APIKey=thisKey).count()
+                if thisKey.allowed_requests - counter > 0 or thisKey.allowed_requests == -1:
+                    article = request.data.get('article')
+                    # Create an article from the above data
+                    serializer = ArticleSerializer(data=article)
+                    if serializer.is_valid(raise_exception=True):
+                        article_saved = serializer.save()
+
+                    APIRequest = CreateAPIRequest(
+                        APIKey=thisKey,
+                        ip=zlib.get_client_ip(request),
+                        body="GET: " + str(request.GET) + "\nPOST: " + str(request.POST) + "\ndata: " + str(request.data)
+                    )
+                    APIRequest.save()
+                    return Response({"success": "Article '{}' created successfully".format(article_saved.title)})
+        return Response("403 Forbidden")
+
 
 class ArticleView(APIView):
     def get(self, request, pk):
-        if "APIKey" in request.GET:
+        if "APIKey" in request.GET.keys():
             thisKey = APIKey.objects.filter(
                 key=request.GET['APIKey'],
                 exp_datetime__gte=datetime.datetime.utcnow(),
@@ -60,7 +84,7 @@ class ArticleView(APIView):
                     APIRequest = CreateAPIRequest(
                         APIKey=thisKey,
                         ip=zlib.get_client_ip(request),
-                        body=request.get_full_path()
+                        body="GET: " + str(request.GET) + "\nPOST: " + str(request.POST) + "\ndata: " + str(request.data)
                     )
                     APIRequest.save()
                     return Response({"article": serializer.data if article else None})
@@ -69,7 +93,7 @@ class ArticleView(APIView):
 
 class ProfilesView(APIView):
     def get(self, request):
-        if "APIKey" in request.GET:
+        if "APIKey" in request.GET.keys():
             thisKey = APIKey.objects.filter(
                 key=request.GET['APIKey'],
                 exp_datetime__gte=datetime.datetime.utcnow(),
@@ -83,7 +107,7 @@ class ProfilesView(APIView):
                     APIRequest = CreateAPIRequest(
                         APIKey=thisKey,
                         ip=zlib.get_client_ip(request),
-                        body=request.get_full_path()
+                        body="GET: " + str(request.GET) + "\nPOST: " + str(request.POST) + "\ndata: " + str(request.data)
                     )
                     APIRequest.save()
                     return Response({"users": serializer.data if profiles else None})
@@ -92,7 +116,7 @@ class ProfilesView(APIView):
 
 class ProfileView(APIView):
     def get(self, request, pk):
-        if "APIKey" in request.GET:
+        if "APIKey" in request.GET.keys():
             thisKey = APIKey.objects.filter(
                 key=request.GET['APIKey'],
                 exp_datetime__gte=datetime.datetime.utcnow(),
@@ -107,7 +131,7 @@ class ProfileView(APIView):
                     APIRequest = CreateAPIRequest(
                         APIKey=thisKey,
                         ip=zlib.get_client_ip(request),
-                        body=request.get_full_path()
+                        body="GET: " + str(request.GET) + "\nPOST: " + str(request.POST) + "\ndata: " + str(request.data)
                     )
                     APIRequest.save()
                     return Response({"user": serializer.data if profile else None})
@@ -116,7 +140,7 @@ class ProfileView(APIView):
 
 class APIKeyView(APIView):
     def get(self, request, pk):
-        if "APIKey" in request.GET:
+        if "APIKey" in request.GET.keys():
             thisKey = APIKey.objects.filter(key=request.GET['APIKey']).first()
             if thisKey:
                 counter = APIRequests.objects.filter(
@@ -127,7 +151,7 @@ class APIKeyView(APIView):
                     APIRequest = CreateAPIRequest(
                         APIKey=thisKey,
                         ip=zlib.get_client_ip(request),
-                        body=request.get_full_path(),
+                        body="GET: " + str(request.GET) + "\nPOST: " + str(request.POST) + "\ndata: " + str(request.data),
                         free=True
                     )
                     apikey = APIKey.objects.filter(key=pk).first()
@@ -142,14 +166,14 @@ class APIKeyView(APIView):
 
 class APIKeysView(APIView):
     def get(self, request):
-        if "APIKey" in request.GET:
+        if "APIKey" in request.GET.keys():
             thisKey = APIKey.objects.filter(key=request.GET['APIKey']).first()
             if thisKey:
                 if thisKey.super_key:
                     APIRequest = CreateAPIRequest(
                         APIKey=thisKey,
                         ip=zlib.get_client_ip(request),
-                        body=request.get_full_path(),
+                        body="GET: " + str(request.GET) + "\nPOST: " + str(request.POST) + "\ndata: " + str(request.data),
                         free=True
                     )
                     apikey = APIKey.objects.all()

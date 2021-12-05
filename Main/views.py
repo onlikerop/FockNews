@@ -6,6 +6,7 @@ import datetime
 
 from Main.models import Articles
 
+
 def index(request):
     response = zlib.get_full_response(
         request,

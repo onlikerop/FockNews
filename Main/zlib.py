@@ -5,6 +5,7 @@ from API.models import APIRequests
 from Main.models import Articles, Views
 from django.db.models import Sum
 
+
 # Service Functions
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -32,7 +33,7 @@ def get_full_response(request, addictive):
     return addictive
 
 
-def CreateAPIRequest(APIKey=None, ip=None, body=None, free=None):
+def CreateAPIRequest(APIKey=None, ip=None, body=None, free=False):
     APIKey_M.objects.filter(
         exp_datetime__lt=datetime.datetime.now(),
         status="Active"

@@ -34,6 +34,9 @@ class Bans(models.Model):
         verbose_name = 'Блокировка'
         verbose_name_plural = 'Блокировки'
 
+    def __str__(self):
+        return str(self.user) + " [" + str(self.ban_datetime) + "]"
+
 
 class Profile(models.Model):
     user = models.OneToOneField(
@@ -61,6 +64,9 @@ class Profile(models.Model):
     class Meta:
         verbose_name = 'Профиль пользователя'
         verbose_name_plural = 'Профили пользователей'
+
+    def __str__(self):
+        return self.user
 
 
 @receiver(post_save, sender=User)

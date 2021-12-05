@@ -30,6 +30,9 @@ class APIKey(models.Model):
         verbose_name = 'API-key'
         verbose_name_plural = 'API-keys'
 
+    def __str__(self):
+        return self.purpose
+
 
 class APIRequests(models.Model):
     APIKey = models.ForeignKey(
@@ -52,3 +55,6 @@ class APIRequests(models.Model):
     class Meta:
         verbose_name = 'API запрос'
         verbose_name_plural = 'API запросы'
+
+    def __str__(self):
+        return self.datetime

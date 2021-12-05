@@ -73,3 +73,6 @@ class Views(models.Model):
     class Meta:
         verbose_name = 'Просмотры'
         verbose_name_plural = 'Просмотры'
+
+    def __str__(self):
+        return self.view_datetime
