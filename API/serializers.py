@@ -4,6 +4,7 @@ from rest_framework import serializers
 
 from API.models import APIKey
 from Main.models import Articles
+from Users.models import Bans
 
 
 class UserSerializer(serializers.Serializer):
@@ -67,3 +68,19 @@ class APIRequestSerializer(serializers.Serializer):
     datetime = serializers.DateTimeField(default=datetime.now())
     body = serializers.CharField()
     free = serializers.BooleanField(default=False)
+
+
+class BansSerializer(serializers.Serializer):
+    user_id = serializers.IntegerField()
+    reason = serializers.CharField(required=False)
+    who_banned_id = serializers.IntegerField()
+    ban_datetime = serializers.DateTimeField(default=datetime.now())
+    pass_datetime = serializers.DateTimeField()
+    status = serializers.CharField(
+        max_length=24,
+        default='Active'
+    )
+    admin_note = serializers.CharField(required=False)
+
+    def create(self, validated_data):
+        return Bans.objects.create(**validated_data)

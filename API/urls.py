@@ -1,5 +1,6 @@
 from django.urls import path
-from .views import ArticlesView, ProfilesView, ArticleView, ProfileView, APIKeyView, APIKeysView, APIRequestsView
+from .views import ArticlesView, ProfilesView, ArticleView, ProfileView, APIKeyView, APIKeysView, APIRequestsView, \
+    BansView
 from . import views
 
 
@@ -32,5 +33,8 @@ urlpatterns = [
          ),
     path('APIRequests/',
          APIRequestsView.as_view()
+         ),
+    path('bans/',
+         BansView.as_view()
          ),
 ]
