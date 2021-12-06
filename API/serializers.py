@@ -1,5 +1,8 @@
+from datetime import datetime
+
 from rest_framework import serializers
 
+from API.models import APIKey
 from Main.models import Articles
 
 
@@ -40,10 +43,27 @@ class ArticleSerializer(serializers.Serializer):
 class APIKeySerializer(serializers.Serializer):
     id = serializers.IntegerField(required=False)
     key = serializers.CharField()
-    issue_datetime = serializers.DateTimeField(required=False)
+    issue_datetime = serializers.DateTimeField(
+        required=False,
+        default=datetime.now()
+    )
     exp_datetime = serializers.DateTimeField()
     issued_by_id = serializers.IntegerField()
     purpose = serializers.CharField()
-    allowed_requests = serializers.IntegerField()
-    status = serializers.CharField()
-    super_key = serializers.BooleanField()
+    allowed_requests = serializers.IntegerField(default=100)
+    status = serializers.CharField(default='Active')
+    super_key = serializers.BooleanField(default=False)
+
+    def create(self, validated_data):
+        return APIKey.objects.create(**validated_data)
+
+
+class APIRequestSerializer(serializers.Serializer):
+    APIKey_id = serializers.IntegerField
+    ip = serializers.CharField(
+        max_length=16,
+        required=False
+    )
+    datetime = serializers.DateTimeField(default=datetime.now())
+    body = serializers.CharField()
+    free = serializers.BooleanField(default=False)

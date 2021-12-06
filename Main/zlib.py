@@ -1,4 +1,7 @@
 import datetime
+import string
+import random
+
 from API.models import APIKey as APIKey_M
 
 from API.models import APIRequests
@@ -44,3 +47,20 @@ def CreateAPIRequest(APIKey=None, ip=None, body=None, free=False):
         body=body,
         free=free
     )
+
+
+def getRequestBody(request):
+    return ("Path:" + request.get_full_path() + "\n" + request.method + ": " +
+            str(request.GET if request.method == "GET"
+                else request.POST if request.method == "POST"
+                else request.PUT if request.method == "PUT"
+                else request.DELETE if request.method == "DELETE"
+                else request) +
+            "\ndata: " + str(request.data))
+
+
+def genAPIKey():
+    while True:
+        key = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(64)).upper()
+        if not APIKey_M.objects.filter(key=key).first():
+            return key
