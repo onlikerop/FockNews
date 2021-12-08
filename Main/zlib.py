@@ -2,7 +2,7 @@ import datetime
 import string
 import random
 
-from API.models import APIKey as APIKey_M
+from API.models import APIKey as APIKey_M, APIKeys_Permissions, APIPermissions
 
 from API.models import APIRequests
 from Main.models import Articles
@@ -64,3 +64,28 @@ def genAPIKey():
         key = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(64)).upper()
         if not APIKey_M.objects.filter(key=key).first():
             return key
+
+
+def checkAPIKeyPerm(key, perm):
+    key = APIKey_M.objects.filter(key=key).first()
+    perm = APIPermissions.objects.filter(codename=perm).first()
+    if not (key and perm):
+        return False
+    return APIKeys_Permissions.objects.filter(
+        key=key,
+        permission=perm
+    ) or key.super_key
+
+
+# This is done to automatically create the permissions used in the application in case they were lost.
+def requiredPerm(perm, silent=False, description=None):
+    permission, created = APIPermissions.objects.get_or_create(codename=perm)
+    if created:
+        if not description and not silent:
+            description = input("There wasn't such permission as {}, and it was created. You can set the description or skip: ".format(perm))
+        if silent:
+            print("There wasn't such permission as {}, and it was created.".format(perm))
+        if description:
+            permission.name = description
+            permission.save()
+    return permission

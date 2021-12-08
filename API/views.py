@@ -1,8 +1,7 @@
 import datetime
-from itertools import chain
 
 from django.contrib.auth.models import User
-from django.db.models import QuerySet, Q
+from django.db.models import Q
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.views import APIView
