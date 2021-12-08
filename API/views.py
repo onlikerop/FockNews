@@ -199,13 +199,36 @@ class APIKeyView(APIView):
                         ip=zlib.get_client_ip(request),
                         body=zlib.getRequestBody(request)
                     )
-                    apikey = {"key": zlib.genAPIKey()}
-                    apikey.update(request.data.get('key'))
-                    # Create an APIKey from the above data
-                    serializer = APIKeySerializer(data=apikey)
-                    if serializer.is_valid(raise_exception=True):
-                        apikey_saved = serializer.save()
                     APIRequest.save()
+                    if "extend" in request.data:
+                        if "key" not in request.data:
+                            return Response("449 Retry With: 'key'")
+                        else:
+                            if not ("exp_datetime" in request.data or "additional_requests" in request.data):
+                                return Response("449 Retry With: 'exp_date' or 'additional_requests'")
+                            else:
+                                key = APIKey.objects.get(key=request.data.get('key'))
+                                if key:
+                                    if "exp_datetime" in request.data:
+                                        key.exp_datetime = request.data.get('exp_datetime')
+                                    if "additional_requests" in request.data:
+                                        key.allowed_requests += request.data.get('additional_requests')
+                                    key.save()
+                                    return Response({
+                                        "success": "APIKey '{}' updated successfully. Now it has {} uses and its new expiration datetime is  {}".format(
+                                            key.key,
+                                            key.allowed_requests,
+                                            key.exp_datetime
+                                        )})
+                                else:
+                                    return Response("404 Not Found")
+                    else:
+                        apikey = {"key": zlib.genAPIKey()}
+                        apikey.update(request.data.get('key'))
+                        # Create an APIKey from the above data
+                        serializer = APIKeySerializer(data=apikey)
+                        if serializer.is_valid(raise_exception=True):
+                            apikey_saved = serializer.save()
                     return Response({
                         "success": "APIKey '{}' created successfully for '{}'. It is valid for {} uses and will expire at {}".format(
                             apikey_saved.key,
@@ -289,7 +312,8 @@ class BansView(APIView):
                     bans = Bans.objects.filter(
                         Q(user=request.GET['user']) if "user" in request.GET.keys() else Q(),
                         Q(who_banned=request.GET['who_banned']) if "who_banned" in request.GET.keys() else Q(),
-                        Q(pass_datetime__gte=datetime.datetime.now(), status="Active") if "active" in request.GET.keys() else Q()
+                        Q(pass_datetime__gte=datetime.datetime.now(),
+                          status="Active") if "active" in request.GET.keys() else Q()
                     )
                     serializer = BansSerializer(bans, many=True)
                     response = serializer.data

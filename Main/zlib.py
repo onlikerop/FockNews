@@ -5,7 +5,7 @@ import random
 from API.models import APIKey as APIKey_M
 
 from API.models import APIRequests
-from Main.models import Articles, Views
+from Main.models import Articles
 from django.db.models import Sum
 
 
