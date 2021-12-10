@@ -97,55 +97,15 @@ class APIRequestsView(APIView):
 
 class BansView(APIView):
     def get(self, request):
-        if "APIKey" in request.GET.keys():
-            thisKey = APIKey.objects.filter(key=request.GET['APIKey']).first()
-            if thisKey:
-                counter = APIRequests.objects.filter(
-                    APIKey=thisKey,
-                    free=False
-                ).count()
-                if thisKey.allowed_requests - counter > 0 or thisKey.allowed_requests == -1:
-                    APIRequest = CreateAPIRequest(
-                        APIKey=thisKey,
-                        ip=zlib.get_client_ip(request),
-                        body=zlib.getRequestBody(request)
-                    )
-                    APIRequest.save()
-                    bans = Bans.objects.filter(
-                        Q(user=request.GET['user']) if "user" in request.GET.keys() else Q(),
-                        Q(who_banned=request.GET['who_banned']) if "who_banned" in request.GET.keys() else Q(),
-                        Q(pass_datetime__gte=datetime.datetime.now(),
-                          status="Active") if "active" in request.GET.keys() else Q()
-                    )
-                    serializer = BansSerializer(bans, many=True)
-                    response = serializer.data
-                    return Response({"Bans": response if bans else None})
-        return Response("403 Forbidden")
+        return APIFunc(
+            request,
+            APIGetBans,
+            "API.bans.view.many"
+        )
 
     def post(self, request):
-        if "APIKey" in request.data:
-            thisKey = APIKey.objects.filter(
-                key=request.data.get('APIKey'),
-                exp_datetime__gte=datetime.datetime.utcnow(),
-                status="Active",
-                super_key=True
-            ).first()
-            if thisKey:
-                counter = APIRequests.objects.filter(
-                    APIKey=thisKey,
-                    free=False
-                ).count()
-                if thisKey.allowed_requests - counter > 0 or thisKey.allowed_requests == -1:
-                    APIRequest = CreateAPIRequest(
-                        APIKey=thisKey,
-                        ip=zlib.get_client_ip(request),
-                        body=zlib.getRequestBody(request)
-                    )
-                    ban = request.data.get('ban')
-                    # Create an APIKey from the above data
-                    serializer = BansSerializer(data=ban)
-                    if serializer.is_valid(raise_exception=True):
-                        ban_saved = serializer.save()
-                    APIRequest.save()
-                    return Response({"success": "Ban for user '{}' created successfully".format(ban_saved.user)})
-        return Response("403 Forbidden")
+        return APIFunc(
+            request,
+            APICreateBan,
+            "API.bans.create"
+        )

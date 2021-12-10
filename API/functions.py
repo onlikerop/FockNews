@@ -1,14 +1,15 @@
 import datetime
 
 from django.contrib.auth.models import User
+from django.db.models import Q
 from rest_framework.response import Response
 
 from API.models import APIKey, APIRequests
-from API.serializers import ArticleSerializer, ProfileSerializer, APIKeySerializer, APIRequestSerializer
+from API.serializers import ArticleSerializer, ProfileSerializer, APIKeySerializer, APIRequestSerializer, BansSerializer
 from Main import zlib
 from Main.models import Articles
 from Main.zlib import CreateAPIRequest, checkAPIKeyPerm, requiredPerm, getThisKey
-from Users.models import Profile
+from Users.models import Profile, Bans
 
 
 def APIFunc(request, func, perm, **kwargs):
@@ -289,3 +290,56 @@ def APIGetRequests(request, rPerm):
                 serializer = APIRequestSerializer(apirequest, many=True)
                 response = serializer.data
                 return Response({"APIRequests": response if apirequest else None})
+
+
+def APIGetBans(request, rPerm):
+    thisKey = APIKey.objects.filter(key=request.GET['APIKey']).first()
+    if thisKey:
+        if checkAPIKeyPerm(thisKey, rPerm):
+            counter = APIRequests.objects.filter(
+                APIKey=thisKey,
+                free=False
+            ).count()
+            if thisKey.allowed_requests - counter > 0 or thisKey.allowed_requests == -1:
+                APIRequest = CreateAPIRequest(
+                    APIKey=thisKey,
+                    ip=zlib.get_client_ip(request),
+                    body=zlib.getRequestBody(request)
+                )
+                APIRequest.save()
+                bans = Bans.objects.filter(
+                    Q(user=request.GET['user']) if "user" in request.GET.keys() else Q(),
+                    Q(who_banned=request.GET['who_banned']) if "who_banned" in request.GET.keys() else Q(),
+                    Q(pass_datetime__gte=datetime.datetime.now(),
+                      status="Active") if "active" in request.GET.keys() else Q()
+                )
+                serializer = BansSerializer(bans, many=True)
+                response = serializer.data
+                return Response({"Bans": response if bans else None})
+
+
+def APICreateBan(request, rPerm):
+    thisKey = APIKey.objects.filter(
+        key=request.data.get('APIKey'),
+        exp_datetime__gte=datetime.datetime.utcnow(),
+        status="Active",
+        super_key=True
+    ).first()
+    if thisKey:
+        counter = APIRequests.objects.filter(
+            APIKey=thisKey,
+            free=False
+        ).count()
+        if thisKey.allowed_requests - counter > 0 or thisKey.allowed_requests == -1:
+            APIRequest = CreateAPIRequest(
+                APIKey=thisKey,
+                ip=zlib.get_client_ip(request),
+                body=zlib.getRequestBody(request)
+            )
+            ban = request.data.get('ban')
+            # Create an APIKey from the above data
+            serializer = BansSerializer(data=ban)
+            if serializer.is_valid(raise_exception=True):
+                ban_saved = serializer.save()
+            APIRequest.save()
+            return Response({"success": "Ban for user '{}' created successfully".format(ban_saved.user)})
