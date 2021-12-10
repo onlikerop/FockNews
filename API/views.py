@@ -1,11 +1,7 @@
-from django.db.models import Q
-from django.db.models import Q
 from django.shortcuts import render
 from rest_framework.views import APIView
 
 from API.functions import *
-from API.serializers import BansSerializer
-from Users.models import Bans
 
 
 # Create your views here.
