@@ -6,6 +6,7 @@ import datetime
 
 from Main.models import Articles
 
+
 def index(request):
     response = zlib.get_full_response(
         request,
@@ -41,11 +42,11 @@ def article(request, pk):
         )
         view.save()
 
-    views = Views.objects.filter(article=Articles.objects.get(id=pk)).count
+    views = Views.objects.filter(article=Articles.objects.get(id=pk)).count()
     views_per_week = Views.objects.filter(
         article=Articles.objects.get(id=pk),
         view_datetime__gte=(datetime.datetime.now() + datetime.timedelta(days=-7)).strftime("%Y-%m-%d %H:%M:%S")
-    ).count
+    ).count()
 
     response = zlib.get_full_response(
         request,

@@ -265,3 +265,6 @@ div.baninfo a#banuser-btn, div.baninfo a#unbanuser-btn{
     left: 50%;
     transform: translate(-50%, -50%)
 }
+#API_select a{
+    word-spacing: normal;
+}
