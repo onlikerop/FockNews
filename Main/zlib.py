@@ -141,13 +141,9 @@ def getThisKey(request, active=True, free=False):
         used_times=Count('APIRequests', filter=Q(APIRequests__free=False))
     ).filter(
         Q(exp_datetime__gte=datetime.datetime.utcnow(), status="Active") if active else Q(),
-        # Q(used_times__lt=F('allowed_requests')) if not (free or F('allowed_requests') == -1) else Q(),
-        Case(
-            When(~Q(allowed_requests=-1), then=Q(used_times__lt=F('allowed_requests'))),
-            default=Q()
-        ),
+        (Q(allowed_requests=-1) | Q(used_times__lt=F('allowed_requests'))) if not free else Q(),
         key=(
             request.GET['APIKey'] if request.method == "GET"
-            else request.data['APIKey'],
+            else request.data['APIKey']
         )
     ).first()

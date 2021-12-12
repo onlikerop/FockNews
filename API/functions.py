@@ -20,12 +20,7 @@ def APIFunc(request, func, perm, **kwargs):
 
 
 def APIGetArticles(request, rPerm):
-    thisKey = APIKey.objects.filter(
-        key=request.GET['APIKey'],
-        exp_datetime__gte=datetime.datetime.utcnow(),
-        status="Active"
-    ).first()
-    # print("\n" + str(thisKey) + str(getThisKey(request)) + "\n")
+    thisKey = getThisKey(request)
     if thisKey:
         if checkAPIKeyPerm(thisKey, rPerm):
             counter = APIRequests.objects.filter(
@@ -45,11 +40,7 @@ def APIGetArticles(request, rPerm):
 
 
 def APIGetArticle(request, rPerm, pk):
-    thisKey = APIKey.objects.filter(
-        key=request.GET['APIKey'],
-        exp_datetime__gte=datetime.datetime.utcnow(),
-        status="Active"
-    ).first()
+    thisKey = getThisKey(request)
     if thisKey:
         if checkAPIKeyPerm(thisKey, rPerm):
             counter = APIRequests.objects.filter(
@@ -69,11 +60,7 @@ def APIGetArticle(request, rPerm, pk):
 
 
 def APICreateArticle(request, rPerm):
-    thisKey = APIKey.objects.filter(
-        key=request.data.get('APIKey'),
-        exp_datetime__gte=datetime.datetime.utcnow(),
-        status="Active"
-    ).first()
+    thisKey = getThisKey(request)
     if thisKey:
         if checkAPIKeyPerm(thisKey, rPerm):
             counter = APIRequests.objects.filter(
@@ -97,34 +84,27 @@ def APICreateArticle(request, rPerm):
 
 
 def APIGetProfiles(request, rPerm):
-    thisKey = APIKey.objects.filter(
-        key=request.GET['APIKey'],
-        exp_datetime__gte=datetime.datetime.utcnow(),
-        status="Active"
-    ).first()
+    thisKey = getThisKey(request)
     if thisKey:
-        counter = APIRequests.objects.filter(
-            APIKey=thisKey,
-            free=False
-        ).count()
-        if thisKey.allowed_requests - counter > 0 or thisKey.allowed_requests == -1:
-            profiles = Profile.objects.all()
-            serializer = ProfileSerializer(profiles, many=True)
-            APIRequest = CreateAPIRequest(
+        if checkAPIKeyPerm(thisKey, rPerm):
+            counter = APIRequests.objects.filter(
                 APIKey=thisKey,
-                ip=zlib.get_client_ip(request),
-                body=zlib.getRequestBody(request)
-            )
-            APIRequest.save()
-            return Response({"users": serializer.data if profiles else None})
+                free=False
+            ).count()
+            if thisKey.allowed_requests - counter > 0 or thisKey.allowed_requests == -1:
+                profiles = Profile.objects.all()
+                serializer = ProfileSerializer(profiles, many=True)
+                APIRequest = CreateAPIRequest(
+                    APIKey=thisKey,
+                    ip=zlib.get_client_ip(request),
+                    body=zlib.getRequestBody(request)
+                )
+                APIRequest.save()
+                return Response({"users": serializer.data if profiles else None})
 
 
 def APIGetProfile(request, rPerm, pk):
-    thisKey = APIKey.objects.filter(
-        key=request.GET['APIKey'],
-        exp_datetime__gte=datetime.datetime.utcnow(),
-        status="Active"
-    ).first()
+    thisKey = getThisKey(request)
     if thisKey:
         if checkAPIKeyPerm(thisKey, rPerm):
             counter = APIRequests.objects.filter(
@@ -145,7 +125,7 @@ def APIGetProfile(request, rPerm, pk):
 
 
 def APIGetKey(request, rPerm, pk):
-    thisKey = APIKey.objects.filter(key=request.GET['APIKey']).first()
+    thisKey = getThisKey(request, active=False, free=True)
     if thisKey:
         if pk == thisKey.key or checkAPIKeyPerm(thisKey, rPerm):
             counter = APIRequests.objects.filter(
@@ -168,46 +148,37 @@ def APIGetKey(request, rPerm, pk):
 
 
 def APICreateKey(request, rPerm):
-    thisKey = APIKey.objects.filter(
-        key=request.data.get('APIKey'),
-        exp_datetime__gte=datetime.datetime.utcnow(),
-        status="Active",
-        super_key=True
-    ).first()
+    thisKey = getThisKey(request)
     if thisKey:
-        counter = APIRequests.objects.filter(
-            APIKey=thisKey,
-            free=False
-        ).count()
-        if thisKey.allowed_requests - counter > 0 or thisKey.allowed_requests == -1:
-            APIRequest = CreateAPIRequest(
+        if checkAPIKeyPerm(thisKey, rPerm):
+            counter = APIRequests.objects.filter(
                 APIKey=thisKey,
-                ip=zlib.get_client_ip(request),
-                body=zlib.getRequestBody(request)
-            )
-            APIRequest.save()
-            apikey = {"key": zlib.genAPIKey()}
-            apikey.update(request.data.get('key'))
-            # Create an APIKey from the above data
-            serializer = APIKeySerializer(data=apikey)
-            if serializer.is_valid(raise_exception=True):
-                apikey_saved = serializer.save()
-            return Response({
-                "success": "APIKey '{}' created successfully for '{}'. It is valid for {} uses and will expire at {}".format(
-                    apikey_saved.key,
-                    apikey_saved.purpose,
-                    apikey_saved.allowed_requests if apikey_saved.allowed_requests != -1 else "infinity",
-                    apikey_saved.exp_datetime
-                )})
+                free=False
+            ).count()
+            if thisKey.allowed_requests - counter > 0 or thisKey.allowed_requests == -1:
+                APIRequest = CreateAPIRequest(
+                    APIKey=thisKey,
+                    ip=zlib.get_client_ip(request),
+                    body=zlib.getRequestBody(request)
+                )
+                APIRequest.save()
+                apikey = {"key": zlib.genAPIKey()}
+                apikey.update(request.data.get('key'))
+                # Create an APIKey from the above data
+                serializer = APIKeySerializer(data=apikey)
+                if serializer.is_valid(raise_exception=True):
+                    apikey_saved = serializer.save()
+                return Response({
+                    "success": "APIKey '{}' created successfully for '{}'. It is valid for {} uses and will expire at {}".format(
+                        apikey_saved.key,
+                        apikey_saved.purpose,
+                        apikey_saved.allowed_requests if apikey_saved.allowed_requests != -1 else "infinity",
+                        apikey_saved.exp_datetime
+                    )})
 
 
 def APIExtendKey(request, rPerm):
-    thisKey = APIKey.objects.filter(
-        key=request.data.get('APIKey'),
-        exp_datetime__gte=datetime.datetime.utcnow(),
-        status="Active"
-    ).first()
-    print("\n", thisKey, getThisKey(request), "\n")
+    thisKey = getThisKey(request)
     if thisKey:
         if checkAPIKeyPerm(thisKey, rPerm):
             counter = APIRequests.objects.filter(
@@ -245,9 +216,9 @@ def APIExtendKey(request, rPerm):
 
 
 def APIGetKeys(request, rPerm):
-    thisKey = APIKey.objects.filter(key=request.GET['APIKey']).first()
+    thisKey = getThisKey(request, free=True)
     if thisKey:
-        if thisKey.super_key:
+        if checkAPIKeyPerm(thisKey, rPerm):
             counter = APIRequests.objects.filter(
                 APIKey=thisKey,
                 free=False
@@ -272,7 +243,7 @@ def APIGetKeys(request, rPerm):
 
 
 def APIGetRequests(request, rPerm):
-    thisKey = APIKey.objects.filter(key=request.GET['APIKey']).first()
+    thisKey = getThisKey(request, free=True)
     if thisKey:
         if checkAPIKeyPerm(thisKey, rPerm):
             counter = APIRequests.objects.filter(
@@ -293,7 +264,7 @@ def APIGetRequests(request, rPerm):
 
 
 def APIGetBans(request, rPerm):
-    thisKey = APIKey.objects.filter(key=request.GET['APIKey']).first()
+    thisKey = getThisKey(request)
     if thisKey:
         if checkAPIKeyPerm(thisKey, rPerm):
             counter = APIRequests.objects.filter(
@@ -319,27 +290,23 @@ def APIGetBans(request, rPerm):
 
 
 def APICreateBan(request, rPerm):
-    thisKey = APIKey.objects.filter(
-        key=request.data.get('APIKey'),
-        exp_datetime__gte=datetime.datetime.utcnow(),
-        status="Active",
-        super_key=True
-    ).first()
+    thisKey = getThisKey(request)
     if thisKey:
-        counter = APIRequests.objects.filter(
-            APIKey=thisKey,
-            free=False
-        ).count()
-        if thisKey.allowed_requests - counter > 0 or thisKey.allowed_requests == -1:
-            APIRequest = CreateAPIRequest(
+        if checkAPIKeyPerm(thisKey, rPerm):
+            counter = APIRequests.objects.filter(
                 APIKey=thisKey,
-                ip=zlib.get_client_ip(request),
-                body=zlib.getRequestBody(request)
-            )
-            ban = request.data.get('ban')
-            # Create an APIKey from the above data
-            serializer = BansSerializer(data=ban)
-            if serializer.is_valid(raise_exception=True):
-                ban_saved = serializer.save()
-            APIRequest.save()
-            return Response({"success": "Ban for user '{}' created successfully".format(ban_saved.user)})
+                free=False
+            ).count()
+            if thisKey.allowed_requests - counter > 0 or thisKey.allowed_requests == -1:
+                APIRequest = CreateAPIRequest(
+                    APIKey=thisKey,
+                    ip=zlib.get_client_ip(request),
+                    body=zlib.getRequestBody(request)
+                )
+                ban = request.data.get('ban')
+                # Create an APIKey from the above data
+                serializer = BansSerializer(data=ban)
+                if serializer.is_valid(raise_exception=True):
+                    ban_saved = serializer.save()
+                APIRequest.save()
+                return Response({"success": "Ban for user '{}' created successfully".format(ban_saved.user)})
