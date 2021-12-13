@@ -2,7 +2,7 @@
     <ul id="header_menu">
         <li id="logo-btn"><a class="btn btn-lg" href = "{% url 'index' %}">FockNews</a></li>
         <li id="contacts-btn"><a class="btn btn-lg" href = "{% url 'contacts' %}">Контакты</a></li>
-        <li id="API-btn"><a class="btn btn-lg" href = "/api/">API</a></li>
+        <li id="API-btn"><a class="btn btn-lg" href = "/api/" target="_blank">API</a></li>
         {% if user_data.is_staff or user_data.is_superuser %}<li id="admin-btn"><a class="btn btn-lg btn-admin" href = "{% url 'admin:index' %}" target="_blank">Панель администратора</a></li>{% endif %}
         {% if user_data.username != '' and user_data.username != NULL%}
             <li id="logout-btn" class="btn-user">
