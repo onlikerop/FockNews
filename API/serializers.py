@@ -20,22 +20,51 @@ class UserSerializer(serializers.Serializer):
 
 class ProfileSerializer(serializers.Serializer):
     user = UserSerializer()
-    avatar = serializers.CharField(required=False)
-    rank = serializers.CharField(max_length=64, required=False)
-    about_me = serializers.CharField(required=False)
-    birthday_date = serializers.DateField(required=False)
+    avatar = serializers.CharField(
+        required=False,
+        allow_null=True
+    )
+    rank = serializers.CharField(
+        max_length=64,
+        required=False,
+        allow_null=True
+    )
+    about_me = serializers.CharField(
+        required=False,
+        allow_null=True
+    )
+    birthday_date = serializers.DateField(
+        required=False,
+        allow_null=True
+    )
 
 
 class ArticleSerializer(serializers.Serializer):
     id = serializers.IntegerField(required=False)
     title = serializers.CharField(max_length=120)
-    body = serializers.CharField(required=False)
-    create_datetime = serializers.DateTimeField()
-    pub_datetime = serializers.DateTimeField(required=False)
-    lasted_datetime = serializers.DateTimeField(required=False)
+    body = serializers.CharField(
+        required=False,
+        allow_null=True
+    )
+    create_datetime = serializers.DateTimeField(default=datetime.now())
+    pub_datetime = serializers.DateTimeField(
+        required=False,
+        allow_null=True,
+        default=datetime.now()
+    )
+    lasted_datetime = serializers.DateTimeField(
+        required=False,
+        allow_null=True
+    )
     author_id = serializers.IntegerField()
-    tags = serializers.CharField(required=False)
-    status = serializers.CharField(max_length=24)
+    tags = serializers.CharField(
+        required=False,
+        allow_null=True
+    )
+    status = serializers.CharField(
+        max_length=24,
+        default="published"
+    )
 
     def create(self, validated_data):
         return Articles.objects.create(**validated_data)
@@ -63,7 +92,8 @@ class APIRequestSerializer(serializers.Serializer):
     APIKey_id = serializers.IntegerField
     ip = serializers.CharField(
         max_length=16,
-        required=False
+        required=False,
+        allow_null=True
     )
     datetime = serializers.DateTimeField(default=datetime.now())
     body = serializers.CharField()
@@ -72,7 +102,10 @@ class APIRequestSerializer(serializers.Serializer):
 
 class BansSerializer(serializers.Serializer):
     user_id = serializers.IntegerField()
-    reason = serializers.CharField(required=False)
+    reason = serializers.CharField(
+        required=False,
+        allow_null=True
+    )
     who_banned_id = serializers.IntegerField()
     ban_datetime = serializers.DateTimeField(default=datetime.now())
     pass_datetime = serializers.DateTimeField()
@@ -80,7 +113,10 @@ class BansSerializer(serializers.Serializer):
         max_length=24,
         default='Active'
     )
-    admin_note = serializers.CharField(required=False)
+    admin_note = serializers.CharField(
+        required=False,
+        allow_null=True
+    )
 
     def create(self, validated_data):
         return Bans.objects.create(**validated_data)

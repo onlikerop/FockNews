@@ -1,3 +1,5 @@
+import re
+
 from django.shortcuts import render
 from Main.models import Articles, Views
 from html_forms.forms import CreateArticleForm
@@ -14,6 +16,8 @@ def index(request):
             'object_list': Articles.objects.filter(status="published").order_by("-pub_datetime")[:20]
         }
     )
+    for art in response['object_list']:
+        art.body = re.sub('(?!<br>|<\/?p>)<[^<]+?>', '', art.body)  # Removing all HTML tags, excluding <br>, <p>, </p>
     return render(request, 'Main/index.html', response)
 
 
