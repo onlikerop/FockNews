@@ -14,7 +14,7 @@ from Users.models import Profile, Bans
 
 def APIFunc(request, func, perm, **kwargs):
     if "APIKey" in request.GET.keys() if request.method == "GET" else "APIKey" in request.data:
-        return func(request=request, rPerm=requiredPerm(perm), **kwargs)
+        return func(request=request, rPerm=requiredPerm(perm), **kwargs) or Response("403 Forbidden")
     else:
         return Response("403 Forbidden")
 

@@ -72,16 +72,17 @@ def checkAPIKeyPerm(key, perm):
         if len(perm) > 1:
             perms = []
             if isinstance(perm[0], str):
-                if not perm:
-                    return True
-                perms.append(bool(APIPermissions.objects.filter(codename=perm).first()))
+                for p in perm:
+                    if p == "":
+                        return True
+                    perms.append(APIPermissions.objects.filter(codename=p).first())
             else:
                 perms = perm
             for i in range(len(perms)):
-                perms[i] = APIKeys_Permissions.objects.filter(
+                perms[i] = bool(APIKeys_Permissions.objects.filter(
                     key=key,
                     permission=perms[i]
-                )
+                ))
             return (True in perms) or key.super_key
         elif len(perm) == 1:
             perm = perm[0]
@@ -132,7 +133,7 @@ def requiredPerm(perm=None, silent=False, description=None):
             if description:
                 permission.name = description
                 permission.save()
-            permissions.append(permission)
+        permissions.append(permission)
     return permissions
 
 
