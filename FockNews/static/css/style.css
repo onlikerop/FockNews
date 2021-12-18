@@ -73,7 +73,7 @@ aside .rank2{
     display: inline;
 }
 
-.article_author, .article_views{
+.article_author, .article_rating, .article_views{
     float: right;
 }
 
@@ -268,3 +268,11 @@ div.baninfo a#banuser-btn, div.baninfo a#unbanuser-btn{
 #API_select a{
     word-spacing: normal;
 }
+
+#btn-downrating{
+    transform: rotate(180deg)   ;
+}
+
+/*svg{
+    border: solid 1px #ff0000;
+}*/
