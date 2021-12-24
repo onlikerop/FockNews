@@ -1,5 +1,5 @@
-docker rmi focknews
+docker rmi onlikerop/focknews
 
 docker build ^
 -t ^
-focknews .
+onlikerop/focknews .
