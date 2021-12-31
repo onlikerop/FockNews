@@ -122,7 +122,6 @@ $(document).ready(function () {
                 }
                 location.reload();
                 $("#btn-upRate").show();
-                alert("Рейтинг поднят!")
             },
             error: function(data) {
                 alert("Ошибка!");
@@ -148,7 +147,6 @@ $(document).ready(function () {
                 }
                 location.reload();
                 $("#btn-downRate").show();
-                alert("Рейтинг опущен!")
             },
             error: function(data) {
                 alert("Ошибка!");

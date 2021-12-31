@@ -46,7 +46,6 @@ def saveeditedarticle(request, pk):
 
 
 def uprate(request, pk):
-    print("ASSHOLE")
     if request.user.is_authenticated\
             and request.accepts\
             and request.POST\
@@ -55,8 +54,6 @@ def uprate(request, pk):
             article=Articles.objects.filter(id=pk).first(),
             user=request.user
         )
-        print(created)
-        print(item)
         if created or item.status != "Active" or item.rating_weight != 1:
             item.rating_datetime = datetime.datetime.now()
             item.status = "Active"
