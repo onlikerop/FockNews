@@ -1,0 +1,18 @@
+web:
+  build: .
+  volumes:
+    - Q:\Progs\Python\Django\FockNews\volume:/usr/src/FockNews/volume
+web_migrate:
+  extends:
+    service: web
+  command: python manage.py migrate
+web_makemigrations:
+  extends:
+    service: web
+  command: python manage.py makemigrations
+web_run:
+  extends:
+    service: web
+  command: python manage.py runserver 0.0.0.0:8000
+  ports:
+    - "8000:8000"
