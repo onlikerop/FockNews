@@ -62,7 +62,9 @@ def uprate(request, pk):
             item.status = "Deleted"
             item.rating_weight = 0
         item.save()
-    return JsonResponse({"column_num": 1})
+        return JsonResponse({"column_num": 1})
+    else:
+        return JsonResponse({"column_num": 0})
 
 
 def downrate(request, pk):
@@ -82,4 +84,6 @@ def downrate(request, pk):
             item.status = "Deleted"
             item.rating_weight = 0
         item.save()
-    return JsonResponse({"column_num": 1})
+        return JsonResponse({"column_num": 1})
+    else:
+        return JsonResponse({"column_num": 0})
