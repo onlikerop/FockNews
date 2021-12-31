@@ -73,6 +73,14 @@ aside .rank2{
     display: inline;
 }
 
+.article_read_indicator{
+    display: inline;
+    float: right;
+    color: blue;
+    margin-top: -0.75em;
+    cursor: default;
+}
+
 .article_author, .article_rating, .article_views{
     float: right;
 }

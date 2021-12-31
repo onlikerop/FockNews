@@ -45,7 +45,8 @@ class Views(models.Model):
         Articles,
         on_delete=models.SET_NULL,
         null=True,
-        verbose_name='Статья'
+        verbose_name='Статья',
+        related_name='Views'
     )
     user = models.ForeignKey(
         User,

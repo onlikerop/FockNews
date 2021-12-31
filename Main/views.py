@@ -1,6 +1,6 @@
 import re
 
-from django.db.models import Sum
+from django.db.models import Sum, Count, F, Q
 from django.shortcuts import render
 from Main.models import Articles, Views
 from html_forms.forms import CreateArticleForm
@@ -14,7 +14,8 @@ def index(request):
     response = zlib.get_full_response(
         request,
         {
-            'object_list': Articles.objects.filter(status="published").order_by("-pub_datetime")[:20]
+            'object_list': Articles.objects.filter(status="published").order_by("-pub_datetime")
+            .annotate(read_by_user=Count('Views', filter=Q(Views__user=request.user)))[:20]
         }
     )
     for art in response['object_list']:
