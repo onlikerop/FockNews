@@ -29,7 +29,7 @@ def contacts(request):
 
 def article(request, pk):
     viewer = request.user if request.user.is_authenticated else None
-    locktimer = (datetime.datetime.utcnow() - Views.objects.filter(
+    locktimer = (datetime.datetime.now() - Views.objects.filter(
         article=Articles.objects.get(id=pk),
         user=viewer,
         user_ip=zlib.get_client_ip(request)

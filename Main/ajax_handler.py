@@ -7,7 +7,7 @@ from Main.models import Articles, Rating
 
 def deletearticle(request, pk):
     if request.user.is_authenticated\
-            and request.is_ajax\
+            and request.accepts\
             and request.POST\
             and request.user.has_perm("Main.delete_articles"):
         item = Articles.objects.filter(id=pk).update(status="deleted")
@@ -16,7 +16,7 @@ def deletearticle(request, pk):
 
 def restorearticle(request, pk):
     if request.user.is_authenticated\
-            and request.is_ajax\
+            and request.accepts\
             and request.POST\
             and request.user.has_perm("Main.restore_articles"):
         item = Articles.objects.filter(id=pk).update(status="published")
@@ -25,7 +25,7 @@ def restorearticle(request, pk):
 
 def publisharticle(request, pk):
     if request.user.is_authenticated\
-            and request.is_ajax\
+            and request.accepts\
             and request.POST\
             and request.user.has_perm("Main.publish_articles"):
         item = Articles.objects.filter(id=pk).update(status="published")
@@ -34,7 +34,7 @@ def publisharticle(request, pk):
 
 def saveeditedarticle(request, pk):
     if request.user.is_authenticated\
-            and request.is_ajax\
+            and request.accepts\
             and request.POST\
             and request.user.has_perm("Main.change_articles"):
         item = Articles.objects.filter(id=pk).update(title=request.POST.get('title'),
