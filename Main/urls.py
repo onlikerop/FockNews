@@ -54,6 +54,16 @@ urlpatterns = [
         name='saveeditedarticle'
     ),
     path(
+        'news/<int:pk>/uprate/',
+        ajax_handler.uprate,
+        name='uprate'
+    ),
+    path(
+        'news/<int:pk>/downrate/',
+        ajax_handler.downrate,
+        name='downrate'
+    ),
+    path(
         'accounts/',
         include('django.contrib.auth.urls')
     ),

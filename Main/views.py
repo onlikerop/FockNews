@@ -1,5 +1,6 @@
 import re
 
+from django.db.models import Sum
 from django.shortcuts import render
 from Main.models import Articles, Views
 from html_forms.forms import CreateArticleForm
@@ -28,7 +29,7 @@ def contacts(request):
 
 def article(request, pk):
     viewer = request.user if request.user.is_authenticated else None
-    locktimer = (datetime.datetime.utcnow() - Views.objects.filter(
+    locktimer = (datetime.datetime.now() - Views.objects.filter(
         article=Articles.objects.get(id=pk),
         user=viewer,
         user_ip=zlib.get_client_ip(request)
@@ -51,13 +52,18 @@ def article(request, pk):
         article=Articles.objects.get(id=pk),
         view_datetime__gte=(datetime.datetime.now() + datetime.timedelta(days=-7)).strftime("%Y-%m-%d %H:%M:%S")
     ).count()
-
+    rating = Articles.objects.get(id=pk).Rating.filter(status="Active")
+    if rating:
+        rating = rating.annotate(rating_sum=Sum('rating_weight')).first().rating_sum
+    else:
+        rating = 0
     response = zlib.get_full_response(
         request,
         {
             'articles': Articles.objects.get(id=pk),
             'views': views,
             'views_per_week': views_per_week,
+            'rating': rating,
             'necessary_perm': "Main.view_" + Articles.objects.get(id=pk).status
         }
     )

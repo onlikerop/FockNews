@@ -29,7 +29,7 @@ $(document).ready(function () {
                 $("#btn-deletearticle").hide();
             },
             success: function(data) {
-                if (data.column_num == 0) {
+                if (data.column_num === 0) {
                     alert("Ошибка. Статья не была удалена!");
                 }
                 location.reload();
@@ -50,7 +50,7 @@ $(document).ready(function () {
                 $("#btn-restorearticle").hide();
             },
             success: function(data) {
-                if (data.column_num == 0) {
+                if (data.column_num === 0) {
                     alert("Ошибка. Статья не была восстановлена!");
                 }
                 location.reload();
@@ -71,7 +71,7 @@ $(document).ready(function () {
                 $("#btn-publisharticle").hide();
             },
             success: function(data) {
-                if (data.column_num == 0) {
+                if (data.column_num === 0) {
                     alert("Ошибка. Статья не была восстановлена!");
                 }
                 location.reload();
@@ -94,7 +94,7 @@ $(document).ready(function () {
                 $("#btn-saveeditarticle").hide();
             },
             success: function(data) {
-                if (data.column_num == 0) {
+                if (data.column_num === 0) {
                     alert("Ошибка. Статья не была сохранена!");
                 }
                 location.href = ".."
@@ -106,8 +106,60 @@ $(document).ready(function () {
         });
     }
 
+    function upRate(event) {
+        $.ajax ({
+            url: window.location.pathname + 'uprate/',
+            data: {
+                'csrfmiddlewaretoken': csrftoken
+            },
+            method: 'POST',
+            beforeSend: function() {
+                $("#btn-upRate").hide();
+            },
+            success: function(data) {
+                if (data.column_num === 0) {
+                    alert("Ошибка. Изменить рейтинг не удалось!");
+                }
+                location.reload();
+                $("#btn-upRate").show();
+            },
+            error: function(data) {
+                alert("Ошибка!");
+                $("#btn-upRate").show();
+            }
+
+        });
+    }
+
+    function downRate(event) {
+        $.ajax ({
+            url: window.location.pathname + 'downrate/',
+            data: {
+                'csrfmiddlewaretoken': csrftoken
+            },
+            method: 'POST',
+            beforeSend: function() {
+                $("#btn-downRate").hide();
+            },
+            success: function(data) {
+                if (data.column_num  === 0) {
+                    alert("Ошибка. Изменить рейтинг не удалось!");
+                }
+                location.reload();
+                $("#btn-downRate").show();
+            },
+            error: function(data) {
+                alert("Ошибка!");
+                $("#btn-downRate").show();
+            }
+
+        });
+    }
+
     $("#btn-deletearticle").bind("click", delArticle);
     $("#btn-restorearticle").bind("click", restoreArticle);
     $("#btn-publisharticle").bind("click", publishArticle);
     $("#btn-saveeditarticle").bind("click", saveEditedArticle);
+    $("#btn-uprating").bind("click", upRate);
+    $("#btn-downrating").bind("click", downRate);
 });
