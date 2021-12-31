@@ -63,10 +63,12 @@
             <h5 class="article_author">{% if articles.status == "published" %}Опубликовано{% else %}Создано{% endif %} пользователем <a href="/users/{{articles.author}}"><u>{{articles.author}}</u></a></h5>
             <br><br>
             <p class="article_tags"><b>Тэги статьи: {{articles.tags}}</b></p>
-            <p class="article_rating text-secondary">Рейтинг: {{articles.Rating.count}}</p>
+            <p class="article_rating text-secondary">Рейтинг: {{rating}}</p>
             <p class="article_views text-secondary">Просмотров: {{views}} <span title="Просмотров за последнюю неделю">({{views_per_week}})</span>&nbsp;&nbsp;&nbsp;&nbsp;</p>
             <br>
-            <a class="btn btn-lg" id="btn-uprating">
+            {% check_perm user_data "Main.give_rating" as checkperm %}
+            {% if checkperm %}
+            <a class="btn btn-lg" id="btn-uprating" type="submit">
                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                      viewBox="0 0 490.2 490.2" style="enable-background:new 0 0 490.2 490.2;" xml:space="preserve" width="1.5em" height="1.5em">
                     <g>
@@ -81,7 +83,7 @@
                     </g>
                 </svg>
             </a>
-            <a class="btn btn-lg" id="btn-downrating">
+            <a class="btn btn-lg" id="btn-downrating" type="submit">
                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                      viewBox="0 0 490.2 490.2" style="enable-background:new 0 0 490.2 490.2;" xml:space="preserve" width="1.5em" height="1.5em">
                     <g>
@@ -96,6 +98,7 @@
                     </g>
                 </svg>
             </a>
+            {% endif %}
         </div>
     {% else %}
         <h3 align="center" class="error text-danger">У Вас нет прав на просмотр данной статьи!</h3>

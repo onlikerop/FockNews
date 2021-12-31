@@ -102,6 +102,10 @@ class Rating(models.Model):
         default='Default'
     )
     rating_weight = models.IntegerField(default=1)
+    status = models.CharField(
+        max_length=24,
+        default='Active'
+    )
     objects = models.Manager()
 
     def __str__(self):
@@ -115,3 +119,4 @@ class Rating(models.Model):
             ("give_rating", "Can give rating to articles"),
             ("manage_rating", "Can manage rating of articles")
         )
+        unique_together = ('article', 'user')
