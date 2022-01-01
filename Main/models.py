@@ -18,7 +18,8 @@ class Articles(models.Model):
         User,
         on_delete=models.SET_NULL,
         null=True,
-        verbose_name='Автор'
+        verbose_name='Автор',
+        related_name='Articles'
     )
     tags = models.TextField(blank=True)
     status = models.CharField(max_length=24)

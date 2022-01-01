@@ -223,7 +223,7 @@ p.group{
     margin-left: 15px;
 }
 
-.about_me2, .rank2, .birthday2{
+.about_me2, .rank2, .birthday2, .name2, .rating2{
     vertical-align: top;
     padding-left: 10px;
     display: inline-block;
