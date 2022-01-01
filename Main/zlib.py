@@ -2,6 +2,8 @@ import datetime
 import string
 import random
 
+from django.db.models.functions import Coalesce
+
 from API.models import APIKey as APIKey_M, APIKeys_Permissions, APIPermissions, APIKey
 
 from API.models import APIRequests
@@ -20,13 +22,35 @@ def get_client_ip(request):
 
 
 def stdict(request):
-    poparts = Articles.objects.filter(
-        Views__view_datetime__gte=(datetime.datetime.now() + datetime.timedelta(days=-7)).strftime("%Y-%m-%d %H:%M:%S")
-    ).annotate(views_num=Sum('Views__view_weight')).order_by('-views_num')[:3]
+    article_rating = Coalesce(Sum('Rating__rating_weight'), 0)
+    poparts = Articles.objects.annotate(
+        article_rating=article_rating
+    ).annotate(
+        views_num=Coalesce(
+            Sum(
+                'Views__view_weight',
+                filter=Q(Views__view_datetime__gte=(
+                        datetime.datetime.now() + datetime.timedelta(days=-7)
+                ).strftime("%Y-%m-%d %H:%M:%S"))
+            ),
+            0
+        )
+    ).order_by('-views_num')[:3]
+
+    toparts = Articles.objects.annotate(
+        article_rating=article_rating
+    ).annotate(
+        views_num=Coalesce(
+            Sum('Views__view_weight'),
+            0
+        )
+    ).order_by('-article_rating')[:3]
+
     return {
         'user_data': request.user,
         'sidebar_data': {
-            'pop_arts': poparts
+            'pop_arts': poparts,
+            'top_arts': toparts
         }
     }
 

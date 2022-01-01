@@ -1,6 +1,7 @@
 import re
 
 from django.db.models import Sum, Count, F, Q
+from django.db.models.functions import Coalesce
 from django.shortcuts import render
 from Main.models import Articles, Views
 from html_forms.forms import CreateArticleForm
@@ -14,8 +15,7 @@ def index(request):
     response = zlib.get_full_response(
         request,
         {
-            'object_list': Articles.objects.filter(status="published").order_by("-pub_datetime")
-            .annotate(read_by_user=Count('Views', filter=Q(Views__user=request.user)))[:20]
+            'object_list': Articles.objects.filter(status="published").annotate(read_by_user=Count('Views', filter=Q(Views__user=request.user))).order_by("-pub_datetime")[:20]
         }
     )
     for art in response['object_list']:
@@ -61,7 +61,10 @@ def article(request, pk):
     response = zlib.get_full_response(
         request,
         {
-            'articles': Articles.objects.get(id=pk),
+            'articles': Articles.objects
+                .annotate(article_rating=Coalesce(Sum('Rating__rating_weight'), 0))
+                .annotate(views_num=Sum('Views__view_weight')).order_by('-views_num')
+                .get(id=pk),
             'views': views,
             'views_per_week': views_per_week,
             'rating': rating,

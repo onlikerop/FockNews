@@ -71,12 +71,12 @@ class Views(models.Model):
     view_weight = models.IntegerField(default=1)
     objects = models.Manager()
 
+    def __str__(self):
+        return self.view_datetime
+
     class Meta:
         verbose_name = 'Просмотры'
         verbose_name_plural = 'Просмотры'
-
-    def __str__(self):
-        return self.view_datetime
 
 
 class Rating(models.Model):

@@ -38,8 +38,8 @@ aside{
     border-radius: 5px;
     border: solid 1px silver;
     position: fixed;
-    top: 100px;
-    right:0;
+    top: 5em;
+    right: 5px;
 }
 
 footer{
@@ -63,6 +63,10 @@ aside div.username .group{
 
 aside .rank2{
     width: auto;
+}
+
+aside #side_articles{
+    height: 40%;
 }
 
 .minarticles{
@@ -280,7 +284,3 @@ div.baninfo a#banuser-btn, div.baninfo a#unbanuser-btn{
 #btn-downrating{
     transform: rotate(180deg)   ;
 }
-
-/*svg{
-    border: solid 1px #ff0000;
-}*/
