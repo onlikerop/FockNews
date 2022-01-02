@@ -3,6 +3,7 @@ import string
 import random
 
 from django.db.models.functions import Coalesce
+from sql_util.aggregates import SubquerySum
 
 from API.models import APIKey as APIKey_M, APIKeys_Permissions, APIPermissions, APIKey
 
@@ -22,7 +23,7 @@ def get_client_ip(request):
 
 
 def stdict(request):
-    article_rating = Coalesce(Sum('Rating__rating_weight'), 0)
+    article_rating = Coalesce(SubquerySum('Rating__rating_weight'), 0)
     poparts = Articles.objects.annotate(
         article_rating=article_rating
     ).annotate(
@@ -45,7 +46,7 @@ def stdict(request):
             0
         )
     ).order_by('-article_rating')[:3]
-
+    
     return {
         'user_data': request.user,
         'sidebar_data': {

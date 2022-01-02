@@ -3,6 +3,8 @@ import re
 from django.db.models import Sum, Count, F, Q
 from django.db.models.functions import Coalesce
 from django.shortcuts import render
+from sql_util.aggregates import SubquerySum
+
 from Main.models import Articles, Views
 from html_forms.forms import CreateArticleForm
 from Main import zlib
@@ -15,11 +17,12 @@ def index(request):
     response = zlib.get_full_response(
         request,
         {
-            'object_list': Articles.objects.filter(status="published").annotate(read_by_user=Count('Views', filter=Q(Views__user=request.user))).order_by("-pub_datetime")[:20]
+            'object_list': Articles.objects.filter(status="published").annotate(
+                read_by_user=Count('Views', filter=Q(Views__user=request.user))).order_by("-pub_datetime")[:20]
         }
     )
     for art in response['object_list']:
-        art.body = re.sub('(?!<br>|<\/?p>)<[^<]+?>', '', art.body)  # Removing all HTML tags, excluding <br>, <p>, </p>
+        art.body = re.sub('(?!<br>|</?p>)<[^<]+?>', '', art.body)  # Removing all HTML tags, excluding <br>, <p>, </p>
     return render(request, 'Main/index.html', response)
 
 
@@ -53,16 +56,12 @@ def article(request, pk):
         article=Articles.objects.get(id=pk),
         view_datetime__gte=(datetime.datetime.now() + datetime.timedelta(days=-7)).strftime("%Y-%m-%d %H:%M:%S")
     ).count()
-    rating = Articles.objects.get(id=pk).Rating.filter(status="Active")
-    if rating:
-        rating = rating.annotate(rating_sum=Sum('rating_weight')).first().rating_sum
-    else:
-        rating = 0
+    rating = Articles.objects.annotate(rating_sum=Coalesce(Sum('Rating__rating_weight'), 0)).get(id=pk).rating_sum
     response = zlib.get_full_response(
         request,
         {
             'articles': Articles.objects
-                .annotate(article_rating=Coalesce(Sum('Rating__rating_weight'), 0))
+                .annotate(article_rating=Coalesce(SubquerySum('Rating__rating_weight'), 0))
                 .annotate(views_num=Sum('Views__view_weight')).order_by('-views_num')
                 .get(id=pk),
             'views': views,
