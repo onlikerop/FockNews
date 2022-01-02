@@ -9,7 +9,7 @@ from API.models import APIKey as APIKey_M, APIKeys_Permissions, APIPermissions, 
 
 from API.models import APIRequests
 from Main.models import Articles
-from django.db.models import Sum, Q, Count, F, Case, When
+from django.db.models import Sum, Q, Count, F
 
 
 # Service Functions
