@@ -177,7 +177,7 @@ aside .side_articles div, aside .side_articles div h6{
     display: inline-block;
 }
 
-#btn-deletearticle, #btn-editarticle, #btn-restorearticle, btn-publisharticle{
+#btn-deletearticle, #btn-editarticle, #btn-restorearticle, #btn-publisharticle{
     display: inline-block;
     float: right;
     margin-left: 10px;
@@ -191,7 +191,7 @@ aside .side_articles div, aside .side_articles div h6{
     background: #FFFFC0;
 }
 
-#btn-restorearticle, btn-publisharticle{
+#btn-restorearticle, #btn-publisharticle{
     background: #E7FFE7;
 }
 
@@ -203,7 +203,7 @@ aside .side_articles div, aside .side_articles div h6{
     background: #E6E6A9;
 }
 
-#btn-restorearticle:hover, btn-publisharticle:hover{
+#btn-restorearticle:hover, #btn-publisharticle:hover{
     background: #D0E6D0;
 }
 
