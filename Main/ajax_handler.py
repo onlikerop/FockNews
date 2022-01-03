@@ -1,11 +1,11 @@
 import datetime
 
-from django.db.models import Q, F, Value
 from django.http import JsonResponse
 from Main.models import Articles, Rating
 
 
 def deletearticle(request, pk):
+    item = 0
     if request.user.is_authenticated\
             and request.accepts\
             and request.POST\
@@ -15,6 +15,7 @@ def deletearticle(request, pk):
 
 
 def restorearticle(request, pk):
+    item = 0
     if request.user.is_authenticated\
             and request.accepts\
             and request.POST\
@@ -24,6 +25,7 @@ def restorearticle(request, pk):
 
 
 def publisharticle(request, pk):
+    item = 0
     if request.user.is_authenticated\
             and request.accepts\
             and request.POST\
@@ -33,6 +35,7 @@ def publisharticle(request, pk):
 
 
 def saveeditedarticle(request, pk):
+    item = 0
     if request.user.is_authenticated\
             and request.accepts\
             and request.POST\

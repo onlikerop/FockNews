@@ -1,6 +1,6 @@
 import re
 
-from django.db.models import Sum, Count, F, Q
+from django.db.models import Sum, Count, Q
 from django.db.models.functions import Coalesce
 from django.shortcuts import render
 from sql_util.aggregates import SubquerySum
@@ -9,8 +9,6 @@ from Main.models import Articles, Views
 from html_forms.forms import CreateArticleForm
 from Main import zlib
 import datetime
-
-from Main.models import Articles
 
 
 def index(request):
