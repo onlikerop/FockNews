@@ -49,7 +49,7 @@
                 {% if page_user_data.profile.rank %}
                 <div class="rank">Звание: <span class="rank2">{{page_user_data.profile.rank|safe}}</span></div>
                 {% endif %}
-                <div class="rating">Рейтинг: <span class="rating2">{{user_rating}}</span></div>
+                <div class="rating">Рейтинг автора: <span class="rating2">{{user_rating}}</span></div>
                 {% if page_user_data.profile.about_me %}
                 <div class="about_me1">Обо мне: <span class="about_me2">{{page_user_data.profile.about_me|safe|linebreaks}}</span></div>
                 {% else %}

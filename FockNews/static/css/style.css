@@ -30,6 +30,7 @@ header{
     display: inline-block;
     width: 50%;
     flex: 1 0 auto;
+    min-height: calc(100% - 75px - 50px);
 }
 
 aside{
@@ -40,6 +41,8 @@ aside{
     position: fixed;
     top: 5em;
     right: 5px;
+    background-color: #ffffff;
+    z-index: 1000;
 }
 
 footer{
@@ -47,6 +50,7 @@ footer{
     bottom: 20px;
     width: 100%;
     flex: 0 0 auto;
+    height: 50px;
 }
 
 aside div{
@@ -65,8 +69,18 @@ aside .rank2{
     width: auto;
 }
 
-aside #side_articles{
-    height: 40%;
+aside .side_articles{
+    height: 36vh;
+    /*border: solid 1px #ff0000;*/
+}
+
+aside .side_articles div{
+    height: 10.7vh;
+    /*border: solid 1px #0000ff;*/
+}
+
+aside .side_articles div, aside .side_articles div h6{
+    font-size: 0.95em;
 }
 
 .minarticles{
