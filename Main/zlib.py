@@ -8,7 +8,7 @@ from sql_util.aggregates import SubquerySum
 from API.models import APIKey as APIKey_M, APIKeys_Permissions, APIPermissions, APIKey
 
 from API.models import APIRequests
-from Main.models import Articles
+from Main.models import Articles, Comments
 from django.db.models import Sum, Q, Count, F
 
 
@@ -173,3 +173,12 @@ def getThisKey(request, active=True, free=False):
             else request.data['APIKey']
         )
     ).first()
+
+
+# def getCommentsTree(src):
+#     if isinstance(src, Articles):
+#         getCommentsTree(src.Comments)
+#     elif isinstance(src, Comments):
+#         pass
+#     else:
+#         raise TypeError("Parameter must be instance of Articles or Comments!")

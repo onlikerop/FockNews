@@ -116,9 +116,85 @@ class Rating(models.Model):
     class Meta:
         verbose_name = 'Рейтинг'
         verbose_name_plural = 'Рейтинг'
-
-        permissions = (
-            ("give_rating", "Can give rating to articles"),
-            ("manage_rating", "Can manage rating of articles")
-        )
         unique_together = ('article', 'user')
+
+
+class Comments(models.Model):
+    article = models.ForeignKey(
+        Articles,
+        on_delete=models.PROTECT,
+        verbose_name='Статья',
+        related_name='Comments'
+    )
+    reply_to = models.ForeignKey(
+        "self",
+        on_delete=models.PROTECT,
+        blank=True,
+        null=True,
+        default=None,
+        verbose_name='Ответ на',
+        related_name='Replies'
+    )
+    user = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        verbose_name='Пользователь',
+        related_name='Comments'
+    )
+    comment_datetime = models.DateTimeField(
+        blank=True,
+        null=True
+    )
+    status = models.CharField(
+        max_length=24,
+        default='published'
+    )
+    objects = models.Manager()
+
+    def __str__(self):
+        return str(self.user) + ": " + str(self.article) + "[{}]".format(self.comment_datetime)
+
+    class Meta:
+        verbose_name = 'Комменатрии'
+        verbose_name_plural = 'Комментарий'
+
+
+class CommentsRating(models.Model):
+    comment = models.ForeignKey(
+        Comments,
+        on_delete=models.PROTECT,
+        verbose_name='Комменатрий',
+        related_name='Rating'
+    )
+    user = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        verbose_name='Пользователь',
+        related_name='Given_commentsrating'
+    )
+    rating_datetime = models.DateTimeField(
+        blank=True,
+        null=True
+    )
+    rating_type = models.CharField(
+        max_length=24,
+        default='Default'
+    )
+    rating_weight = models.IntegerField(default=1)
+    status = models.CharField(
+        max_length=24,
+        default='Active'
+    )
+    objects = models.Manager()
+
+    def __str__(self):
+        return "(" + str(self.comment) + "): " + "{:+}".format(self.rating_weight)
+
+    class Meta:
+        verbose_name = 'Рейтинг комменатрия'
+        verbose_name_plural = 'Рейтинг комменатриев'
+        unique_together = ('comment', 'user')
