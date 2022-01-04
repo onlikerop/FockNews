@@ -9,7 +9,7 @@ from API.models import APIKey as APIKey_M, APIKeys_Permissions, APIPermissions, 
 
 from API.models import APIRequests
 from Main.models import Articles, Comments
-from django.db.models import Sum, Q, Count, F
+from django.db.models import Sum, Q, Count, F, QuerySet
 
 
 # Service Functions
@@ -46,7 +46,7 @@ def stdict(request):
             0
         )
     ).order_by('-article_rating')[:3]
-    
+
     return {
         'user_data': request.user,
         'sidebar_data': {
@@ -175,10 +175,48 @@ def getThisKey(request, active=True, free=False):
     ).first()
 
 
-# def getCommentsTree(src):
-#     if isinstance(src, Articles):
-#         getCommentsTree(src.Comments)
-#     elif isinstance(src, Comments):
-#         pass
-#     else:
-#         raise TypeError("Parameter must be instance of Articles or Comments!")
+def getCommentsTree(src=Articles.objects.get(id=1)):
+    class Tree:
+
+        def __init__(self, elem):
+            self.body = elem
+            self.heirs = []
+
+        def __str__(self):
+            if isinstance(self.body, Comments):
+                print(self.body.comment)
+            elif isinstance(self.body, str):
+                print(self.body)
+            else:
+                print(self.body.__class__.__name__)
+
+        body = None
+        heirs = list()
+
+        def append(self, elem):
+            self.heirs.append(Tree(elem))
+
+        def recapp(self, elem):
+            if isinstance(elem, QuerySet):
+                for i in elem.all():
+                    self.recapp(Tree(i))
+            elif isinstance(elem, Tree):
+                self.append(elem.body)
+                for i in elem.body.Replies.all():
+                    self.heirs[-1].recapp(Tree(i))
+            else:
+                raise TypeError("Must be Tree or QuerySet")
+
+        def recprint(self, layer=0, show_root=True):
+            if show_root:
+                print("-" * layer, end='')
+                if isinstance(self.body, str):
+                    print(self.body)
+                else:
+                    print(self.body.comment)
+            else:
+                layer -= 1
+            for i in self.heirs:
+                i.recprint(layer + 1)
+
+    return Tree("ROOT").recapp(Comments.objects.filter(article=src, reply_to=None))

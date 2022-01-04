@@ -143,6 +143,7 @@ class Comments(models.Model):
         verbose_name='Пользователь',
         related_name='Comments'
     )
+    comment = models.TextField()
     comment_datetime = models.DateTimeField(
         blank=True,
         null=True
@@ -157,8 +158,8 @@ class Comments(models.Model):
         return str(self.user) + ": " + str(self.article) + "[{}]".format(self.comment_datetime)
 
     class Meta:
-        verbose_name = 'Комменатрии'
-        verbose_name_plural = 'Комментарий'
+        verbose_name = 'Комменатрий'
+        verbose_name_plural = 'Комментарии'
 
 
 class CommentsRating(models.Model):
