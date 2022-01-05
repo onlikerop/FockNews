@@ -1,6 +1,6 @@
 import re
 
-from django.db.models import Sum, Count, Q
+from django.db.models import Sum, Count, Q, Value
 from django.db.models.functions import Coalesce
 from django.shortcuts import render
 from sql_util.aggregates import SubquerySum
@@ -17,7 +17,9 @@ def index(request):
         request,
         {
             'object_list': Articles.objects.filter(status="published").annotate(
-                read_by_user=Count('Views', filter=Q(Views__user=request.user))).order_by("-pub_datetime")[:20]
+                read_by_user=Count('Views', filter=Q(Views__user=request.user)) if request.user.is_authenticated
+                else Value(False)
+            ).order_by("-pub_datetime")[:20]
         }
     )
     for art in response['object_list']:
