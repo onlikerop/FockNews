@@ -2,9 +2,9 @@
     <div class="side_minprofile">
         <div class="avatar">
             {% if request.user.profile.avatar %}
-            <img src="{{MEDIA_URL}}{{request.user.profile.avatar}}">
+            <img src="{{MEDIA_URL}}{{request.user.profile.avatar}}" alt="Аватар">
             {% else %}
-            <img src="{{MEDIA_URL}}images/avatars/default.png">
+            <img src="{{MEDIA_URL}}images/avatars/default.png" alt="Аватар">
             {% endif %}
         </div>
         <div class="username">

@@ -6,6 +6,7 @@ from django.shortcuts import render
 from sql_util.aggregates import SubquerySum
 
 from Main.models import Articles, Views
+from Main.zlib import getCommentsTree
 from html_forms.forms import CreateArticleForm
 from Main import zlib
 import datetime
@@ -65,7 +66,8 @@ def article(request, pk):
             'views': views,
             'views_per_week': views_per_week,
             'rating': rating,
-            'necessary_perm': "Main.view_" + Articles.objects.get(id=pk).status
+            'necessary_perm': "Main.view_" + Articles.objects.get(id=pk).status,
+            'tree': getCommentsTree(Articles.objects.get(id=pk))
         }
     )
     return render(request, 'Main/article.html', response)

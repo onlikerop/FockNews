@@ -1,0 +1,22 @@
+{% for tree in tree.heirs %}
+<div class="comment" id="comment-{{tree.body.id}}">
+    <div class="comment-user">
+        <div class="avatar">
+            {% if tree.body.user.profile.avatar %}
+            <img src="{{MEDIA_URL}}{{tree.body.user.profile.avatar}}" alt="Аватар">
+            {% else %}
+            <img src="{{MEDIA_URL}}images/avatars/default.png" alt="Аватар">
+            {% endif %}
+        </div>
+        <h4 class="username {{tree.body.user.groups.all.0.name}}">{{tree.body.user.username}}</h4>
+    </div>
+    <div class="comment-body">
+        {{tree.body.comment}}
+    </div>
+</div>
+<div class="replies">
+    {% if tree.heirs %}
+        {% include "includes/article_comment.html" %}
+    {% endif %}
+</div>
+{% endfor %}

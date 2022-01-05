@@ -12,6 +12,9 @@ from Main.models import Articles, Comments
 from django.db.models import Sum, Q, Count, F, QuerySet
 
 
+# Service Classes
+
+
 # Service Functions
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -178,6 +181,9 @@ def getThisKey(request, active=True, free=False):
 def getCommentsTree(src=Articles.objects.get(id=1)):
     class Tree:
 
+        body = None
+        heirs = list()
+
         def __init__(self, elem):
             self.body = elem
             self.heirs = []
@@ -189,9 +195,6 @@ def getCommentsTree(src=Articles.objects.get(id=1)):
                 print(self.body)
             else:
                 print(self.body.__class__.__name__)
-
-        body = None
-        heirs = list()
 
         def append(self, elem):
             self.heirs.append(Tree(elem))
@@ -206,6 +209,7 @@ def getCommentsTree(src=Articles.objects.get(id=1)):
                     self.heirs[-1].recapp(Tree(i))
             else:
                 raise TypeError("Must be Tree or QuerySet")
+            return self
 
         def recprint(self, layer=0, show_root=True):
             if show_root:

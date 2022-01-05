@@ -100,6 +100,9 @@
             </a>
             {% endif %}
         </div>
+        <div class="comments">
+        {% include "includes/article_comment.html" %}
+        </div>
     {% else %}
         <h3 align="center" class="error text-danger">У Вас нет прав на просмотр данной статьи!</h3>
     {% endif %}

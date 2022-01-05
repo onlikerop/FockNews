@@ -298,3 +298,37 @@ div.baninfo a#banuser-btn, div.baninfo a#unbanuser-btn{
 #btn-downrating{
     transform: rotate(180deg)   ;
 }
+
+div.comments {
+    margin-top: 3em;
+}
+
+div.comment{
+    display: table;
+}
+
+div.comment-user{
+    display: table-row;
+}
+
+div.comment-user .avatar{
+    display: table-cell;
+}
+
+div.comment-user .avatar img{
+    width: 64px;
+    height: 64px;
+}
+
+div.comment{
+    display: table-cell;
+    /*border: solid 1px #5a6268;*/
+    border-radius: 5px;
+}
+
+div.comment-body{
+    margin-left: 15px;
+}
+div.comments .replies{
+    margin-left: 3em;
+}
