@@ -1,4 +1,5 @@
 @charset "UTF-8";
+@import url("groups.css");
 
 /**{
      border: solid 1px #ff0000;
@@ -31,6 +32,7 @@ header{
     width: 50%;
     flex: 1 0 auto;
     min-height: calc(100% - 75px - 50px);
+    padding-left: 5px;
 }
 
 aside{
@@ -114,10 +116,10 @@ aside .side_articles div, aside .side_articles div h6{
 
 .article_draft, .article_deleted{
     text-decoration: underline;
-    font-size: 1em
+    font-size: 1em;
 }
 
-.article_deleted{
+.article_deleted, .comment_deleted{
     color: #FF5050;
 }
 
@@ -263,17 +265,6 @@ display: inline;
 div.baninfo a#banuser-btn, div.baninfo a#unbanuser-btn{
     float: right;
 }
-/*Стили групп пользователей*/
-
-.Администратор{
-    color: red;
-    font-weight: 700;
-}
-
-.Модератор{
-    color: forestgreen;
-    font-weight: 500;
-}
 
 #API_select{
     width: 100%;
@@ -299,36 +290,55 @@ div.baninfo a#banuser-btn, div.baninfo a#unbanuser-btn{
     transform: rotate(180deg)   ;
 }
 
-div.comments {
+div.comments{
     margin-top: 3em;
-}
-
-div.comment{
-    display: table;
 }
 
 div.comment-user{
     display: table-row;
 }
 
-div.comment-user .avatar{
+div.comment-user a{
+    text-decoration: none;
+    color: inherit;
+}
+
+div.comment-user .spacer{
     display: table-cell;
+    min-width: 75px;
+}
+
+div.comment-user div, div.comment-user a{
+    display: table-cell;
+    /*border: solid 1px rgba(90, 98, 104, 0.5);*/
+}
+
+div.comment-user .username{
+    padding-right: 5px;
+    padding-left: 10px;
 }
 
 div.comment-user .avatar img{
-    width: 64px;
-    height: 64px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
 }
 
 div.comment{
-    display: table-cell;
-    /*border: solid 1px #5a6268;*/
+    /*border: solid 1px rgba(90, 98, 104, 0.5);*/
     border-radius: 5px;
+    padding-bottom: 10px;
 }
 
 div.comment-body{
     margin-left: 15px;
 }
 div.comments .replies{
-    margin-left: 3em;
+    margin-left: 48px;
+}
+
+.delete-comment{
+    display: table-cell;
+    float: right;
+    /*border: solid 1px rgba(90, 98, 104, 0.5);*/
 }

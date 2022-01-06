@@ -161,6 +161,11 @@ class Comments(models.Model):
         verbose_name = 'Комменатрий'
         verbose_name_plural = 'Комментарии'
 
+        permissions = (
+            ("restore_comments", "Can restore Comments"),
+            ("view_deleted", "Can view deleted Comments"),
+        )
+
 
 class CommentsRating(models.Model):
     comment = models.ForeignKey(

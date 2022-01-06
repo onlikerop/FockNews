@@ -1,0 +1,11 @@
+/*Стили групп пользователей*/
+
+.Администратор{
+    color: red;
+    font-weight: 700;
+}
+
+.Модератор{
+    color: forestgreen;
+    font-weight: 500;
+}

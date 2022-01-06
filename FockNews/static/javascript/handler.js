@@ -156,10 +156,54 @@ $(document).ready(function () {
         });
     }
 
+
+    function delComment(event) {
+        $.ajax ({
+            url: window.location.pathname + 'delcomm/' + event.target.id.split("btn-deletecomment-")[1] + '/',
+            data: {
+                'csrfmiddlewaretoken': csrftoken
+            },
+            method: 'POST',
+            beforeSend: function() {
+                $("#"+event.target.id).hide();
+            },
+            success: function(data) {
+                if (data.column_num === 0) {
+                    alert("Ошибка. Комментарий не был удалён!");
+                }
+                location.reload();
+            }
+
+        });
+    }
+
+
+    function resComment(event) {
+        $.ajax ({
+            url: window.location.pathname + 'rescomm/' + event.target.id.split("btn-restorecomment-")[1] + '/',
+            data: {
+                'csrfmiddlewaretoken': csrftoken
+            },
+            method: 'POST',
+            beforeSend: function() {
+                $("#"+event.target.id).hide();
+            },
+            success: function(data) {
+                if (data.column_num === 0) {
+                    alert("Ошибка. Комментарий не был восстановлен!");
+                }
+                location.reload();
+            }
+
+        });
+    }
+
     $("#btn-deletearticle").bind("click", delArticle);
     $("#btn-restorearticle").bind("click", restoreArticle);
     $("#btn-publisharticle").bind("click", publishArticle);
     $("#btn-saveeditarticle").bind("click", saveEditedArticle);
     $("#btn-uprating").bind("click", upRate);
     $("#btn-downrating").bind("click", downRate);
+    $(".delete-comment").bind("click", delComment);
+    $(".restore-comment").bind("click", resComment);
 });

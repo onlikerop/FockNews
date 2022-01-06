@@ -54,6 +54,16 @@ urlpatterns = [
         name='saveeditedarticle'
     ),
     path(
+        'news/<int:pk>/delcomm/<int:sk>/',
+        ajax_handler.deletecomment,
+        name='deletecomment'
+    ),
+    path(
+        'news/<int:pk>/rescomm/<int:sk>/',
+        ajax_handler.restorecomment,
+        name='restorecomment'
+    ),
+    path(
         'news/<int:pk>/uprate/',
         ajax_handler.uprate,
         name='uprate'

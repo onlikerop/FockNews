@@ -1,17 +1,53 @@
+{% load extra_tags %}
+
 {% for tree in tree.heirs %}
 <div class="comment" id="comment-{{tree.body.id}}">
     <div class="comment-user">
         <div class="avatar">
-            {% if tree.body.user.profile.avatar %}
-            <img src="{{MEDIA_URL}}{{tree.body.user.profile.avatar}}" alt="Аватар">
-            {% else %}
-            <img src="{{MEDIA_URL}}images/avatars/default.png" alt="Аватар">
+            <a href="/users/{{tree.body.user}}">
+                {% if tree.body.user.profile.avatar %}
+                <img src="{{MEDIA_URL}}{{tree.body.user.profile.avatar}}" alt="Аватар" href>
+                {% else %}
+                <img src="{{MEDIA_URL}}images/avatars/default.png" alt="Аватар">
+                {% endif %}
+            </a>
+        </div>
+        <div class="username">
+            <a href="/users/{{tree.body.user}}">
+                <h4 class="{{tree.body.user.groups.all.0.name}}">
+                    {{tree.body.user.username}}
+                </h4>
+            </a>
+            {% check_perm user_data "Main.view_deleted" as checkperm %}
+            {% if tree.body.status == "deleted" and checkperm %}
+                <span class="comment_deleted">Комментарий удалён</span>
             {% endif %}
         </div>
-        <h4 class="username {{tree.body.user.groups.all.0.name}}">{{tree.body.user.username}}</h4>
+        <div class="comment_datetime">{{tree.body.comment_datetime|date:"d.m.Y H:i"}}</div>
+        <div class="spacer"></div>
+        {% if tree.body.status == "published" %}
+            {% check_perm user_data "Main.delete_comments" as checkperm %}
+            {% if checkperm %}
+                <div>
+                    <a class="delete-comment text-secondary" id="btn-deletecomment-{{tree.body.id}}" href="" type="submit" title="Удалить комменатрий">x</a>
+                </div>
+            {% endif %}
+        {% else %}
+            {% check_perm user_data "Main.restore_comments" as checkperm %}
+            {% if checkperm %}
+            <div>
+                <a class="restore-comment text-secondary" id="btn-restorecomment-{{tree.body.id}}" href="" type="submit" title="Восстановить комменатрий">&#11148;</a>
+            </div>
+            {% endif %}
+        {% endif %}
     </div>
     <div class="comment-body">
-        {{tree.body.comment}}
+        {% check_perm user_data "Main.view_deleted" as checkperm %}
+        {% if tree.body.status == "published" or checkperm %}
+            {{tree.body.comment}}
+        {% else %}
+        <h5 class="text-secondary"><i>Комментарий удалён</i></h5>
+    {% endif %}
     </div>
 </div>
 <div class="replies">
