@@ -198,12 +198,64 @@ $(document).ready(function () {
         });
     }
 
+    function upRateComm(event) {
+        $.ajax ({
+            url: window.location.pathname + 'upratecomm/' + event.target.parentNode.id.split("btn-uprate-comm-")[1] + '/',
+            data: {
+                'csrfmiddlewaretoken': csrftoken
+            },
+            method: 'POST',
+            beforeSend: function() {
+                $("#"+event.target.parentNode.id).hide();
+            },
+            success: function(data) {
+                if (data.column_num === 0) {
+                    alert("Ошибка. Изменить рейтинг не удалось!");
+                }
+                location.reload();
+                $("#"+event.target.parentNode.id).show();
+            },
+            error: function(data) {
+                alert("Ошибка!");
+                $("#"+event.target.parentNode.id).show();
+            }
+
+        });
+    }
+
+    function downRateComm(event) {
+        $.ajax ({
+            url: window.location.pathname + 'downratecomm/' + event.target.parentNode.id.split("btn-downrate-comm-")[1] + '/',
+            data: {
+                'csrfmiddlewaretoken': csrftoken
+            },
+            method: 'POST',
+            beforeSend: function() {
+                $(event.target.parentNode.id).hide();
+            },
+            success: function(data) {
+                if (data.column_num  === 0) {
+                    alert("Ошибка. Изменить рейтинг не удалось!");
+                }
+                location.reload();
+                $(event.target.parentNode.id).show();
+            },
+            error: function(data) {
+                alert("Ошибка!");
+                $(event.target.parentNode.id).show();
+            }
+
+        });
+    }
+
     $("#btn-deletearticle").bind("click", delArticle);
     $("#btn-restorearticle").bind("click", restoreArticle);
     $("#btn-publisharticle").bind("click", publishArticle);
     $("#btn-saveeditarticle").bind("click", saveEditedArticle);
-    $("#btn-uprating").bind("click", upRate);
-    $("#btn-downrating").bind("click", downRate);
+    $("#btn-uprate-article").bind("click", upRate);
+    $("#btn-downrate-article").bind("click", downRate);
     $(".delete-comment").bind("click", delComment);
     $(".restore-comment").bind("click", resComment);
+    $(".btn-uprate-comm").bind("click", upRateComm);
+    $(".btn-downrate-comm").bind("click", downRateComm);
 });

@@ -286,8 +286,8 @@ div.baninfo a#banuser-btn, div.baninfo a#unbanuser-btn{
     word-spacing: normal;
 }
 
-#btn-downrating{
-    transform: rotate(180deg)   ;
+.btn-downrating{
+    transform: rotate(180deg);
 }
 
 div.comments{
@@ -325,7 +325,7 @@ div.comment-user .avatar img{
 }
 
 div.comment{
-    /*border: solid 1px rgba(90, 98, 104, 0.5);*/
+    border: solid 1px rgba(90, 98, 104, calc(2/9));
     border-radius: 5px;
     padding-bottom: 10px;
 }
@@ -341,4 +341,11 @@ div.comments .replies{
     display: table-cell;
     float: right;
     /*border: solid 1px rgba(90, 98, 104, 0.5);*/
+}
+
+.comment-rating{
+    display: inline-block;
+    float: right;
+    font-weight: bold;
+    padding-right: 5px;
 }

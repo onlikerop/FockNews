@@ -66,9 +66,9 @@
             <p class="article_rating text-secondary">Рейтинг: {{rating}}</p>
             <p class="article_views text-secondary">Просмотров: {{views}} <span title="Просмотров за последнюю неделю">({{views_per_week}})</span>&nbsp;&nbsp;&nbsp;&nbsp;</p>
             <br>
-            {% check_perm user_data "Main.give_rating" as checkperm %}
+            {% check_perm user_data "Main.add_commentsrating" as checkperm %}
             {% if checkperm %}
-            <a class="btn btn-lg" id="btn-uprating" type="submit">
+            <a class="btn btn-lg btn-uprating" id="btn-uprate-article" type="submit">
                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                      viewBox="0 0 490.2 490.2" style="enable-background:new 0 0 490.2 490.2;" xml:space="preserve" width="1.5em" height="1.5em">
                     <g>
@@ -83,7 +83,7 @@
                     </g>
                 </svg>
             </a>
-            <a class="btn btn-lg" id="btn-downrating" type="submit">
+            <a class="btn btn-lg btn-downrating" id="btn-downrate-article" type="submit">
                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                      viewBox="0 0 490.2 490.2" style="enable-background:new 0 0 490.2 490.2;" xml:space="preserve" width="1.5em" height="1.5em">
                     <g>

@@ -64,6 +64,16 @@ urlpatterns = [
         name='restorecomment'
     ),
     path(
+        'news/<int:pk>/upratecomm/<int:sk>/',
+        ajax_handler.upratecomm,
+        name='upratecomm'
+    ),
+    path(
+        'news/<int:pk>/downratecomm/<int:sk>/',
+        ajax_handler.downratecomm,
+        name='downratecomm'
+    ),
+    path(
         'news/<int:pk>/uprate/',
         ajax_handler.uprate,
         name='uprate'

@@ -201,11 +201,11 @@ def getCommentsTree(src=Articles.objects.get(id=1)):
 
         def recapp(self, elem):
             if isinstance(elem, QuerySet):
-                for i in elem.all():
+                for i in elem.annotate(rating_sum=Coalesce(Sum('Rating__rating_weight'), 0)).all():
                     self.recapp(Tree(i))
             elif isinstance(elem, Tree):
                 self.append(elem.body)
-                for i in elem.body.Replies.all():
+                for i in elem.body.Replies.annotate(rating_sum=Coalesce(Sum('Rating__rating_weight'), 0)).all():
                     self.heirs[-1].recapp(Tree(i))
             else:
                 raise TypeError("Must be Tree or QuerySet")
@@ -217,7 +217,7 @@ def getCommentsTree(src=Articles.objects.get(id=1)):
                 if isinstance(self.body, str):
                     print(self.body)
                 else:
-                    print(self.body.comment)
+                    print(self.body.comment + " " + self.body.rating)
             else:
                 layer -= 1
             for i in self.heirs:
