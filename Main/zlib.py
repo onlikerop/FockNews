@@ -183,10 +183,12 @@ def getCommentsTree(src=Articles.objects.get(id=1)):
 
         body = None
         heirs = list()
+        queryset = None
 
         def __init__(self, elem):
             self.body = elem
             self.heirs = []
+            self.queryset = None
 
         def __str__(self):
             if isinstance(self.body, Comments):
@@ -199,13 +201,15 @@ def getCommentsTree(src=Articles.objects.get(id=1)):
         def append(self, elem):
             self.heirs.append(Tree(elem))
 
-        def recapp(self, elem):
+        def recapp(self, elem, sort='comment_datetime'):
             if isinstance(elem, QuerySet):
-                for i in elem.annotate(rating_sum=Coalesce(Sum('Rating__rating_weight'), 0)).all():
+                if self.body == "ROOT":
+                    self.queryset = elem
+                for i in elem.annotate(rating_sum=Coalesce(Sum('Rating__rating_weight'), 0)).order_by(sort).all():
                     self.recapp(Tree(i))
             elif isinstance(elem, Tree):
                 self.append(elem.body)
-                for i in elem.body.Replies.annotate(rating_sum=Coalesce(Sum('Rating__rating_weight'), 0)).all():
+                for i in elem.body.Replies.annotate(rating_sum=Coalesce(Sum('Rating__rating_weight'), 0)).order_by(sort).all():
                     self.heirs[-1].recapp(Tree(i))
             else:
                 raise TypeError("Must be Tree or QuerySet")
@@ -217,10 +221,28 @@ def getCommentsTree(src=Articles.objects.get(id=1)):
                 if isinstance(self.body, str):
                     print(self.body)
                 else:
-                    print(self.body.comment + " " + self.body.rating)
+                    print(self.body.comment + " (" + str(self.body.rating_sum) + ")")
             else:
                 layer -= 1
             for i in self.heirs:
                 i.recprint(layer + 1)
+
+        def recsort(self, sort):
+            # self.heirs = []
+            # self.recapp(self.queryset, sort)
+            # self.recprint()
+            reverse = False
+            if sort[0] == "-":
+                reverse = True
+            func = (lambda x: x.body.comment_datetime) if (sort[1:] if reverse else sort) == "comment_datetime"\
+                else (lambda x: x.body.rating_sum) if (sort[1:] if reverse else sort) == "rating_sum"\
+                else None
+            self.heirs.sort(
+                key=func,
+                reverse=reverse
+            )
+            for i in self.heirs:
+                i.recsort(sort)
+            return self
 
     return Tree("ROOT").recapp(Comments.objects.filter(article=src, reply_to=None))

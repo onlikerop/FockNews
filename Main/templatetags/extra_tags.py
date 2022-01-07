@@ -33,3 +33,8 @@ def check_ban(user):
             pass_datetime__gt=datetime.now().strftime("%Y-%m-%d %H:%M:%d"))
                                                        ).order_by("-ban_datetime")[0])
     return result
+
+
+@register.simple_tag()
+def sort_comments(comments, sort):
+    return comments.recsort(sort)

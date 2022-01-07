@@ -101,7 +101,15 @@
             {% endif %}
         </div>
         <div class="comments">
-        {% include "includes/article_comment.html" %}
+            <select id="comments-sort">
+                <option value="comment_datetime" {% if sort == "comment_datetime" %}selected{% endif %}>Сначала старые</option>
+                <option value="-comment_datetime" {% if sort == "-comment_datetime" %}selected{% endif %}>Сначала новые</option>
+                <option value="-rating_sum" {% if sort == "-rating_sum" %}selected{% endif %}>Рейтинг по-убыванию</option>
+                <option value="rating_sum" {% if sort == "rating_sum" %}selected{% endif %}>Рейтинг по-возрастанию</option>
+            </select>
+            <br>
+            {% sort_comments tree sort as tree %}
+            {% include "includes/article_comment.html" %}
         </div>
     {% else %}
         <h3 align="center" class="error text-danger">У Вас нет прав на просмотр данной статьи!</h3>

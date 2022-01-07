@@ -349,3 +349,10 @@ div.comments .replies{
     font-weight: bold;
     padding-right: 5px;
 }
+
+select#comments-sort{
+    float: right;
+    display: block;
+    margin-top: -7px;
+    /*border: solid 1px #ff0000;*/
+}

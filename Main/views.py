@@ -33,6 +33,16 @@ def contacts(request):
 
 
 def article(request, pk):
+    sort = 'comment_datetime'
+    if request.method == "GET":
+        if "sort" in request.GET.keys():
+            if request.GET['sort'] in [
+                'comment_datetime',
+                '-comment_datetime',
+                'rating_sum',
+                '-rating_sum'
+            ]:
+                sort = request.GET['sort']
     viewer = request.user if request.user.is_authenticated else None
     locktimer = (datetime.datetime.now() - Views.objects.filter(
         article=Articles.objects.get(id=pk),
@@ -69,7 +79,8 @@ def article(request, pk):
             'views_per_week': views_per_week,
             'rating': rating,
             'necessary_perm': "Main.view_" + Articles.objects.get(id=pk).status,
-            'tree': getCommentsTree(Articles.objects.get(id=pk))
+            'tree': getCommentsTree(Articles.objects.get(id=pk)),
+            'sort': sort
         }
     )
     return render(request, 'Main/article.html', response)

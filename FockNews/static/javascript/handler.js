@@ -248,6 +248,30 @@ $(document).ready(function () {
         });
     }
 
+    function sortComm(event) {
+        $.ajax ({
+            data: {
+                'csrfmiddlewaretoken': csrftoken
+            },
+            method: 'POST',
+            beforeSend: function() {
+                $(event.target.id).hide();
+            },
+            success: function(data) {
+                if (data.column_num  === 0) {
+                    alert("Ошибка. Отсортировать не удалось!");
+                }
+                $(event.target.id).show();
+                location.href = '?sort=' + event.target.value;
+            },
+            error: function(data) {
+                alert("Ошибка!");
+                $(event.target.id).show();
+            }
+
+        });
+    }
+
     $("#btn-deletearticle").bind("click", delArticle);
     $("#btn-restorearticle").bind("click", restoreArticle);
     $("#btn-publisharticle").bind("click", publishArticle);
@@ -258,4 +282,5 @@ $(document).ready(function () {
     $(".restore-comment").bind("click", resComment);
     $(".btn-uprate-comm").bind("click", upRateComm);
     $(".btn-downrate-comm").bind("click", downRateComm);
+    $("#comments-sort").bind("change", sortComm);
 });
