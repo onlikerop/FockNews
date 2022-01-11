@@ -228,9 +228,6 @@ def getCommentsTree(src=Articles.objects.get(id=1)):
                 i.recprint(layer + 1)
 
         def recsort(self, sort):
-            # self.heirs = []
-            # self.recapp(self.queryset, sort)
-            # self.recprint()
             reverse = False
             if sort[0] == "-":
                 reverse = True
