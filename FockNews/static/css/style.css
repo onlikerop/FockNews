@@ -110,8 +110,10 @@ aside .side_articles div, aside .side_articles div h6{
 }
 
 .article_body{
-    margin-left: 10px;
-    margin-right: 10px;
+    margin: 10px;
+    border-radius: 20px;
+    border: 10px solid #C8C9CA;
+    padding: 10px;
 }
 
 .article_draft, .article_deleted{

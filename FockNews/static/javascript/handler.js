@@ -38,7 +38,6 @@ $(document).ready(function () {
         });
     }
 
-
     function restoreArticle(event) {
         $.ajax ({
             url: window.location.pathname + 'restore/',
@@ -58,7 +57,6 @@ $(document).ready(function () {
 
         });
     }
-
 
     function publishArticle(event) {
         $.ajax ({
@@ -156,6 +154,30 @@ $(document).ready(function () {
         });
     }
 
+    function reportArticle(event) {
+        $.ajax ({
+            url: window.location.pathname + 'reportarticle/',
+            data: {
+                'csrfmiddlewaretoken': csrftoken
+            },
+            method: 'POST',
+            beforeSend: function() {
+                $("#"+event.target.parentNode.id).hide();
+            },
+            success: function(data) {
+                if (data.column_num  === 0) {
+                    alert("Ошибка. Изменить рейтинг не удалось!");
+                }
+                location.reload();
+                $("#"+event.target.parentNode.id).show();
+            },
+            error: function(data) {
+                alert("Ошибка!");
+                $("#"+event.target.parentNode.id).show();
+            }
+
+        });
+    }
 
     function delComment(event) {
         $.ajax ({
@@ -176,7 +198,6 @@ $(document).ready(function () {
 
         });
     }
-
 
     function resComment(event) {
         $.ajax ({
@@ -255,23 +276,24 @@ $(document).ready(function () {
             },
             method: 'POST',
             beforeSend: function() {
-                $(event.target.id).hide();
+                $("#"+event.target.id).hide();
             },
             success: function(data) {
                 if (data.column_num  === 0) {
                     alert("Ошибка. Отсортировать не удалось!");
                 }
-                $(event.target.id).show();
+                $("#"+event.target.id).show();
                 location.href = '?sort=' + event.target.value;
             },
             error: function(data) {
                 alert("Ошибка!");
-                $(event.target.id).show();
+                $("#"+event.target.id).show();
             }
 
         });
     }
 
+    // basic binds
     $("#btn-deletearticle").bind("click", delArticle);
     $("#btn-restorearticle").bind("click", restoreArticle);
     $("#btn-publisharticle").bind("click", publishArticle);
@@ -283,4 +305,5 @@ $(document).ready(function () {
     $(".btn-uprate-comm").bind("click", upRateComm);
     $(".btn-downrate-comm").bind("click", downRateComm);
     $("#comments-sort").bind("change", sortComm);
+    // $("#btn-report-article").bind("click", reportArticle)
 });

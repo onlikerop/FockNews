@@ -84,6 +84,11 @@ urlpatterns = [
         name='downrate'
     ),
     path(
+        'news/<int:pk>/reportarticle/',
+        ajax_handler.reportarticle,
+        name='reportarticle'
+    ),
+    path(
         'accounts/',
         include('django.contrib.auth.urls')
     ),
