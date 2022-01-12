@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models import Q
 
 
 class Articles(models.Model):
@@ -37,7 +38,7 @@ class Articles(models.Model):
             ("publish_articles", "Can publish drafts of Articles"),
             ("view_published", "Can view published Articles"),
             ("view_draft", "Can view drafts of Articles"),
-            ("view_deleted", "Can view deleted Articles"),
+            ("view_deleted", "Can view deleted Articles")
         )
 
 
@@ -163,7 +164,7 @@ class Comments(models.Model):
 
         permissions = (
             ("restore_comments", "Can restore Comments"),
-            ("view_deleted", "Can view deleted Comments"),
+            ("view_deleted", "Can view deleted Comments")
         )
 
 
@@ -204,3 +205,90 @@ class CommentsRating(models.Model):
         verbose_name = 'Рейтинг комменатрия'
         verbose_name_plural = 'Рейтинг комменатриев'
         unique_together = ('comment', 'user')
+
+
+class Reportable(models.Model):
+    def __init__(self, obj, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.object = obj
+
+    article = models.ForeignKey(
+        Articles,
+        on_delete=models.PROTECT,
+        blank=True,
+        null=True,
+        verbose_name='Статья',
+        related_name='Reported'
+    )
+    comment = models.ForeignKey(
+        Comments,
+        on_delete=models.PROTECT,
+        blank=True,
+        null=True,
+        verbose_name='Комменатрий',
+        related_name='Reported'
+    )
+
+    @property
+    def object(self):
+        def coalesce(*args):
+            for el in args:
+                if el is not None:
+                    return el
+            return None
+        return coalesce(self.article, self.comment)
+
+    @object.setter
+    def object(self, obj):
+        if isinstance(obj, Articles):
+            self.article = obj
+            self.comment = None
+        elif isinstance(obj, Comments):
+            self.comment = obj
+            self.article = None
+        else:
+            raise TypeError("Not a Reportable model")
+
+    class Meta:
+        constraints = [
+            models.CheckConstraint(check=Q(article=None) | Q(comment=None), name='one_field_none'),
+        ]
+
+
+class Reports(models.Model):
+    object = models.ForeignKey(
+        Reportable,
+        on_delete=models.PROTECT,
+        verbose_name='Объект жалобы',
+        related_name='Reports'
+    )
+    user = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        verbose_name='Пользователь',
+        related_name='Reported'
+    )
+    comment = models.TextField()
+    report_datetime = models.DateTimeField(
+        blank=True,
+        null=True
+    )
+    status = models.CharField(
+        max_length=24,
+        default='Open'
+    )
+    objects = models.Manager()
+
+    def __str__(self):
+        return str(self.user) + ": " + str(self.object)
+
+    class Meta:
+        verbose_name = 'Жалоба'
+        verbose_name_plural = 'Жалобы'
+
+        permissions = (
+            ("consider_reports", "Can consider Reports"),
+            ("review_reports", "Can review Reports")
+        )
