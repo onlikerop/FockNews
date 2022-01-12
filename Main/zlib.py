@@ -5,7 +5,7 @@ import random
 from django.db.models.functions import Coalesce
 from sql_util.aggregates import SubquerySum
 
-from API.models import APIKey as APIKey_M, APIKeys_Permissions, APIPermissions, APIKey
+from API.models import APIKey as APIKey_M, APIKeysPermissions, APIPermissions, APIKey
 
 from API.models import APIRequests
 from Main.models import Articles, Comments
@@ -107,7 +107,7 @@ def checkAPIKeyPerm(key, perm):
             else:
                 perms = perm
             for i in range(len(perms)):
-                perms[i] = bool(APIKeys_Permissions.objects.filter(
+                perms[i] = bool(APIKeysPermissions.objects.filter(
                     key=key,
                     permission=perms[i]
                 ))
@@ -124,7 +124,7 @@ def checkAPIKeyPerm(key, perm):
         key = APIKey_M.objects.filter(key=key).first()
     if not (key and perm):
         return False
-    return APIKeys_Permissions.objects.filter(
+    return APIKeysPermissions.objects.filter(
         key=key,
         permission=perm
     ) or key.super_key
@@ -205,11 +205,11 @@ def getCommentsTree(src=Articles.objects.get(id=1)):
             if isinstance(elem, QuerySet):
                 if self.body == "ROOT":
                     self.queryset = elem
-                for i in elem.annotate(rating_sum=Coalesce(Sum('Rating__rating_weight'), 0)).order_by(sort).all():
+                for i in elem.order_by(sort).all():
                     self.recapp(Tree(i))
             elif isinstance(elem, Tree):
                 self.append(elem.body)
-                for i in elem.body.Replies.annotate(rating_sum=Coalesce(Sum('Rating__rating_weight'), 0)).order_by(sort).all():
+                for i in elem.body.Replies.order_by(sort).all():
                     self.heirs[-1].recapp(Tree(i))
             else:
                 raise TypeError("Must be Tree or QuerySet")

@@ -1,6 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models import Q
+from django.db.models import Q, Sum
+
+
+def coalesce(*args):
+    for el in args:
+        if el is not None:
+            return el
+    return None
 
 
 class Articles(models.Model):
@@ -25,6 +32,10 @@ class Articles(models.Model):
     tags = models.TextField(blank=True)
     status = models.CharField(max_length=24)
     objects = models.Manager()
+
+    @property
+    def rating_sum(self):
+        return coalesce(self.Rating.all().aggregate(rating_sum=Sum('rating_weight')).get('rating_sum'), 0)
 
     def __str__(self):
         return self.title
@@ -74,7 +85,7 @@ class Views(models.Model):
     objects = models.Manager()
 
     def __str__(self):
-        return self.view_datetime
+        return str(self.article) + "[" + str(self.view_datetime) + "]"
 
     class Meta:
         verbose_name = 'Просмотры'
@@ -155,6 +166,10 @@ class Comments(models.Model):
     )
     objects = models.Manager()
 
+    @property
+    def rating_sum(self):
+        return coalesce(self.Rating.all().aggregate(rating_sum=Sum('rating_weight')).get('rating_sum'), 0)
+
     def __str__(self):
         return str(self.user) + ": " + str(self.article) + "[{}]".format(self.comment_datetime)
 
@@ -228,14 +243,10 @@ class Reportable(models.Model):
         verbose_name='Комменатрий',
         related_name='Reported'
     )
+    objects = models.Manager()
 
     @property
     def object(self):
-        def coalesce(*args):
-            for el in args:
-                if el is not None:
-                    return el
-            return None
         return coalesce(self.article, self.comment)
 
     @object.setter
@@ -248,6 +259,10 @@ class Reportable(models.Model):
             self.article = None
         else:
             raise TypeError("Not a Reportable model")
+
+    def __str__(self):
+        obj = self.object
+        return type(obj).__name__ + str(obj)
 
     class Meta:
         constraints = [

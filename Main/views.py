@@ -67,7 +67,7 @@ def article(request, pk):
         article=Articles.objects.get(id=pk),
         view_datetime__gte=(datetime.datetime.now() + datetime.timedelta(days=-7)).strftime("%Y-%m-%d %H:%M:%S")
     ).count()
-    rating = Articles.objects.annotate(rating_sum=Coalesce(Sum('Rating__rating_weight'), 0)).get(id=pk).rating_sum
+    rating = Articles.objects.get(id=pk).rating_sum
     response = zlib.get_full_response(
         request,
         {
