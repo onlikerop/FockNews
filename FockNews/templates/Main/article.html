@@ -12,30 +12,32 @@
     {% endif %}
     {% if checkperm or articles.status == "published" %}
         <div class="article">
-            <h2 class="article_title text-primary">{{articles.title}}</h2>
-            {% check_perm user_data "Main.delete_articles" as checkperm %}
-            {% if checkperm and articles.status != "deleted" %}
-                <button class="btn btn-lg text-danger" id="btn-deletearticle" type="submit">Удалить статью</button>
-            {% endif %}
-            {% check_perm user_data "Main.restore_articles" as checkperm %}
-            {% if checkperm and articles.status == "deleted" %}
-                <button class="btn btn-lg text-success" id="btn-restorearticle" type="submit">Восстановить статью</button>
-            {% endif %}
-            {% check_perm user_data "Main.add_articles" as checkperm %}
-            {% if checkperm and articles.status == "draft" %}
-                <button class="btn btn-lg text-success" id="btn-publisharticle" type="submit">Опубликовать статью</button>
-            {% endif %}
-            {% check_perm user_data "Main.change_articles" as checkperm %}
-            {% if checkperm %}
-                <a class="btn btn-lg text-warning" id="btn-editarticle" href="edit">Изменить статью</a>
-            {% endif %}
-            {% if articles.status == "draft" %}
-                <h3 class="article_draft">Внимание! Вы просматриваете черновик!</h3>
-                <br>
-            {% elif articles.status == "deleted" %}
-                <h3 class="article_deleted">Внимание! Вы просматриваете удалённую статью!</h3>
-                <br>
-            {% endif %}
+            <div class="article-header">
+                <h2 class="article_title text-primary">{{articles.title}}</h2><br>
+                {% check_perm user_data "Main.delete_articles" as checkperm %}
+                <ul class="nav manage-article">
+                    {% if checkperm and articles.status != "deleted" %}
+                        <li class="nav-item"><button class="btn btn-lg text-danger" id="btn-deletearticle" type="submit">Удалить статью</button></li>
+                    {% endif %}
+                    {% check_perm user_data "Main.restore_articles" as checkperm %}
+                    {% if checkperm and articles.status == "deleted" %}
+                        <li class="nav-item"><button class="btn btn-lg text-success" id="btn-restorearticle" type="submit">Восстановить статью</button></li>
+                    {% endif %}
+                    {% check_perm user_data "Main.add_articles" as checkperm %}
+                    {% if checkperm and articles.status == "draft" %}
+                        <li class="nav-item"><button class="btn btn-lg text-success" id="btn-publisharticle" type="submit">Опубликовать статью</button></li>
+                    {% endif %}
+                    {% check_perm user_data "Main.change_articles" as checkperm %}
+                    {% if checkperm %}
+                        <li class="nav-item"><a class="btn btn-lg text-warning" id="btn-editarticle" href="edit/">Изменить статью</a></li>
+                    {% endif %}
+                    {% if articles.status == "draft" %}
+                        <li class="nav-item"><h3 class="article_draft">Внимание! Вы просматриваете черновик!</h3></li>
+                    {% elif articles.status == "deleted" %}
+                        <li class="nav-item"><h3 class="article_deleted">Внимание! Вы просматриваете удалённую статью!</h3></li>
+                    {% endif %}
+                </ul>
+            </div>
             <div class="article_body text-dark">{{articles.body|safe|linebreaks}}</div><br>
             <h5 class="article_datetime">Дата публикации: {% if articles.status == "published" %}{{articles.pub_datetime|date:"d.m.Y H:i"}}{% else %}Не опубликовано{% endif %}</h5>{% if articles.lasted_datetime != NULL %} <span class="btn-link article_lasted_datetime" title="{{articles.lasted_datetime|date:'d.m.Y H:i'}}">(ред.)</span> {% endif %}
             <h5 class="article_author">{% if articles.status == "published" %}Опубликовано{% else %}Создано{% endif %} пользователем <a href="/users/{{articles.author}}"><u>{{articles.author}}</u></a></h5>
