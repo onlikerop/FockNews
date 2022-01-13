@@ -1,50 +1,50 @@
 {% load extra_tags %}
 
 {% for tree in tree.heirs %}
-<div class="comment" id="comment-{{tree.body.id}}">
-    <div class="comment-rating {% if tree.body.rating_sum > 0 %}text-success{% elif tree.body.rating_sum < 0 %}text-danger{% endif %}">
-    {{tree.body.rating_sum}}
-    </div>
-    <div class="comment-user">
-        <div class="avatar">
-            <a href="/users/{{tree.body.user}}">
-                {% if tree.body.user.profile.avatar %}
-                <img src="{{MEDIA_URL}}{{tree.body.user.profile.avatar}}" alt="Аватар" href>
-                {% else %}
-                <img src="{{MEDIA_URL}}images/avatars/default.png" alt="Аватар">
+<div class="card comment" id="comment-{{tree.body.id}}">
+    <div class="card-header">
+        <div class="manage-comment">
+            {% if tree.body.status == "published" %}
+                {% check_perm user_data "Main.delete_comments" as checkperm %}
+                {% if checkperm %}
+                        <a class="delete-comment text-secondary" id="btn-deletecomment-{{tree.body.id}}" href="" type="submit" title="Удалить комменатрий">x</a>
                 {% endif %}
-            </a>
-        </div>
-        <div class="username">
-            <a href="/users/{{tree.body.user}}">
-                <h4 class="{{tree.body.user.groups.all.0.name}}">
-                    {{tree.body.user.username}}
-                </h4>
-            </a>
-            {% check_perm user_data "Main.view_deleted" as checkperm %}
-            {% if tree.body.status == "deleted" and checkperm %}
-                <span class="comment_deleted">Комментарий удалён</span>
+            {% else %}
+                {% check_perm user_data "Main.restore_comments" as checkperm %}
+                {% if checkperm %}
+                    <a class="restore-comment text-secondary" id="btn-restorecomment-{{tree.body.id}}" href="" type="submit" title="Восстановить комменатрий">&#11148;</a>
+                {% endif %}
             {% endif %}
         </div>
-        <div class="comment_datetime">{{tree.body.comment_datetime|date:"d.m.Y H:i"}}</div>
         <div class="spacer"></div>
-        {% if tree.body.status == "published" %}
-            {% check_perm user_data "Main.delete_comments" as checkperm %}
-            {% if checkperm %}
-                <div>
-                    <a class="delete-comment text-secondary" id="btn-deletecomment-{{tree.body.id}}" href="" type="submit" title="Удалить комменатрий">x</a>
-                </div>
-            {% endif %}
-        {% else %}
-            {% check_perm user_data "Main.restore_comments" as checkperm %}
-            {% if checkperm %}
-            <div>
-                <a class="restore-comment text-secondary" id="btn-restorecomment-{{tree.body.id}}" href="" type="submit" title="Восстановить комменатрий">&#11148;</a>
+        <div class="comment-rating {% if tree.body.rating_sum > 0 %}text-success{% elif tree.body.rating_sum < 0 %}text-danger{% endif %}">
+        {{tree.body.rating_sum}}
+        </div>
+        <div class="comment-user">
+            <div class="avatar">
+                <a href="/users/{{tree.body.user}}">
+                    {% if tree.body.user.profile.avatar %}
+                    <img src="{{MEDIA_URL}}{{tree.body.user.profile.avatar}}" alt="Аватар" href>
+                    {% else %}
+                    <img src="{{MEDIA_URL}}images/avatars/default.png" alt="Аватар">
+                    {% endif %}
+                </a>
             </div>
-            {% endif %}
-        {% endif %}
+            <div class="username">
+                <a href="/users/{{tree.body.user}}">
+                    <h4 class="{{tree.body.user.groups.all.0.name}}">
+                        {{tree.body.user.username}}
+                    </h4>
+                </a>
+                {% check_perm user_data "Main.view_deleted" as checkperm %}
+                {% if tree.body.status == "deleted" and checkperm %}
+                    <span class="comment_deleted">Комментарий удалён</span>
+                {% endif %}
+            </div>
+            <div class="comment_datetime">{{ tree.body.comment_datetime|date:"d.m.Y H:i" }}</div>
+        </div>
     </div>
-    <div class="comment-body">
+    <div class="card-body comment-body">
         {% check_perm user_data "Main.view_deleted" as checkperm %}
         {% if tree.body.status == "published" or checkperm %}
             {{tree.body.comment}}
@@ -52,7 +52,7 @@
         <h5 class="text-secondary"><i>Комментарий удалён</i></h5>
     {% endif %}
     </div>
-    <div class="comment-rate">
+    <div class="card-footer comment-rate">
         {% check_perm user_data "Main.add_rating" as checkperm %}
             {% if checkperm %}
                 <a class="btn btn-lg btn-uprating btn-uprate-comm" id="btn-uprate-comm-{{tree.body.id}}" type="submit">
@@ -85,6 +85,15 @@
                         </g>
                     </svg>
                 </a>
+            {% endif %}
+            {% check_perm user_data "Main.add_reports" as checkperm %}
+            {% if checkperm %}
+                <a class="btn btn-lg btn-report-comment" id="btn-report-comment-{{ tree.body.id }}" type="button" data-bs-toggle="modal" data-bs-target="#reportCommentModal" data-bs-comment-user="{{ tree.body.user.username }}" data-bs-comment-user-group="{{ tree.body.user.groups.all.0.name }}" data-bs-comment-comment="{{ tree.body.comment }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="0.75em" height="0.75em" fill="currentColor" class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
+                      <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"></path>
+                    </svg>
+                </a>
+                {% include "includes/modals/reportArticleModal.html" %}
             {% endif %}
     </div>
 </div>

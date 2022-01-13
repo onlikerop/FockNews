@@ -23,7 +23,7 @@
     <div class="side_articles">
         <h6>Статьи, популярные на этой неделе:</h6>
         {% for post in sidebar_data.pop_arts %}
-        <div id="pop-article{{post.id}}">
+        <div id="pop-article-{{post.id}}">
             <b class="article_title"><a href="/news/{{post.id}}">{{post.title}}</a></b>
             <h6 class="article_views">Просмотров: {{post.views_num}}</h6><br>
             <h6 class="article_datetime">{{post.pub_datetime|date:"d.m.Y H:i"}}</h6>{% if post.lasted_datetime != NULL %} <span class="btn-link article_lasted_datetime" title="{{post.lasted_datetime|date:'d.m.Y H:i'}}">(ред.)</span> {% endif %}
@@ -37,7 +37,7 @@
     <div class="side_articles">
         <h6>Статьи с наибольшим рейтингом:</h6>
         {% for post in sidebar_data.top_arts %}
-        <div id="top-article{{post.id}}">
+        <div id="top-article-{{post.id}}">
             <b class="article_title"><a href="/news/{{post.id}}">{{post.title}}</a></b>
             <h6 class="article_views">Просмотров: {{post.views_num}}</h6><br>
             <h6 class="article_datetime">{{post.pub_datetime|date:"d.m.Y H:i"}}</h6>{% if post.lasted_datetime != NULL %} <span class="btn-link article_lasted_datetime" title="{{post.lasted_datetime|date:'d.m.Y H:i'}}">(ред.)</span> {% endif %}

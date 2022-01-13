@@ -5,7 +5,7 @@ from django.db.models.functions import Coalesce
 from django.shortcuts import render
 from sql_util.aggregates import SubquerySum
 
-from Main.models import Articles, Views
+from Main.models import Articles, Views, ReportTypes
 from Main.zlib import getCommentsTree
 from html_forms.forms import CreateArticleForm
 from Main import zlib
@@ -80,7 +80,8 @@ def article(request, pk):
             'rating': rating,
             'necessary_perm': "Main.view_" + Articles.objects.get(id=pk).status,
             'tree': getCommentsTree(Articles.objects.get(id=pk)),
-            'sort': sort
+            'sort': sort,
+            'reporttypes': ReportTypes.objects.all()
         }
     )
     return render(request, 'Main/article.html', response)

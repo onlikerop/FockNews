@@ -18,6 +18,27 @@ $(document).ready(function () {
     const csrftoken = getCookie('csrftoken');
 
 
+    // transit-info functions
+
+        // Comments report
+    $(".btn-report-comment").bind("click", function (event) {
+        let group = event.currentTarget.getAttribute('data-bs-comment-user-group')
+        let user = event.currentTarget.getAttribute('data-bs-comment-user')
+        let comment = event.currentTarget.getAttribute('data-bs-comment-comment')
+        $("#commrep-title").addClass(group)
+        $("#commrep-title").text(user)
+        $("#commrep-body").text(comment)
+    })
+        // Comments report modal hide event trigger
+    $("#reportCommentModal").on('hide.bs.modal', function () {
+       setTimeout(function (){
+           $("#commrep-title").attr('class', 'card-title')
+       }, 100
+       )
+    });
+
+
+    // basic functions
     function delArticle(event) {
         $.ajax ({
             url: window.location.pathname + 'delete/',
@@ -158,22 +179,32 @@ $(document).ready(function () {
         $.ajax ({
             url: window.location.pathname + 'reportarticle/',
             data: {
-                'csrfmiddlewaretoken': csrftoken
+                'csrfmiddlewaretoken': csrftoken,
+                'type': $("#reportArticleTypes").val(),
+                'comment': $("#report-input").val()
             },
             method: 'POST',
             beforeSend: function() {
-                $("#"+event.target.parentNode.id).hide();
+                $("#"+event.currentTarget.id).hide();
+                if ($("#reportArticleTypes").val() === null) {
+                    alert("Выберите тип жалобы!")
+                    $("#"+event.currentTarget.id).show();
+                    return false
+                }
             },
             success: function(data) {
                 if (data.column_num  === 0) {
-                    alert("Ошибка. Изменить рейтинг не удалось!");
+                    alert("Ошибка. Отправить жалобу не удалось!");
                 }
+                alert("Жалоба отправлена");
                 location.reload();
-                $("#"+event.target.parentNode.id).show();
+                $("#"+event.currentTarget.id).show();
+                $('#reportArticleModal').modal('hide');
             },
             error: function(data) {
                 alert("Ошибка!");
-                $("#"+event.target.parentNode.id).show();
+                $("#"+event.currentTarget.id).show();
+                $('#reportArticleModal').modal('hide');
             }
 
         });
@@ -181,13 +212,13 @@ $(document).ready(function () {
 
     function delComment(event) {
         $.ajax ({
-            url: window.location.pathname + 'delcomm/' + event.target.id.split("btn-deletecomment-")[1] + '/',
+            url: window.location.pathname + 'delcomm/' + event.currentTarget.id.split("btn-deletecomment-")[1] + '/',
             data: {
                 'csrfmiddlewaretoken': csrftoken
             },
             method: 'POST',
             beforeSend: function() {
-                $("#"+event.target.id).hide();
+                $("#"+event.currentTarget.id).hide();
             },
             success: function(data) {
                 if (data.column_num === 0) {
@@ -201,13 +232,13 @@ $(document).ready(function () {
 
     function resComment(event) {
         $.ajax ({
-            url: window.location.pathname + 'rescomm/' + event.target.id.split("btn-restorecomment-")[1] + '/',
+            url: window.location.pathname + 'rescomm/' + event.currentTarget.id.split("btn-restorecomment-")[1] + '/',
             data: {
                 'csrfmiddlewaretoken': csrftoken
             },
             method: 'POST',
             beforeSend: function() {
-                $("#"+event.target.id).hide();
+                $("#"+event.currentTarget.id).hide();
             },
             success: function(data) {
                 if (data.column_num === 0) {
@@ -221,24 +252,24 @@ $(document).ready(function () {
 
     function upRateComm(event) {
         $.ajax ({
-            url: window.location.pathname + 'upratecomm/' + event.target.parentNode.id.split("btn-uprate-comm-")[1] + '/',
+            url: window.location.pathname + 'upratecomm/' + event.currentTarget.id.split("btn-uprate-comm-")[1] + '/',
             data: {
                 'csrfmiddlewaretoken': csrftoken
             },
             method: 'POST',
             beforeSend: function() {
-                $("#"+event.target.parentNode.id).hide();
+                $("#"+event.currentTarget.id).hide();
             },
             success: function(data) {
                 if (data.column_num === 0) {
                     alert("Ошибка. Изменить рейтинг не удалось!");
                 }
                 location.reload();
-                $("#"+event.target.parentNode.id).show();
+                $("#"+event.currentTarget.id).show();
             },
             error: function(data) {
                 alert("Ошибка!");
-                $("#"+event.target.parentNode.id).show();
+                $("#"+event.currentTarget.id).show();
             }
 
         });
@@ -246,24 +277,24 @@ $(document).ready(function () {
 
     function downRateComm(event) {
         $.ajax ({
-            url: window.location.pathname + 'downratecomm/' + event.target.parentNode.id.split("btn-downrate-comm-")[1] + '/',
+            url: window.location.pathname + 'downratecomm/' + event.currentTarget.id.split("btn-downrate-comm-")[1] + '/',
             data: {
                 'csrfmiddlewaretoken': csrftoken
             },
             method: 'POST',
             beforeSend: function() {
-                $(event.target.parentNode.id).hide();
+                $(event.currentTarget.id).hide();
             },
             success: function(data) {
                 if (data.column_num  === 0) {
                     alert("Ошибка. Изменить рейтинг не удалось!");
                 }
                 location.reload();
-                $(event.target.parentNode.id).show();
+                $(event.currentTarget.id).show();
             },
             error: function(data) {
                 alert("Ошибка!");
-                $(event.target.parentNode.id).show();
+                $(event.currentTarget.id).show();
             }
 
         });
@@ -276,18 +307,18 @@ $(document).ready(function () {
             },
             method: 'POST',
             beforeSend: function() {
-                $("#"+event.target.id).hide();
+                $("#"+event.currentTarget.id).hide();
             },
             success: function(data) {
                 if (data.column_num  === 0) {
                     alert("Ошибка. Отсортировать не удалось!");
                 }
-                $("#"+event.target.id).show();
-                location.href = '?sort=' + event.target.value;
+                $("#"+event.currentTarget.id).show();
+                location.href = '?sort=' + event.currentTarget.value;
             },
             error: function(data) {
                 alert("Ошибка!");
-                $("#"+event.target.id).show();
+                $("#"+event.currentTarget.id).show();
             }
 
         });
@@ -305,5 +336,5 @@ $(document).ready(function () {
     $(".btn-uprate-comm").bind("click", upRateComm);
     $(".btn-downrate-comm").bind("click", downRateComm);
     $("#comments-sort").bind("change", sortComm);
-    // $("#btn-report-article").bind("click", reportArticle)
+    $("#btn-send-report").bind("click", reportArticle)
 });

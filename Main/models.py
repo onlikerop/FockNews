@@ -223,9 +223,10 @@ class CommentsRating(models.Model):
 
 
 class Reportable(models.Model):
-    def __init__(self, obj, *args, **kwargs):
+    def __init__(self, *args, obj=None, **kwargs):
         super().__init__(*args, **kwargs)
-        self.object = obj
+        if obj:
+            self.object = obj
 
     article = models.ForeignKey(
         Articles,
@@ -262,12 +263,27 @@ class Reportable(models.Model):
 
     def __str__(self):
         obj = self.object
-        return type(obj).__name__ + str(obj)
+        return obj._meta.verbose_name + " " + str(obj)
 
     class Meta:
         constraints = [
             models.CheckConstraint(check=Q(article=None) | Q(comment=None), name='one_field_none'),
         ]
+
+
+class ReportTypes(models.Model):
+    codename = models.CharField(
+        max_length=24,
+        unique=True
+    )
+    name = models.CharField(max_length=64)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Тип жалобы'
+        verbose_name_plural = 'Типы жалоб'
 
 
 class Reports(models.Model):
@@ -284,6 +300,14 @@ class Reports(models.Model):
         null=True,
         verbose_name='Пользователь',
         related_name='Reported'
+    )
+    type = models.ForeignKey(
+        ReportTypes,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        verbose_name='Тип жалобы',
+        related_name='Reports'
     )
     comment = models.TextField()
     report_datetime = models.DateTimeField(

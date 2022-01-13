@@ -1,14 +1,14 @@
 import datetime
 
 from django.http import JsonResponse
-from Main.models import Articles, Rating, Comments, CommentsRating
+from Main.models import Articles, Rating, Comments, CommentsRating, Reports, ReportTypes, Reportable
 
 
 def deletearticle(request, pk):
     item = 0
-    if request.user.is_authenticated\
-            and request.accepts\
-            and request.POST\
+    if request.user.is_authenticated \
+            and request.accepts \
+            and request.POST \
             and request.user.has_perm("Main.delete_articles"):
         item = Articles.objects.filter(id=pk).update(status="deleted")
     return JsonResponse({"column_num": item})
@@ -16,9 +16,9 @@ def deletearticle(request, pk):
 
 def restorearticle(request, pk):
     item = 0
-    if request.user.is_authenticated\
-            and request.accepts\
-            and request.POST\
+    if request.user.is_authenticated \
+            and request.accepts \
+            and request.POST \
             and request.user.has_perm("Main.restore_articles"):
         item = Articles.objects.filter(id=pk).update(status="published")
     return JsonResponse({"column_num": item})
@@ -26,9 +26,9 @@ def restorearticle(request, pk):
 
 def publisharticle(request, pk):
     item = 0
-    if request.user.is_authenticated\
-            and request.accepts\
-            and request.POST\
+    if request.user.is_authenticated \
+            and request.accepts \
+            and request.POST \
             and request.user.has_perm("Main.publish_articles"):
         item = Articles.objects.filter(id=pk).update(status="published")
     return JsonResponse({"column_num": item})
@@ -36,9 +36,9 @@ def publisharticle(request, pk):
 
 def saveeditedarticle(request, pk):
     item = 0
-    if request.user.is_authenticated\
-            and request.accepts\
-            and request.POST\
+    if request.user.is_authenticated \
+            and request.accepts \
+            and request.POST \
             and request.user.has_perm("Main.change_articles"):
         item = Articles.objects.filter(id=pk).update(title=request.POST.get('title'),
                                                      body=request.POST.get('body'),
@@ -49,9 +49,9 @@ def saveeditedarticle(request, pk):
 
 
 def uprate(request, pk):
-    if request.user.is_authenticated\
-            and request.accepts\
-            and request.POST\
+    if request.user.is_authenticated \
+            and request.accepts \
+            and request.POST \
             and request.user.has_perm("Main.add_rating"):
         item, created = Rating.objects.get_or_create(
             article=Articles.objects.filter(id=pk).first(),
@@ -71,9 +71,9 @@ def uprate(request, pk):
 
 
 def downrate(request, pk):
-    if request.user.is_authenticated\
-            and request.accepts\
-            and request.POST\
+    if request.user.is_authenticated \
+            and request.accepts \
+            and request.POST \
             and request.user.has_perm("Main.add_rating"):
         item, created = Rating.objects.get_or_create(
             article=Articles.objects.filter(id=pk).first(),
@@ -93,11 +93,18 @@ def downrate(request, pk):
 
 
 def reportarticle(request, pk):
-    if request.user.is_authenticated\
-            and request.accepts\
-            and request.POST\
+    if request.user.is_authenticated \
+            and request.accepts \
+            and request.POST \
             and request.user.has_perm("Main.add_reports"):
-
+        Reports.objects.create(
+            object=Reportable.objects.create(obj=Articles.objects.get(id=pk)),
+            user=request.user,
+            type=ReportTypes.objects.get(codename=request.POST.get('type')),
+            comment=request.POST.get('comment'),
+            report_datetime=datetime.datetime.now(),
+            status="Active"
+        )
         return JsonResponse({"column_num": 1})
     else:
         return JsonResponse({"column_num": 0})
@@ -105,9 +112,9 @@ def reportarticle(request, pk):
 
 def deletecomment(request, pk, sk):
     item = 0
-    if request.user.is_authenticated\
-            and request.accepts\
-            and request.POST\
+    if request.user.is_authenticated \
+            and request.accepts \
+            and request.POST \
             and request.user.has_perm("Main.delete_comments"):
         item = Comments.objects.filter(id=sk).update(status="deleted")
     return JsonResponse({"column_num": item})
@@ -115,18 +122,18 @@ def deletecomment(request, pk, sk):
 
 def restorecomment(request, pk, sk):
     item = 0
-    if request.user.is_authenticated\
-            and request.accepts\
-            and request.POST\
+    if request.user.is_authenticated \
+            and request.accepts \
+            and request.POST \
             and request.user.has_perm("Main.restore_comments"):
         item = Comments.objects.filter(id=sk).update(status="published")
     return JsonResponse({"column_num": item})
 
 
 def upratecomm(request, pk, sk):
-    if request.user.is_authenticated\
-            and request.accepts\
-            and request.POST\
+    if request.user.is_authenticated \
+            and request.accepts \
+            and request.POST \
             and request.user.has_perm("Main.add_commentsrating"):
         item, created = CommentsRating.objects.get_or_create(
             comment=Comments.objects.filter(id=sk).first(),
@@ -146,9 +153,9 @@ def upratecomm(request, pk, sk):
 
 
 def downratecomm(request, pk, sk):
-    if request.user.is_authenticated\
-            and request.accepts\
-            and request.POST\
+    if request.user.is_authenticated \
+            and request.accepts \
+            and request.POST \
             and request.user.has_perm("Main.add_commentsrating"):
         item, created = CommentsRating.objects.get_or_create(
             comment=Comments.objects.filter(id=sk).first(),
