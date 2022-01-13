@@ -297,7 +297,7 @@ div.comments{
 }
 
 div.comment-user{
-    display: table-row;
+    /*display: table-row;*/
 }
 
 div.comment-user a{
@@ -313,14 +313,15 @@ div.comment .spacer{
     visibility: hidden
 }
 
-div.comment-user div, div.comment-user a{
-    display: table-cell;
+div.comment-user div{
+    /*display: table-cell;*/
+    display: inline-block;
+    margin-right: 10px;
     /*border: solid 1px rgba(90, 98, 104, 0.5);*/
 }
 
 div.comment-user .username{
-    padding-right: 5px;
-    padding-left: 10px;
+    width: auto;
 }
 
 div.comment-user .avatar img{

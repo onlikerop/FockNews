@@ -36,12 +36,14 @@
                         {{tree.body.user.username}}
                     </h4>
                 </a>
-                {% check_perm user_data "Main.view_deleted" as checkperm %}
-                {% if tree.body.status == "deleted" and checkperm %}
-                    <span class="comment_deleted">Комментарий удалён</span>
-                {% endif %}
             </div>
             <div class="comment_datetime">{{ tree.body.comment_datetime|date:"d.m.Y H:i" }}</div>
+            <div class="deleted-comment">
+                    {% check_perm user_data "Main.view_deleted" as checkperm %}
+                    {% if tree.body.status == "deleted" and checkperm %}
+                        <span class="comment_deleted">Комментарий удалён</span>
+                    {% endif %}
+            </div>
         </div>
     </div>
     <div class="card-body comment-body">
