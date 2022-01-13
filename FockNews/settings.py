@@ -22,12 +22,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'vse777b!7(^s!+0)!c7^(2(s9_8k@2is@lj$q7z23h00bk*5tz'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 if DEBUG:
     ALLOWED_HOSTS = [r'*']
 else:
-    ALLOWED_HOSTS = ['HOST IP', 'DOMAIN NAIM', 'localhost']
+    ALLOWED_HOSTS = ['109.252.117.175', '192.168.192.128', 'localhost']
 
 # Application definition
 
@@ -126,7 +126,7 @@ if DEBUG:
     STATIC_DIR = os.path.join(BASE_DIR, "FockNews/static")
     STATICFILES_DIRS = [
         STATIC_DIR,
-        '/var/www/FockNews/static/',
+        '/var/www/FockNews/FockNews/static/',
     ]
 else:
     STATIC_ROOT = os.path.join(BASE_DIR, 'FockNews/static/')
