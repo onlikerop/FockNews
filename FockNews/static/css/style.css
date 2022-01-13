@@ -12,10 +12,16 @@ body{
 
 header{
     height: 75px;
+    margin-bottom: 10px;
+    /*border: #0dcaf0 solid 1px;*/
 }
 
 #header_menu{
     list-style: none;
+}
+
+#header_menu #logo-btn{
+    margin-left: 5px;
 }
 
 #header_menu li{
@@ -31,7 +37,7 @@ header{
     display: inline-block;
     width: 50%;
     flex: 1 0 auto;
-    min-height: calc(100% - 75px - 50px);
+    min-height: calc(100% - 75px - 50px - 20px);
     padding-left: 5px;
 }
 
@@ -73,16 +79,47 @@ aside .rank2{
 
 aside .side_articles{
     height: 36vh;
+    /*border: solid 1px #00ff00;*/
+}
+
+aside .side_articles .side_label{
+    margin-left: 5px;
+}
+
+aside .side_articles .top-article, aside .side_articles .pop-article{
+    height: 10.75vh;
+    /*border: solid 1px #0000ff;*/
+}
+
+aside .side_articles .side-article-body{
+    height: 85%;
     /*border: solid 1px #ff0000;*/
 }
 
-aside .side_articles div{
-    height: 10.7vh;
+aside .side_articles .side-article-body *{
     /*border: solid 1px #0000ff;*/
 }
 
 aside .side_articles div, aside .side_articles div h6{
     font-size: 0.95em;
+}
+
+aside .article_tags{
+    display: block;
+    width: 50%;
+    /*border: red solid 1px;*/
+    margin: 3px;
+}
+
+aside .side_analytics{
+    float: right;
+    display: block;
+    /*border: red solid 1px;*/
+}
+
+aside .side_analytics .article_rating, aside .side_analytics .article_views{
+    float: left;
+    margin: auto;
 }
 
 .minarticles{

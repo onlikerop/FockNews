@@ -21,29 +21,39 @@
     </div><hr>
 
     <div class="side_articles">
-        <h6>Статьи, популярные на этой неделе:</h6>
+        <h6 class="side_label">Статьи, популярные на этой неделе:</h6>
         {% for post in sidebar_data.pop_arts %}
-        <div id="pop-article-{{post.id}}">
-            <b class="article_title"><a href="/news/{{post.id}}">{{post.title}}</a></b>
-            <h6 class="article_views">Просмотров: {{post.views_num}}</h6><br>
-            <h6 class="article_datetime">{{post.pub_datetime|date:"d.m.Y H:i"}}</h6>{% if post.lasted_datetime != NULL %} <span class="btn-link article_lasted_datetime" title="{{post.lasted_datetime|date:'d.m.Y H:i'}}">(ред.)</span> {% endif %}
-            <h6 class="article_rating">Рейтинг: {{post.article_rating}}</h6><br>
-            <h6 class="article_author"><a href="/users/{{post.author}}"><u>{{post.author}}</u></a></h6>
-            <p class="article_tags">{{post.tags}}</p>
+        <div class="pop-article" id="pop-article-{{post.id}}">
+            <div class="side-article-body">
+                <div class="side-article_info">
+                    <h6 class="article_author"><a href="/users/{{post.author}}"><u>{{post.author}}</u></a></h6>
+                    <b class="article_title"><a href="/news/{{post.id}}">{{post.title|truncatechars:32}}</a></b>
+                </div>
+                <div class="side_analytics">
+                    <h6 class="article_views">Просмотров: {{post.views_num}}</h6><br>
+                    <h6 class="article_rating">Рейтинг: {{post.article_rating}}</h6>
+                </div>
+                <p class="article_tags">{{post.tags}}</p>
+            </div>
             <hr>
         </div>
         {% endfor %}
     </div>
     <div class="side_articles">
-        <h6>Статьи с наибольшим рейтингом:</h6>
+        <h6 class="side_label">Статьи с наибольшим рейтингом:</h6>
         {% for post in sidebar_data.top_arts %}
-        <div id="top-article-{{post.id}}">
-            <b class="article_title"><a href="/news/{{post.id}}">{{post.title}}</a></b>
-            <h6 class="article_views">Просмотров: {{post.views_num}}</h6><br>
-            <h6 class="article_datetime">{{post.pub_datetime|date:"d.m.Y H:i"}}</h6>{% if post.lasted_datetime != NULL %} <span class="btn-link article_lasted_datetime" title="{{post.lasted_datetime|date:'d.m.Y H:i'}}">(ред.)</span> {% endif %}
-            <h6 class="article_rating">Рейтинг: {{post.article_rating}}</h6><br>
-            <h6 class="article_author"><a href="/users/{{post.author}}"><u>{{post.author}}</u></a></h6>
-            <p class="article_tags">{{post.tags}}</p>
+        <div class="top-article" id="top-article-{{post.id}}">
+            <div class="side-article-body">
+                <div class="side-article_info">
+                    <h6 class="article_author"><a href="/users/{{post.author}}"><u>{{post.author}}</u></a></h6>
+                    <b class="article_title"><a href="/news/{{post.id}}">{{post.title|truncatechars:32}}</a></b>
+                </div>
+                <div class="side_analytics">
+                    <h6 class="article_views">Просмотров: {{post.views_num}}</h6><br>
+                    <h6 class="article_rating">Рейтинг: {{post.article_rating}}</h6>
+                </div>
+                <p class="article_tags">{{post.tags}}</p>
+            </div>
             <hr>
         </div>
         {% endfor %}
