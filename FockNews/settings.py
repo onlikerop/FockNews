@@ -24,7 +24,10 @@ SECRET_KEY = 'vse777b!7(^s!+0)!c7^(2(s9_8k@2is@lj$q7z23h00bk*5tz'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [r'*']
+if DEBUG:
+    ALLOWED_HOSTS = [r'*']
+else:
+    ALLOWED_HOSTS = ['HOST IP', 'DOMAIN NAIM', 'localhost']
 
 # Application definition
 
@@ -119,9 +122,18 @@ USE_TZ = False
 
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "FockNews/static"),
-]
+if DEBUG:
+    STATIC_DIR = os.path.join(BASE_DIR, "FockNews/static")
+    STATICFILES_DIRS = [
+        STATIC_DIR,
+        '/var/www/FockNews/static/',
+    ]
+else:
+    STATIC_ROOT = os.path.join(BASE_DIR, 'FockNews/static/')
+    STATICFILES_FINDERS = (
+        'django.contrib.staticfiles.finders.FileSystemFinder',
+        'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    )
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "FockNews/media")
