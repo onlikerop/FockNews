@@ -54,6 +54,46 @@ urlpatterns = [
         name='saveeditedarticle'
     ),
     path(
+        'news/<int:pk>/delcomm/<int:sk>/',
+        ajax_handler.deletecomment,
+        name='deletecomment'
+    ),
+    path(
+        'news/<int:pk>/rescomm/<int:sk>/',
+        ajax_handler.restorecomment,
+        name='restorecomment'
+    ),
+    path(
+        'news/<int:pk>/upratecomm/<int:sk>/',
+        ajax_handler.upratecomm,
+        name='upratecomm'
+    ),
+    path(
+        'news/<int:pk>/downratecomm/<int:sk>/',
+        ajax_handler.downratecomm,
+        name='downratecomm'
+    ),
+    path(
+        'news/<int:pk>/sendcomm/',
+        ajax_handler.sendcomm,
+        name='sendcomm'
+    ),
+    path(
+        'news/<int:pk>/uprate/',
+        ajax_handler.uprate,
+        name='uprate'
+    ),
+    path(
+        'news/<int:pk>/downrate/',
+        ajax_handler.downrate,
+        name='downrate'
+    ),
+    path(
+        'news/<int:pk>/reportarticle/',
+        ajax_handler.reportarticle,
+        name='reportarticle'
+    ),
+    path(
         'accounts/',
         include('django.contrib.auth.urls')
     ),
@@ -77,4 +117,4 @@ urlpatterns = [
         include('API.urls'),
         name='API'
     )
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

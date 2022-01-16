@@ -1,68 +1,110 @@
 {% extends "wrapper.html" %}
 {% load extra_tags %}
+{% load static %}
 
 {% block title %}
     {{articles.title}}
 {% endblock %}
 
 {% block content %}
-    <style>
-        #upperhr {
-        height: 30px;
-        border-style: solid;
-        border-color: black;
-        border-width: 1px 0 0 0;
-        border-radius: 20px;
-        }
-
-        #lowerhr {
-        display: block;
-        content: "";
-        height: 30px;
-        margin-top: -31px;
-        border-style: solid;
-        border-color: black;
-        border-width: 0 0 1px 0;
-        border-radius: 20px;
-        }
-    </style>
     {% if articles.status != "published" %}
         {% check_perm user_data necessary_perm as checkperm %}
     {% endif %}
     {% if checkperm or articles.status == "published" %}
         <div class="article">
-            <h2 class="article_title text-primary">{{articles.title}}</h2>
-            {% check_perm user_data "Main.delete_articles" as checkperm %}
-            {% if checkperm and articles.status != "deleted" %}
-                <button class="btn btn-lg text-danger" id="btn-deletearticle" type="submit">Удалить статью</button>
-            {% endif %}
-            {% check_perm user_data "Main.restore_articles" as checkperm %}
-            {% if checkperm and articles.status == "deleted" %}
-                <button class="btn btn-lg text-success" id="btn-restorearticle" type="submit">Восстановить статью</button>
-            {% endif %}
-            {% check_perm user_data "Main.add_articles" as checkperm %}
-            {% if checkperm and articles.status == "draft" %}
-                <button class="btn btn-lg text-success" id="btn-publisharticle" type="submit">Опубликовать статью</button>
-            {% endif %}
-            {% check_perm user_data "Main.change_articles" as checkperm %}
-            {% if checkperm %}
-                <a class="btn btn-lg text-warning" id="btn-editarticle" href="edit">Изменить статью</a>
-            {% endif %}
-            {% if articles.status == "draft" %}
-                <h3 class="article_draft">Внимание! Вы просматриваете черновик!</h3>
-                <br>
-            {% elif articles.status == "deleted" %}
-                <h3 class="article_deleted">Внимание! Вы просматриваете удалённую статью!</h3>
-                <br>
-            {% endif %}
-            <hr id="upperhr">
+            <div class="article-header">
+                <h2 class="article_title text-primary">{{articles.title}}</h2><br>
+                {% check_perm user_data "Main.delete_articles" as checkperm %}
+                <ul class="nav manage-article">
+                    {% if checkperm and articles.status != "deleted" %}
+                        <li class="nav-item"><button class="btn btn-lg text-danger" id="btn-deletearticle" type="submit">Удалить статью</button></li>
+                    {% endif %}
+                    {% check_perm user_data "Main.restore_articles" as checkperm %}
+                    {% if checkperm and articles.status == "deleted" %}
+                        <li class="nav-item"><button class="btn btn-lg text-success" id="btn-restorearticle" type="submit">Восстановить статью</button></li>
+                    {% endif %}
+                    {% check_perm user_data "Main.add_articles" as checkperm %}
+                    {% if checkperm and articles.status == "draft" %}
+                        <li class="nav-item"><button class="btn btn-lg text-success" id="btn-publisharticle" type="submit">Опубликовать статью</button></li>
+                    {% endif %}
+                    {% check_perm user_data "Main.change_articles" as checkperm %}
+                    {% if checkperm %}
+                        <li class="nav-item"><a class="btn btn-lg text-warning" id="btn-editarticle" href="edit/">Изменить статью</a></li>
+                    {% endif %}
+                    {% if articles.status == "draft" %}
+                        <li class="nav-item"><h3 class="article_draft">Внимание! Вы просматриваете черновик!</h3></li>
+                    {% elif articles.status == "deleted" %}
+                        <li class="nav-item"><h3 class="article_deleted">Внимание! Вы просматриваете удалённую статью!</h3></li>
+                    {% endif %}
+                </ul>
+            </div>
             <div class="article_body text-dark">{{articles.body|safe|linebreaks}}</div><br>
-            <hr id="lowerhr">
             <h5 class="article_datetime">Дата публикации: {% if articles.status == "published" %}{{articles.pub_datetime|date:"d.m.Y H:i"}}{% else %}Не опубликовано{% endif %}</h5>{% if articles.lasted_datetime != NULL %} <span class="btn-link article_lasted_datetime" title="{{articles.lasted_datetime|date:'d.m.Y H:i'}}">(ред.)</span> {% endif %}
             <h5 class="article_author">{% if articles.status == "published" %}Опубликовано{% else %}Создано{% endif %} пользователем <a href="/users/{{articles.author}}"><u>{{articles.author}}</u></a></h5>
             <br><br>
             <p class="article_tags"><b>Тэги статьи: {{articles.tags}}</b></p>
-            <p class="article_views text-secondary">Просмотров: {{views}} <span title="Просмотров за последнюю неделю">({{views_per_week}})</span></p>
+            <p class="article_rating text-secondary">Рейтинг: {{rating}}</p>
+            <p class="article_views text-secondary">Просмотров: {{views}} <span title="Просмотров за последнюю неделю">({{views_per_week}})</span>&nbsp;&nbsp;&nbsp;&nbsp;</p>
+            <br>
+            {% check_perm user_data "Main.add_commentsrating" as checkperm %}
+            {% if checkperm %}
+                <a class="btn btn-lg btn-uprating" id="btn-uprate-article" type="submit">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                         viewBox="0 0 490.2 490.2" style="enable-background:new 0 0 490.2 490.2;" xml:space="preserve" width="1.5em" height="1.5em">
+                        <g>
+                            <path d="M490.1,234.464c0-37.6-30.6-68.3-68.3-68.3H316.2v-76.1c0-32.2-9.4-55.4-28-69c-29.4-21.6-69.8-9.3-71.5-8.7
+                                c-5.1,1.6-8.6,6.3-8.6,11.7v85.5c0,67.3-78.1,90.2-81.4,91.2c-1,0.3-1.9,0.6-2.7,1.1c-5.8-11.6-17.8-19.6-31.6-19.6H35.2
+                                c-19.4,0-35.2,15.8-35.2,35.2v207.9c0,19.4,15.8,35.2,35.2,35.2h33.1c6.8,0,12.3-5.5,12.3-12.3s-5.6-12.2-12.3-12.2H35.2
+                                c-5.9,0-10.7-4.8-10.7-10.7v-207.9c0-5.9,4.8-10.7,10.7-10.7h57.3c5.9,0,10.7,4.8,10.7,10.7v196.1c0,37.6,30.6,68.3,68.3,68.3
+                                h209.2c46.4,0,75.9-24.3,81.1-66.3l28.2-177c0.1-0.6,0.2-1.3,0.2-1.9v-2.2H490.1z M465.6,235.564l-28.1,176.5
+                                c-3.7,30-22.8,45.3-56.8,45.3h-7.8H171.5c-24.1,0-43.8-19.6-43.8-43.8v-189.1c1.8,0.4,3.7,0.3,5.6-0.2
+                                c4.1-1.1,99.3-28.7,99.3-114.8v-75.6c10.4-1.6,28.2-2.5,41.1,6.9c11.9,8.8,18,25.3,18,49.3v88.4c0,6.8,5.5,12.3,12.3,12.3h117.9
+                                c24.1,0,43.8,19.6,43.8,43.8v1H465.6z"></path>
+                        </g>
+                    </svg>
+                </a>
+                <a class="btn btn-lg btn-downrating" id="btn-downrate-article" type="submit">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                         viewBox="0 0 490.2 490.2" style="enable-background:new 0 0 490.2 490.2;" xml:space="preserve" width="1.5em" height="1.5em">
+                        <g>
+                            <path d="M490.1,234.464c0-37.6-30.6-68.3-68.3-68.3H316.2v-76.1c0-32.2-9.4-55.4-28-69c-29.4-21.6-69.8-9.3-71.5-8.7
+                                c-5.1,1.6-8.6,6.3-8.6,11.7v85.5c0,67.3-78.1,90.2-81.4,91.2c-1,0.3-1.9,0.6-2.7,1.1c-5.8-11.6-17.8-19.6-31.6-19.6H35.2
+                                c-19.4,0-35.2,15.8-35.2,35.2v207.9c0,19.4,15.8,35.2,35.2,35.2h33.1c6.8,0,12.3-5.5,12.3-12.3s-5.6-12.2-12.3-12.2H35.2
+                                c-5.9,0-10.7-4.8-10.7-10.7v-207.9c0-5.9,4.8-10.7,10.7-10.7h57.3c5.9,0,10.7,4.8,10.7,10.7v196.1c0,37.6,30.6,68.3,68.3,68.3
+                                h209.2c46.4,0,75.9-24.3,81.1-66.3l28.2-177c0.1-0.6,0.2-1.3,0.2-1.9v-2.2H490.1z M465.6,235.564l-28.1,176.5
+                                c-3.7,30-22.8,45.3-56.8,45.3h-7.8H171.5c-24.1,0-43.8-19.6-43.8-43.8v-189.1c1.8,0.4,3.7,0.3,5.6-0.2
+                                c4.1-1.1,99.3-28.7,99.3-114.8v-75.6c10.4-1.6,28.2-2.5,41.1,6.9c11.9,8.8,18,25.3,18,49.3v88.4c0,6.8,5.5,12.3,12.3,12.3h117.9
+                                c24.1,0,43.8,19.6,43.8,43.8v1H465.6z"></path>
+                        </g>
+                    </svg>
+                </a>
+            {% endif %}
+            {% check_perm user_data "Main.add_reports" as checkperm %}
+            {% if checkperm %}
+                <a class="btn btn-lg btn-report-article" id="btn-report-article" type="button" data-bs-toggle="modal" data-bs-target="#reportArticleModal">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" fill="currentColor" class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
+                      <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"></path>
+                    </svg>
+                </a>
+                {% include "includes/modals/reportArticleModal.html" %}
+            {% endif %}
+        </div>
+        <select id="comments-sort" class="form-control">
+            <option value="comment_datetime" {% if sort == "comment_datetime" %}selected{% endif %}>Сначала старые</option>
+            <option value="-comment_datetime" {% if sort == "-comment_datetime" %}selected{% endif %}>Сначала новые</option>
+            <option value="-rating_sum" {% if sort == "-rating_sum" %}selected{% endif %}>Рейтинг по-убыванию</option>
+            <option value="rating_sum" {% if sort == "rating_sum" %}selected{% endif %}>Рейтинг по-возрастанию</option>
+        </select>
+
+        <div class="comments">
+            <div class="card card-body" id="SendCommentToArticle">
+                <textarea id="send-comment-0" class="reply-comment form-control" placeholder="Комментарий"></textarea>
+                <a id="btn-send-comment-0" class="btn btn-primary btn-send-comment" type="submit">Отправить комментарий</a>
+            </div>
+            <br>
+            {% sort_comments tree sort as tree %}
+            {% include "includes/modals/reportCommentModal.html" %}
+            {% include "includes/article_comment.html" %}
         </div>
     {% else %}
         <h3 align="center" class="error text-danger">У Вас нет прав на просмотр данной статьи!</h3>

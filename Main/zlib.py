@@ -2,11 +2,17 @@ import datetime
 import string
 import random
 
-from API.models import APIKey as APIKey_M, APIKeys_Permissions, APIPermissions, APIKey
+from django.db.models.functions import Coalesce
+from sql_util.aggregates import SubquerySum
+
+from API.models import APIKey as APIKey_M, APIKeysPermissions, APIPermissions, APIKey
 
 from API.models import APIRequests
-from Main.models import Articles
-from django.db.models import Sum, Q, Count, F, Case, When
+from Main.models import Articles, Comments
+from django.db.models import Sum, Q, Count, F, QuerySet
+
+
+# Service Classes
 
 
 # Service Functions
@@ -20,13 +26,35 @@ def get_client_ip(request):
 
 
 def stdict(request):
-    poparts = Articles.objects.filter(
-        views__view_datetime__gte=(datetime.datetime.now() + datetime.timedelta(days=-7)).strftime("%Y-%m-%d %H:%M:%S")
-    ).annotate(views_num=Sum('views__view_weight')).order_by('-views_num')[:3]
+    article_rating = Coalesce(SubquerySum('Rating__rating_weight'), 0)
+    poparts = Articles.objects.annotate(
+        article_rating=article_rating
+    ).annotate(
+        views_num=Coalesce(
+            Sum(
+                'Views__view_weight',
+                filter=Q(Views__view_datetime__gte=(
+                        datetime.datetime.now() + datetime.timedelta(days=-7)
+                ).strftime("%Y-%m-%d %H:%M:%S"))
+            ),
+            0
+        )
+    ).order_by('-views_num')[:3]
+
+    toparts = Articles.objects.annotate(
+        article_rating=article_rating
+    ).annotate(
+        views_num=Coalesce(
+            Sum('Views__view_weight'),
+            0
+        )
+    ).order_by('-article_rating')[:3]
+
     return {
         'user_data': request.user,
         'sidebar_data': {
-            'pop_arts': poparts
+            'pop_arts': poparts,
+            'top_arts': toparts
         }
     }
 
@@ -79,7 +107,7 @@ def checkAPIKeyPerm(key, perm):
             else:
                 perms = perm
             for i in range(len(perms)):
-                perms[i] = bool(APIKeys_Permissions.objects.filter(
+                perms[i] = bool(APIKeysPermissions.objects.filter(
                     key=key,
                     permission=perms[i]
                 ))
@@ -96,7 +124,7 @@ def checkAPIKeyPerm(key, perm):
         key = APIKey_M.objects.filter(key=key).first()
     if not (key and perm):
         return False
-    return APIKeys_Permissions.objects.filter(
+    return APIKeysPermissions.objects.filter(
         key=key,
         permission=perm
     ) or key.super_key
@@ -148,3 +176,70 @@ def getThisKey(request, active=True, free=False):
             else request.data['APIKey']
         )
     ).first()
+
+
+def getCommentsTree(src=Articles.objects.get(id=1)):
+    class Tree:
+
+        body = None
+        heirs = list()
+        queryset = None
+
+        def __init__(self, elem):
+            self.body = elem
+            self.heirs = []
+            self.queryset = None
+
+        def __str__(self):
+            if isinstance(self.body, Comments):
+                print(self.body.comment)
+            elif isinstance(self.body, str):
+                print(self.body)
+            else:
+                print(self.body.__class__.__name__)
+
+        def append(self, elem):
+            self.heirs.append(Tree(elem))
+
+        def recapp(self, elem, sort='comment_datetime'):
+            if isinstance(elem, QuerySet):
+                if self.body == "ROOT":
+                    self.queryset = elem
+                for i in elem.order_by(sort).all():
+                    self.recapp(Tree(i))
+            elif isinstance(elem, Tree):
+                self.append(elem.body)
+                for i in elem.body.Replies.order_by(sort).all():
+                    self.heirs[-1].recapp(Tree(i))
+            else:
+                raise TypeError("Must be Tree or QuerySet")
+            return self
+
+        def recprint(self, layer=0, show_root=True):
+            if show_root:
+                print("-" * layer, end='')
+                if isinstance(self.body, str):
+                    print(self.body)
+                else:
+                    print(self.body.comment + " (" + str(self.body.rating_sum) + ")")
+            else:
+                layer -= 1
+            for i in self.heirs:
+                i.recprint(layer + 1)
+
+        def recsort(self, sort):
+            reverse = False
+            if sort[0] == "-":
+                reverse = True
+            func = (lambda x: x.body.comment_datetime) if (sort[1:] if reverse else sort) == "comment_datetime"\
+                else (lambda x: x.body.rating_sum) if (sort[1:] if reverse else sort) == "rating_sum"\
+                else None
+            self.heirs.sort(
+                key=func,
+                reverse=reverse
+            )
+            for i in self.heirs:
+                i.recsort(sort)
+            return self
+
+    return Tree("ROOT").recapp(Comments.objects.filter(article=src, reply_to=None))

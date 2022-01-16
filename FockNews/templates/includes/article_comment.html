@@ -1,0 +1,112 @@
+{% load extra_tags %}
+
+{% for tree in tree.heirs %}
+<div class="card comment" id="comment-{{tree.body.id}}">
+    <div class="card-header">
+        <div class="manage-comment">
+            {% if tree.body.status == "published" %}
+                {% check_perm user_data "Main.delete_comments" as checkperm %}
+                {% if checkperm %}
+                        <a class="delete-comment text-secondary" id="btn-deletecomment-{{tree.body.id}}" href="" type="submit" title="Удалить комменатрий">x</a>
+                {% endif %}
+            {% else %}
+                {% check_perm user_data "Main.restore_comments" as checkperm %}
+                {% if checkperm %}
+                    <a class="restore-comment text-secondary" id="btn-restorecomment-{{tree.body.id}}" href="" type="submit" title="Восстановить комменатрий">&#11148;</a>
+                {% endif %}
+            {% endif %}
+        </div>
+        <div class="spacer"></div>
+        <div class="comment-rating {% if tree.body.rating_sum > 0 %}text-success{% elif tree.body.rating_sum < 0 %}text-danger{% endif %}">
+        {{tree.body.rating_sum}}
+        </div>
+        <div class="comment-user">
+            <div class="avatar">
+                <a href="/users/{{tree.body.user}}">
+                    {% if tree.body.user.profile.avatar %}
+                    <img src="{{MEDIA_URL}}{{tree.body.user.profile.avatar}}" alt="Аватар" href>
+                    {% else %}
+                    <img src="{{MEDIA_URL}}images/avatars/default.png" alt="Аватар">
+                    {% endif %}
+                </a>
+            </div>
+            <div class="username">
+                <a href="/users/{{tree.body.user}}">
+                    <h4 class="{{tree.body.user.groups.all.0.name}}">
+                        {{tree.body.user.username}}
+                    </h4>
+                </a>
+            </div>
+            <div class="comment_datetime">{{ tree.body.comment_datetime|date:"d.m.Y H:i" }}</div>
+            <div class="deleted-comment">
+                    {% check_perm user_data "Main.view_deleted" as checkperm %}
+                    {% if tree.body.status == "deleted" and checkperm %}
+                        <span class="comment_deleted">Комментарий удалён</span>
+                    {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="card-body comment-body">
+        {% check_perm user_data "Main.view_deleted" as checkperm %}
+        {% if tree.body.status == "published" or checkperm %}
+            {{tree.body.comment|safe}}
+        {% else %}
+        <h5 class="text-secondary"><i>Комментарий удалён</i></h5>
+    {% endif %}
+    </div>
+    <div class="card-footer comment-rate">
+        {% check_perm user_data "Main.add_rating" as checkperm %}
+        {% if checkperm %}
+            <a class="btn btn-lg btn-uprating btn-uprate-comm" id="btn-uprate-comm-{{tree.body.id}}" type="submit">
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                     viewBox="0 0 490.2 490.2" style="enable-background:new 0 0 490.2 490.2;" xml:space="preserve" width="0.75em" height="0.75em">
+                    <g>
+                        <path d="M490.1,234.464c0-37.6-30.6-68.3-68.3-68.3H316.2v-76.1c0-32.2-9.4-55.4-28-69c-29.4-21.6-69.8-9.3-71.5-8.7
+                            c-5.1,1.6-8.6,6.3-8.6,11.7v85.5c0,67.3-78.1,90.2-81.4,91.2c-1,0.3-1.9,0.6-2.7,1.1c-5.8-11.6-17.8-19.6-31.6-19.6H35.2
+                            c-19.4,0-35.2,15.8-35.2,35.2v207.9c0,19.4,15.8,35.2,35.2,35.2h33.1c6.8,0,12.3-5.5,12.3-12.3s-5.6-12.2-12.3-12.2H35.2
+                            c-5.9,0-10.7-4.8-10.7-10.7v-207.9c0-5.9,4.8-10.7,10.7-10.7h57.3c5.9,0,10.7,4.8,10.7,10.7v196.1c0,37.6,30.6,68.3,68.3,68.3
+                            h209.2c46.4,0,75.9-24.3,81.1-66.3l28.2-177c0.1-0.6,0.2-1.3,0.2-1.9v-2.2H490.1z M465.6,235.564l-28.1,176.5
+                            c-3.7,30-22.8,45.3-56.8,45.3h-7.8H171.5c-24.1,0-43.8-19.6-43.8-43.8v-189.1c1.8,0.4,3.7,0.3,5.6-0.2
+                            c4.1-1.1,99.3-28.7,99.3-114.8v-75.6c10.4-1.6,28.2-2.5,41.1,6.9c11.9,8.8,18,25.3,18,49.3v88.4c0,6.8,5.5,12.3,12.3,12.3h117.9
+                            c24.1,0,43.8,19.6,43.8,43.8v1H465.6z"></path>
+                    </g>
+                </svg>
+            </a>
+            <a class="btn btn-lg btn-downrating btn-downrate-comm" id="btn-downrate-comm-{{tree.body.id}}" type="submit">
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                     viewBox="0 0 490.2 490.2" style="enable-background:new 0 0 490.2 490.2;" xml:space="preserve" width="0.75em" height="0.75em">
+                    <g>
+                        <path d="M490.1,234.464c0-37.6-30.6-68.3-68.3-68.3H316.2v-76.1c0-32.2-9.4-55.4-28-69c-29.4-21.6-69.8-9.3-71.5-8.7
+                            c-5.1,1.6-8.6,6.3-8.6,11.7v85.5c0,67.3-78.1,90.2-81.4,91.2c-1,0.3-1.9,0.6-2.7,1.1c-5.8-11.6-17.8-19.6-31.6-19.6H35.2
+                            c-19.4,0-35.2,15.8-35.2,35.2v207.9c0,19.4,15.8,35.2,35.2,35.2h33.1c6.8,0,12.3-5.5,12.3-12.3s-5.6-12.2-12.3-12.2H35.2
+                            c-5.9,0-10.7-4.8-10.7-10.7v-207.9c0-5.9,4.8-10.7,10.7-10.7h57.3c5.9,0,10.7,4.8,10.7,10.7v196.1c0,37.6,30.6,68.3,68.3,68.3
+                            h209.2c46.4,0,75.9-24.3,81.1-66.3l28.2-177c0.1-0.6,0.2-1.3,0.2-1.9v-2.2H490.1z M465.6,235.564l-28.1,176.5
+                            c-3.7,30-22.8,45.3-56.8,45.3h-7.8H171.5c-24.1,0-43.8-19.6-43.8-43.8v-189.1c1.8,0.4,3.7,0.3,5.6-0.2
+                            c4.1-1.1,99.3-28.7,99.3-114.8v-75.6c10.4-1.6,28.2-2.5,41.1,6.9c11.9,8.8,18,25.3,18,49.3v88.4c0,6.8,5.5,12.3,12.3,12.3h117.9
+                            c24.1,0,43.8,19.6,43.8,43.8v1H465.6z"></path>
+                    </g>
+                </svg>
+            </a>
+        {% endif %}
+        {% check_perm user_data "Main.add_reports" as checkperm %}
+        {% if checkperm %}
+            <a class="btn btn-lg btn-report-comment" id="btn-report-comment-{{ tree.body.id }}" type="button" data-bs-toggle="modal" data-bs-target="#reportCommentModal" data-bs-comment-user="{{ tree.body.user.username }}" data-bs-comment-user-group="{{ tree.body.user.groups.all.0.name }}" data-bs-comment-comment="{{ tree.body.comment }}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="0.75em" height="0.75em" fill="currentColor" class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
+                  <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"></path>
+                </svg>
+            </a>
+            {% include "includes/modals/reportArticleModal.html" %}
+            <a class="reply-comment link-primary" data-bs-toggle="collapse" href="#collapseReplyField-{{ tree.body.id }}" role="button" aria-expanded="false" aria-controls="collapseReplyField">Ответить</a>
+            <div class="collapse" id="collapseReplyField-{{ tree.body.id }}">
+                <textarea id="send-comment-{{ tree.body.id }}" class="reply-comment form-control" placeholder="Комментарий"></textarea>
+                <a id="btn-send-comment-{{ tree.body.id }}" class="btn btn-primary btn-send-comment btn-send-reply" type="submit">Ответить</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+<div class="replies">
+    {% if tree.heirs %}
+        {% include "includes/article_comment.html" %}
+    {% endif %}
+</div>
+{% endfor %}

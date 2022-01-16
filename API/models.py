@@ -57,7 +57,7 @@ class APIRequests(models.Model):
         verbose_name_plural = 'API запросы'
 
     def __str__(self):
-        return self.datetime
+        return str(self.datetime)
 
 
 class APIPermissions(models.Model):
@@ -73,10 +73,10 @@ class APIPermissions(models.Model):
         verbose_name_plural = 'Права API'
 
     def __str__(self):
-        return self.codename
+        return self.name
 
 
-class APIKeys_Permissions(models.Model):
+class APIKeysPermissions(models.Model):
     key = models.ForeignKey(
         APIKey,
         on_delete=models.PROTECT,

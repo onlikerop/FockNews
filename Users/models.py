@@ -1,7 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models import Sum
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+
+from Main.models import coalesce
 
 
 class Bans(models.Model):
@@ -60,6 +63,10 @@ class Profile(models.Model):
         null=True
     )
     objects = models.Manager()
+
+    @property
+    def user_rating(self):
+        return coalesce(self.user.Articles.all().aggregate(rating_sum=Sum('Rating__rating_weight')).get('rating_sum'), 0)
 
     class Meta:
         verbose_name = 'Профиль пользователя'

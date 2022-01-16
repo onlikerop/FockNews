@@ -1,23 +1,29 @@
 import re
 
+from django.db.models import Sum, Count, Q, Value
+from django.db.models.functions import Coalesce
 from django.shortcuts import render
-from Main.models import Articles, Views
+from sql_util.aggregates import SubquerySum
+
+from Main.models import Articles, Views, ReportTypes
+from Main.zlib import getCommentsTree
 from html_forms.forms import CreateArticleForm
 from Main import zlib
 import datetime
-
-from Main.models import Articles
 
 
 def index(request):
     response = zlib.get_full_response(
         request,
         {
-            'object_list': Articles.objects.filter(status="published").order_by("-pub_datetime")[:20]
+            'object_list': Articles.objects.filter(status="published").annotate(
+                read_by_user=Count('Views', filter=Q(Views__user=request.user)) if request.user.is_authenticated
+                else Value(False)
+            ).order_by("-pub_datetime")[:20]
         }
     )
     for art in response['object_list']:
-        art.body = re.sub('(?!<br>|<\/?p>)<[^<]+?>', '', art.body)  # Removing all HTML tags, excluding <br>, <p>, </p>
+        art.body = re.sub('(?!<br>|</?p>)<[^<]+?>', '', art.body)  # Removing all HTML tags, excluding <br>, <p>, </p>
     return render(request, 'Main/index.html', response)
 
 
@@ -27,8 +33,18 @@ def contacts(request):
 
 
 def article(request, pk):
+    sort = 'comment_datetime'
+    if request.method == "GET":
+        if "sort" in request.GET.keys():
+            if request.GET['sort'] in [
+                'comment_datetime',
+                '-comment_datetime',
+                'rating_sum',
+                '-rating_sum'
+            ]:
+                sort = request.GET['sort']
     viewer = request.user if request.user.is_authenticated else None
-    locktimer = (datetime.datetime.utcnow() - Views.objects.filter(
+    locktimer = (datetime.datetime.now() - Views.objects.filter(
         article=Articles.objects.get(id=pk),
         user=viewer,
         user_ip=zlib.get_client_ip(request)
@@ -51,14 +67,21 @@ def article(request, pk):
         article=Articles.objects.get(id=pk),
         view_datetime__gte=(datetime.datetime.now() + datetime.timedelta(days=-7)).strftime("%Y-%m-%d %H:%M:%S")
     ).count()
-
+    rating = Articles.objects.get(id=pk).rating_sum
     response = zlib.get_full_response(
         request,
         {
-            'articles': Articles.objects.get(id=pk),
+            'articles': Articles.objects
+                .annotate(article_rating=Coalesce(SubquerySum('Rating__rating_weight'), 0))
+                .annotate(views_num=Sum('Views__view_weight')).order_by('-views_num')
+                .get(id=pk),
             'views': views,
             'views_per_week': views_per_week,
-            'necessary_perm': "Main.view_" + Articles.objects.get(id=pk).status
+            'rating': rating,
+            'necessary_perm': "Main.view_" + Articles.objects.get(id=pk).status,
+            'tree': getCommentsTree(Articles.objects.get(id=pk)),
+            'sort': sort,
+            'reporttypes': ReportTypes.objects.all()
         }
     )
     return render(request, 'Main/article.html', response)

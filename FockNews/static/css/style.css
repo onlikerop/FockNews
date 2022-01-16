@@ -1,4 +1,5 @@
 @charset "UTF-8";
+@import url("groups.css");
 
 /**{
      border: solid 1px #ff0000;
@@ -11,10 +12,16 @@ body{
 
 header{
     height: 75px;
+    margin-bottom: 10px;
+    /*border: #0dcaf0 solid 1px;*/
 }
 
 #header_menu{
     list-style: none;
+}
+
+#header_menu #logo-btn{
+    margin-left: 5px;
 }
 
 #header_menu li{
@@ -30,6 +37,8 @@ header{
     display: inline-block;
     width: 50%;
     flex: 1 0 auto;
+    min-height: calc(100% - 75px - 50px - 20px);
+    padding-left: 5px;
 }
 
 aside{
@@ -38,8 +47,10 @@ aside{
     border-radius: 5px;
     border: solid 1px silver;
     position: fixed;
-    top: 100px;
-    right:0;
+    top: 5em;
+    right: 5px;
+    background-color: #ffffff;
+    z-index: 1000;
 }
 
 footer{
@@ -47,6 +58,7 @@ footer{
     bottom: 20px;
     width: 100%;
     flex: 0 0 auto;
+    height: 50px;
 }
 
 aside div{
@@ -65,6 +77,51 @@ aside .rank2{
     width: auto;
 }
 
+aside .side_articles{
+    height: 36vh;
+    /*border: solid 1px #00ff00;*/
+}
+
+aside .side_articles .side_label{
+    margin-left: 5px;
+}
+
+aside .side_articles .top-article, aside .side_articles .pop-article{
+    height: 10.75vh;
+    /*border: solid 1px #0000ff;*/
+}
+
+aside .side_articles .side-article-body{
+    height: 85%;
+    /*border: solid 1px #ff0000;*/
+}
+
+aside .side_articles .side-article-body *{
+    /*border: solid 1px #0000ff;*/
+}
+
+aside .side_articles div, aside .side_articles div h6{
+    font-size: 0.95em;
+}
+
+aside .article_tags{
+    display: block;
+    width: 50%;
+    /*border: red solid 1px;*/
+    margin: 3px;
+}
+
+aside .side_analytics{
+    float: right;
+    display: block;
+    /*border: red solid 1px;*/
+}
+
+aside .side_analytics .article_rating, aside .side_analytics .article_views{
+    float: left;
+    margin: auto;
+}
+
 .minarticles{
     margin-left: 30px;
 }
@@ -73,7 +130,15 @@ aside .rank2{
     display: inline;
 }
 
-.article_author, .article_views{
+.article_read_indicator{
+    display: inline;
+    float: right;
+    color: blue;
+    margin-top: -0.75em;
+    cursor: default;
+}
+
+.article_author, .article_rating, .article_views{
     float: right;
 }
 
@@ -82,16 +147,18 @@ aside .rank2{
 }
 
 .article_body{
-    margin-left: 10px;
-    margin-right: 10px;
+    margin: 10px;
+    border-radius: 20px;
+    border: 10px solid #C8C9CA;
+    padding: 10px;
 }
 
 .article_draft, .article_deleted{
     text-decoration: underline;
-    font-size: 1em
+    font-size: 1em;
 }
 
-.article_deleted{
+.article_deleted, .comment_deleted{
     color: #FF5050;
 }
 
@@ -151,7 +218,7 @@ aside .rank2{
     display: inline-block;
 }
 
-#btn-deletearticle, #btn-editarticle, #btn-restorearticle, btn-publisharticle{
+#btn-deletearticle, #btn-editarticle, #btn-restorearticle, #btn-publisharticle{
     display: inline-block;
     float: right;
     margin-left: 10px;
@@ -165,7 +232,7 @@ aside .rank2{
     background: #FFFFC0;
 }
 
-#btn-restorearticle, btn-publisharticle{
+#btn-restorearticle, #btn-publisharticle{
     background: #E7FFE7;
 }
 
@@ -177,7 +244,7 @@ aside .rank2{
     background: #E6E6A9;
 }
 
-#btn-restorearticle:hover, btn-publisharticle:hover{
+#btn-restorearticle:hover, #btn-publisharticle:hover{
     background: #D0E6D0;
 }
 
@@ -211,7 +278,7 @@ p.group{
     margin-left: 15px;
 }
 
-.about_me2, .rank2, .birthday2{
+.about_me2, .rank2, .birthday2, .name2, .rating2{
     vertical-align: top;
     padding-left: 10px;
     display: inline-block;
@@ -237,17 +304,6 @@ display: inline;
 div.baninfo a#banuser-btn, div.baninfo a#unbanuser-btn{
     float: right;
 }
-/*Стили групп пользователей*/
-
-.Администратор{
-    color: red;
-    font-weight: 700;
-}
-
-.Модератор{
-    color: forestgreen;
-    font-weight: 500;
-}
 
 #API_select{
     width: 100%;
@@ -267,4 +323,87 @@ div.baninfo a#banuser-btn, div.baninfo a#unbanuser-btn{
 }
 #API_select a{
     word-spacing: normal;
+}
+
+.btn-downrating{
+    transform: rotate(180deg);
+}
+
+div.comments{
+    margin-top: 3em;
+}
+
+div.comment-user{
+    /*display: table-row;*/
+}
+
+div.comment-user a{
+    text-decoration: none;
+    color: inherit;
+}
+
+div.comment .spacer{
+    display: inline-block;
+    float: right;
+    min-width: 25px;
+    border: solid 1px #ff0000;
+    visibility: hidden
+}
+
+div.comment-user div{
+    /*display: table-cell;*/
+    display: inline-block;
+    margin-right: 10px;
+    /*border: solid 1px rgba(90, 98, 104, 0.5);*/
+}
+
+div.comment-user .username{
+    width: auto;
+}
+
+div.comment-user .avatar img{
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+}
+
+div.comment{
+    border: solid 1px rgba(90, 98, 104, calc(2/9));
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+div.comment-body{
+    margin-left: 15px;
+}
+div.comments .replies{
+    margin-left: 48px;
+}
+
+.manage-comment{
+    display: inline-block;
+    float: right;
+    /*border: solid 1px rgba(90, 98, 104, 0.5);*/
+}
+
+.comment-rating{
+    display: inline-block;
+    float: right;
+    font-weight: bold;
+    padding-right: 5px;
+}
+
+select#comments-sort{
+    float: right;
+    display: block;
+    /*border: solid 1px #ff0000;*/
+    width: auto;
+}
+
+.btn-send-reply{
+    float: right;
+}
+
+#SendCommentToArticle{
+    width: 100%;
 }
