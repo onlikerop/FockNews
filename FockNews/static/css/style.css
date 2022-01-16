@@ -399,3 +399,11 @@ select#comments-sort{
     /*border: solid 1px #ff0000;*/
     width: auto;
 }
+
+.btn-send-reply{
+    float: right;
+}
+
+#SendCommentToArticle{
+    width: 100%;
+}

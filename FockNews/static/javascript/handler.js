@@ -185,10 +185,10 @@ $(document).ready(function () {
             },
             method: 'POST',
             beforeSend: function() {
-                $("#"+event.currentTarget.id).hide();
+                $("#" + event.currentTarget.id).hide();
                 if ($("#reportArticleTypes").val() === null) {
                     alert("Выберите тип жалобы!")
-                    $("#"+event.currentTarget.id).show();
+                    $("#" + event.currentTarget.id).show();
                     return false
                 }
             },
@@ -198,12 +198,12 @@ $(document).ready(function () {
                 }
                 alert("Жалоба отправлена");
                 location.reload();
-                $("#"+event.currentTarget.id).show();
+                $("#" + event.currentTarget.id).show();
                 $('#reportArticleModal').modal('hide');
             },
             error: function(data) {
                 alert("Ошибка!");
-                $("#"+event.currentTarget.id).show();
+                $("#" + event.currentTarget.id).show();
                 $('#reportArticleModal').modal('hide');
             }
 
@@ -218,7 +218,7 @@ $(document).ready(function () {
             },
             method: 'POST',
             beforeSend: function() {
-                $("#"+event.currentTarget.id).hide();
+                $("#" + event.currentTarget.id).hide();
             },
             success: function(data) {
                 if (data.column_num === 0) {
@@ -238,7 +238,7 @@ $(document).ready(function () {
             },
             method: 'POST',
             beforeSend: function() {
-                $("#"+event.currentTarget.id).hide();
+                $("#" + event.currentTarget.id).hide();
             },
             success: function(data) {
                 if (data.column_num === 0) {
@@ -258,18 +258,18 @@ $(document).ready(function () {
             },
             method: 'POST',
             beforeSend: function() {
-                $("#"+event.currentTarget.id).hide();
+                $("#" + event.currentTarget.id).hide();
             },
             success: function(data) {
                 if (data.column_num === 0) {
                     alert("Ошибка. Изменить рейтинг не удалось!");
                 }
                 location.reload();
-                $("#"+event.currentTarget.id).show();
+                $("#" + event.currentTarget.id).show();
             },
             error: function(data) {
                 alert("Ошибка!");
-                $("#"+event.currentTarget.id).show();
+                $("#" + event.currentTarget.id).show();
             }
 
         });
@@ -307,18 +307,45 @@ $(document).ready(function () {
             },
             method: 'POST',
             beforeSend: function() {
-                $("#"+event.currentTarget.id).hide();
+                $("#" + event.currentTarget.id).hide();
             },
             success: function(data) {
                 if (data.column_num  === 0) {
                     alert("Ошибка. Отсортировать не удалось!");
                 }
-                $("#"+event.currentTarget.id).show();
+                $("#" + event.currentTarget.id).show();
                 location.href = '?sort=' + event.currentTarget.value;
             },
             error: function(data) {
                 alert("Ошибка!");
-                $("#"+event.currentTarget.id).show();
+                $("#" + event.currentTarget.id).show();
+            }
+
+        });
+    }
+
+    function SendComment(event) {
+        $.ajax ({
+            url: window.location.pathname + 'sendcomm/',
+            data: {
+                'csrfmiddlewaretoken': csrftoken,
+                'reply_to': event.currentTarget.id.split("btn-send-comment-")[1],
+                'comment': $('#send-comment-' + event.currentTarget.id.split("btn-send-comment-")[1]).val()
+            },
+            method: 'POST',
+            beforeSend: function() {
+                $("#" + event.currentTarget.id).hide();
+            },
+            success: function(data) {
+                if (data.column_num  === 0) {
+                    alert("Ошибка. Отправить ответ не удалось!");
+                }
+                $("#" + event.currentTarget.id).show();
+                location.reload();
+            },
+            error: function(data) {
+                alert("Ошибка!");
+                $("#" + event.currentTarget.id).show();
             }
 
         });
@@ -337,4 +364,5 @@ $(document).ready(function () {
     $(".btn-downrate-comm").bind("click", downRateComm);
     $("#comments-sort").bind("change", sortComm);
     $("#btn-send-report").bind("click", reportArticle)
+    $(".btn-send-comment").bind("click", SendComment)
 });

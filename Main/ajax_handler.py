@@ -172,3 +172,24 @@ def downratecomm(request, pk, sk):
         return JsonResponse({"column_num": 1})
     else:
         return JsonResponse({"column_num": 0})
+
+
+def sendcomm(request, pk):
+    item = 0
+    if request.user.is_authenticated \
+            and request.accepts \
+            and request.POST \
+            and request.user.has_perm("Main.add_comments"):
+        Comments.objects.create(
+            article=Articles.objects.get(id=pk),
+            reply_to=(
+                Comments.objects.get(id=int(request.POST.get('reply_to'))) if int(request.POST.get('reply_to')) != 0
+                else None
+            ),
+            user=request.user,
+            comment=request.POST.get('comment'),
+            comment_datetime=datetime.datetime.now()
+        )
+        return JsonResponse({"column_num": 1})
+    else:
+        return JsonResponse({"column_num": 0})

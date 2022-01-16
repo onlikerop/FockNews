@@ -74,6 +74,11 @@ urlpatterns = [
         name='downratecomm'
     ),
     path(
+        'news/<int:pk>/sendcomm/',
+        ajax_handler.sendcomm,
+        name='sendcomm'
+    ),
+    path(
         'news/<int:pk>/uprate/',
         ajax_handler.uprate,
         name='uprate'

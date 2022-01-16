@@ -95,7 +95,13 @@
             <option value="-rating_sum" {% if sort == "-rating_sum" %}selected{% endif %}>Рейтинг по-убыванию</option>
             <option value="rating_sum" {% if sort == "rating_sum" %}selected{% endif %}>Рейтинг по-возрастанию</option>
         </select>
+
         <div class="comments">
+            <div class="card card-body" id="SendCommentToArticle">
+                <textarea id="send-comment-0" class="reply-comment form-control" placeholder="Комментарий"></textarea>
+                <a id="btn-send-comment-0" class="btn btn-primary btn-send-comment" type="submit">Отправить комментарий</a>
+            </div>
+            <br>
             {% sort_comments tree sort as tree %}
             {% include "includes/modals/reportCommentModal.html" %}
             {% include "includes/article_comment.html" %}
