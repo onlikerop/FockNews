@@ -248,8 +248,21 @@ aside .side_analytics .article_rating, aside .side_analytics .article_views{
     background: #D0E6D0;
 }
 
-.btn-user{
+.btn-user, .searchbar{
     float: right;
+}
+
+.searchbar form{
+    width: 300px;
+    transform: translateY(calc(100%/3));
+}
+
+.searchbar button{
+    width: 100px;
+}
+
+#search-btn, #search-input{
+    display: inline;
 }
 
 div.avatar img{
@@ -406,4 +419,11 @@ select#comments-sort{
 
 #SendCommentToArticle{
     width: 100%;
+}
+.svg-green{
+    fill: #00d437;
+}
+
+.svg-red{
+    fill: red;
 }

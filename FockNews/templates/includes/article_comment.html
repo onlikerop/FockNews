@@ -57,8 +57,9 @@
     <div class="card-footer comment-rate">
         {% check_perm user_data "Main.add_rating" as checkperm %}
         {% if checkperm %}
+        {% check_like user_data "Comment" tree.body.id as checklike %}
             <a class="btn btn-lg btn-uprating btn-uprate-comm" id="btn-uprate-comm-{{tree.body.id}}" type="submit">
-                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                <svg {% if checklike == 1 %} class="svg-green" {% endif %} xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                      viewBox="0 0 490.2 490.2" style="enable-background:new 0 0 490.2 490.2;" xml:space="preserve" width="0.75em" height="0.75em">
                     <g>
                         <path d="M490.1,234.464c0-37.6-30.6-68.3-68.3-68.3H316.2v-76.1c0-32.2-9.4-55.4-28-69c-29.4-21.6-69.8-9.3-71.5-8.7
@@ -73,7 +74,7 @@
                 </svg>
             </a>
             <a class="btn btn-lg btn-downrating btn-downrate-comm" id="btn-downrate-comm-{{tree.body.id}}" type="submit">
-                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                <svg {% if checklike == -1 %} class="svg-red" {% endif %} xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                      viewBox="0 0 490.2 490.2" style="enable-background:new 0 0 490.2 490.2;" xml:space="preserve" width="0.75em" height="0.75em">
                     <g>
                         <path d="M490.1,234.464c0-37.6-30.6-68.3-68.3-68.3H316.2v-76.1c0-32.2-9.4-55.4-28-69c-29.4-21.6-69.8-9.3-71.5-8.7
@@ -95,6 +96,9 @@
                   <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"></path>
                 </svg>
             </a>
+        {% endif %}
+        {% check_perm user_data "Main.add_comments" as checkperm %}
+        {% if checkperm %}
             {% include "includes/modals/reportArticleModal.html" %}
             <a class="reply-comment link-primary" data-bs-toggle="collapse" href="#collapseReplyField-{{ tree.body.id }}" role="button" aria-expanded="false" aria-controls="collapseReplyField">Ответить</a>
             <div class="collapse" id="collapseReplyField-{{ tree.body.id }}">

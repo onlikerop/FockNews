@@ -3,6 +3,7 @@ from datetime import datetime
 from django import template
 from django.contrib.auth.models import User
 from django.db.models import Q
+from django.core.exceptions import ObjectDoesNotExist
 
 from Main.models import Articles
 from Users.models import Profile, Bans
@@ -38,3 +39,17 @@ def check_ban(user):
 @register.simple_tag()
 def sort_comments(comments, sort):
     return comments.recsort(sort)
+
+
+@register.simple_tag()
+def check_like(user, content_type, content_id):
+    try:
+        if content_type.lower() == "article":
+            return user.Given_rating.all().get(article_id=content_id, rating_type="Default").rating_weight
+        elif content_type.lower() == "comment":
+            return user.Given_commentsrating.all().get(comment_id=content_id, rating_type="Default").rating_weight
+        else:
+            return 0
+    except ObjectDoesNotExist:
+        return 0
+

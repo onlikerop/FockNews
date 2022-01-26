@@ -48,8 +48,9 @@
             <br>
             {% check_perm user_data "Main.add_commentsrating" as checkperm %}
             {% if checkperm %}
+            {% check_like user_data "Article" articles.id as checklike %}
                 <a class="btn btn-lg btn-uprating" id="btn-uprate-article" type="submit">
-                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                    <svg {% if checklike == 1 %} class="svg-green" {% endif %} xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                          viewBox="0 0 490.2 490.2" style="enable-background:new 0 0 490.2 490.2;" xml:space="preserve" width="1.5em" height="1.5em">
                         <g>
                             <path d="M490.1,234.464c0-37.6-30.6-68.3-68.3-68.3H316.2v-76.1c0-32.2-9.4-55.4-28-69c-29.4-21.6-69.8-9.3-71.5-8.7
@@ -64,7 +65,7 @@
                     </svg>
                 </a>
                 <a class="btn btn-lg btn-downrating" id="btn-downrate-article" type="submit">
-                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                    <svg {% if checklike == -1 %} class="svg-red" {% endif %} xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                          viewBox="0 0 490.2 490.2" style="enable-background:new 0 0 490.2 490.2;" xml:space="preserve" width="1.5em" height="1.5em">
                         <g>
                             <path d="M490.1,234.464c0-37.6-30.6-68.3-68.3-68.3H316.2v-76.1c0-32.2-9.4-55.4-28-69c-29.4-21.6-69.8-9.3-71.5-8.7
@@ -89,6 +90,7 @@
                 {% include "includes/modals/reportArticleModal.html" %}
             {% endif %}
         </div>
+        <br>
         <select id="comments-sort" class="form-control">
             <option value="comment_datetime" {% if sort == "comment_datetime" %}selected{% endif %}>Сначала старые</option>
             <option value="-comment_datetime" {% if sort == "-comment_datetime" %}selected{% endif %}>Сначала новые</option>
@@ -97,10 +99,13 @@
         </select>
 
         <div class="comments">
-            <div class="card card-body" id="SendCommentToArticle">
-                <textarea id="send-comment-0" class="reply-comment form-control" placeholder="Комментарий"></textarea>
-                <a id="btn-send-comment-0" class="btn btn-primary btn-send-comment" type="submit">Отправить комментарий</a>
-            </div>
+            {% check_perm user_data "Main.add_comments" as checkperm %}
+            {% if checkperm %}
+                <div class="card card-body" id="SendCommentToArticle">
+                    <textarea id="send-comment-0" class="reply-comment form-control" placeholder="Комментарий"></textarea>
+                    <a id="btn-send-comment-0" class="btn btn-primary btn-send-comment" type="submit">Отправить комментарий</a>
+                </div>
+            {% endif %}
             <br>
             {% sort_comments tree sort as tree %}
             {% include "includes/modals/reportCommentModal.html" %}

@@ -1,4 +1,4 @@
-<header>
+<header class="container-fluid">
     <nav id="header_menu">
         <li id="logo-btn" class="navbar-brand"><a class="btn btn-lg" href = "{% url 'index' %}">FockNews</a></li>
         <li id="contacts-btn"><a class="btn btn-lg" href = "{% url 'contacts' %}">Контакты</a></li>
@@ -8,9 +8,9 @@
             <li id="logout-btn" class="btn-user">
                 <a class="btn btn-lg" href = "{% url 'logout' %}">
                     <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-box-arrow-right" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                      <path fill-rule="evenodd" d="M11.646 11.354a.5.5 0 0 1 0-.708L14.293 8l-2.647-2.646a.5.5 0 0 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0z"/>
-                      <path fill-rule="evenodd" d="M4.5 8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5z"/>
-                      <path fill-rule="evenodd" d="M2 13.5A1.5 1.5 0 0 1 .5 12V4A1.5 1.5 0 0 1 2 2.5h7A1.5 1.5 0 0 1 10.5 4v1.5a.5.5 0 0 1-1 0V4a.5.5 0 0 0-.5-.5H2a.5.5 0 0 0-.5.5v8a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5v-1.5a.5.5 0 0 1 1 0V12A1.5 1.5 0 0 1 9 13.5H2z"/>
+                      <path fill-rule="evenodd" d="M11.646 11.354a.5.5 0 0 1 0-.708L14.293 8l-2.647-2.646a.5.5 0 0 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0z"></path>
+                      <path fill-rule="evenodd" d="M4.5 8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5z"></path>
+                      <path fill-rule="evenodd" d="M2 13.5A1.5 1.5 0 0 1 .5 12V4A1.5 1.5 0 0 1 2 2.5h7A1.5 1.5 0 0 1 10.5 4v1.5a.5.5 0 0 1-1 0V4a.5.5 0 0 0-.5-.5H2a.5.5 0 0 0-.5.5v8a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5v-1.5a.5.5 0 0 1 1 0V12A1.5 1.5 0 0 1 9 13.5H2z"></path>
                     </svg>
                 </a>
             </li>
@@ -18,6 +18,12 @@
         {% else %}
             <li id="login-btn" class="btn-user"><a class="btn btn-lg" href = "{% url 'login' %}">Войти</a></li>
         {% endif %}
+        <li id="searchbar" class="searchbar me-4">
+            <form class="d-flex">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="form-control btn btn-outline-success" type="submit">Search</button>
+            </form>
+        </li>
     </nav>
     <hr>
 </header>
