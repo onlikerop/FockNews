@@ -13,10 +13,16 @@ import datetime
 
 
 def index(request):
+    search = \
+        Q(title__icontains=request.GET['search']) \
+        | Q(body__icontains=request.GET['search']) \
+        | Q(tags__icontains=request.GET['search']) \
+            if 'search' in request.GET.keys() else Q() \
+            if request.method == 'GET' else Q()
     response = zlib.get_full_response(
         request,
         {
-            'object_list': Articles.objects.filter(status="published").annotate(
+            'object_list': Articles.objects.filter(status="published").filter(search).annotate(
                 read_by_user=Count('Views', filter=Q(Views__user=request.user)) if request.user.is_authenticated
                 else Value(False)
             ).order_by("-pub_datetime")[:20]

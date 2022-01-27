@@ -305,7 +305,7 @@ $(document).ready(function () {
             data: {
                 'csrfmiddlewaretoken': csrftoken
             },
-            method: 'POST',
+            method: 'GET',
             beforeSend: function() {
                 $("#" + event.currentTarget.id).hide();
             },
@@ -324,7 +324,7 @@ $(document).ready(function () {
         });
     }
 
-    function SendComment(event) {
+    function sendComm(event) {
         $.ajax ({
             url: window.location.pathname + 'sendcomm/',
             data: {
@@ -351,6 +351,30 @@ $(document).ready(function () {
         });
     }
 
+    function searchArticles(event) {
+        $.ajax ({
+            data: {
+                'csrfmiddlewaretoken': csrftoken,
+            },
+            method: 'GET',
+            beforeSend: function() {
+                $("#" + event.currentTarget.id).hide();
+            },
+            success: function(data) {
+                if (data.column_num  === 0) {
+                    alert("Ошибка. Поиск выполнить не удалось!");
+                }
+                $("#" + event.currentTarget.id).show();
+                location.href = '?search=' + $("#search-input").val()
+            },
+            error: function(data) {
+                alert("Ошибка!");
+                $("#" + event.currentTarget.id).show();
+            }
+
+        });
+    }
+
     // basic binds
     $("#btn-deletearticle").bind("click", delArticle);
     $("#btn-restorearticle").bind("click", restoreArticle);
@@ -364,5 +388,6 @@ $(document).ready(function () {
     $(".btn-downrate-comm").bind("click", downRateComm);
     $("#comments-sort").bind("change", sortComm);
     $("#btn-send-report").bind("click", reportArticle)
-    $(".btn-send-comment").bind("click", SendComment)
+    $(".btn-send-comment").bind("click", sendComm)
+    $("#search-btn").bind("click", searchArticles)
 });
